@@ -17,5 +17,7 @@ public class Controller implements Initializable{
     }
     public void StartNewGame() {
         System.out.println("Starting a new game...");
+        System.out.println("St6545646jknk");
+
     }
 }
