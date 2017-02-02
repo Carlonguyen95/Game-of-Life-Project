@@ -13,9 +13,8 @@ public class Controller implements Initializable{
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 
-    	//RANDOM jklils 
+    	//RANDOM jklils. 
     }
-
     public void StartNewGame() {
         System.out.println("Starting a new game...");
     }
