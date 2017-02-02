@@ -23,7 +23,10 @@ public class Main extends Application {
         launch(args);
 
         System.out.println("Test");
+        
+        System.out.println("Test");
 
+        System.out.println("Test");
 
     }
 
