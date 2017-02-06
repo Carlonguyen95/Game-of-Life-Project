@@ -19,28 +19,44 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.canvas.*?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <center>
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller">
+
+   <center>   
       <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
+      	
+        <children>
+            <Pane>
+               <children>
+              	<Canvas fx:id="graphics" height="500.0" nodeOrientation="INHERIT" onMouseClicked="#mouseClicked" width="800.0" />
+               </children>
+            </Pane>
+        </children>
+      
+               <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </BorderPane.margin>
-         <effect>
+         
+               <effect>
             <InnerShadow choke="0.1" height="10.0" radius="4.5" width="10.0" />
          </effect>
-      </Pane>
+                  
+            </Pane>
    </center>
+   
    <effect>
       <InnerShadow choke="0.1" height="50.0" radius="24.5" width="50.0" />
    </effect>
+   
    <bottom>
       <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Zoom" />
             <Button mnemonicParsing="false" text="-" />
-            <Slider />
+            <Slider fx:id="sizeSlider" max="100.0" min="1.0" onMouseDragged="#newSizeEvent" value="5.0" />
             <Button mnemonicParsing="false" text="+" />
+            <ColorPicker fx:id="colorPicker" onAction="#newColorEvent" />
             <Button mnemonicParsing="false" text="Start">
                <font>
                   <Font name="Arial Black" size="15.0" />
