@@ -10,15 +10,12 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable{
 
+	//Denne metoden starter ved oppstart
     @Override
     public void initialize(java.net.URL location, java.util.ResourceBundle resources) {
 
-
     }
-
-    public void StartNewGame() {
-        System.out.println("Starting a new game...");
-        System.out.println("St6545646jknk");
-
-    }
+    
+    
 }
+

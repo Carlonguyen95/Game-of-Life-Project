@@ -29,13 +29,6 @@
          <effect>
             <InnerShadow choke="0.1" height="10.0" radius="4.5" width="10.0" />
          </effect>
-         <children>
-            <ImageView fitHeight="487.0" fitWidth="761.0" layoutX="14.0" layoutY="14.0">
-               <image>
-                  <Image url="@../../../../Desktop/GoL/Pattern1.png" />
-               </image>
-            </ImageView>
-         </children>
       </Pane>
    </center>
    <effect>
