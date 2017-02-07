@@ -29,7 +29,24 @@
         <children>
             <Pane>
                <children>
-              	<Canvas fx:id="graphics" height="500.0" nodeOrientation="INHERIT" onMouseClicked="#mouseClicked" width="800.0" />
+                  <GridPane prefHeight="515.0" prefWidth="787.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                        <RowConstraints minHeight="10.0" vgrow="NEVER" />
+                     </rowConstraints>
+                     <children>
+                    	<Canvas fx:id="graphics" height="515.0" nodeOrientation="INHERIT" onMouseClicked="#mouseClicked" width="787.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
                </children>
             </Pane>
         </children>
