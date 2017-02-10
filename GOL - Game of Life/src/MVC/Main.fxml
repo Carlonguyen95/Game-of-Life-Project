@@ -27,26 +27,9 @@
       <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
       	
         <children>
-            <Pane>
+            <Pane layoutX="10.0" layoutY="10.0">
                <children>
-                  <GridPane prefHeight="515.0" prefWidth="787.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
-                        <RowConstraints minHeight="10.0" vgrow="NEVER" />
-                     </rowConstraints>
-                     <children>
-                    	<Canvas fx:id="graphics" height="515.0" nodeOrientation="INHERIT" onMouseClicked="#mouseClicked" width="787.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                     </children>
-                  </GridPane>
+                  <Canvas fx:id="graphics" height="515.0" nodeOrientation="INHERIT" onMouseClicked="#mouseClicked" width="780.0" />
                </children>
             </Pane>
         </children>
@@ -71,15 +54,14 @@
          <children>
             <Label text="Zoom" />
             <Button mnemonicParsing="false" text="-" />
-            <Slider fx:id="sizeSlider" max="100.0" min="1.0" onMouseDragged="#newSizeEvent" value="5.0" />
+            <Slider fx:id="sizeSlider" max="50.0" min="1.0" onMouseDragged="#newSizeEvent" value="5.0" />
             <Button mnemonicParsing="false" text="+" />
-            <ColorPicker fx:id="colorPicker" onAction="#newColorEvent" />
             <Button mnemonicParsing="false" text="Start">
                <font>
                   <Font name="Arial Black" size="15.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="Stop">
+            <Button mnemonicParsing="false" text="Stop" onAction="#clearEvent" >
                <font>
                   <Font name="Arial Black" size="15.0" />
                </font>
