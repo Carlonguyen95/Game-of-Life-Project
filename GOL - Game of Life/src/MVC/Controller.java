@@ -18,7 +18,8 @@ public class Controller implements Initializable{
     @FXML private Slider sizeSlider;
 
     GraphicsContext gc;
-    private int cellSize = 12;
+    private int cellSize = 30;
+    
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
@@ -26,9 +27,6 @@ public class Controller implements Initializable{
        // colorChanger.setValue(Color.BLACK);
 
         start_Game();
-
-
-
     }
 
 
@@ -39,17 +37,12 @@ public class Controller implements Initializable{
     }
 
     public void closeProgram(ActionEvent event) {
+    	
         System.exit(0);
     }
 
-    private byte[][] board = {
-            {1, 0, 0, 1},
-            {0, 1, 1, 0},
-            {0, 1, 1, 0},
-            {1, 0, 0, 1}
-    };
-
     public void drawGrid() {
+    	
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
 
@@ -101,4 +94,11 @@ public class Controller implements Initializable{
         gc.setFill(Color.BLACK);
         drawGrid();
     }
+    
+    private byte[][] board = {
+						    {1, 0, 0, 1},
+						    {0, 1, 1, 0},
+						    {0, 1, 1, 0},
+						    {1, 0, 0, 1}
+		};
 }

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Label?>
@@ -12,7 +19,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="419.0" prefWidth="510.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller">
+<BorderPane prefHeight="419.0" prefWidth="510.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller">
 
    <center>   
       <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
@@ -25,7 +32,7 @@
             <InnerShadow choke="0.1" height="10.0" radius="4.5" width="10.0" />
          </effect>
          <children>
-             <Canvas fx:id="graphics" height="332.0" onDragDone="#draw" width="496.0" BorderPane.alignment="CENTER" />
+             <Canvas fx:id="graphics" height="335.0" onDragDone="#draw" width="500.0" BorderPane.alignment="CENTER" />
          </children>
                   
             </Pane>
@@ -40,16 +47,8 @@
          <children>
             <Label text="Zoom" />
             <Slider fx:id="sizeSlider" max="50.0" min="1.0" value="5.0" />
-            <MenuButton fx:id="startButton" mnemonicParsing="false" onAction="#drawGrid" text="start" textFill="#d32b2b">
-              <items>
-                <MenuItem mnemonicParsing="false" text="1x" />
-                <MenuItem mnemonicParsing="false" text="2x" />
-                  <MenuItem mnemonicParsing="false" text="4x" />
-              </items>
-               <font>
-                  <Font name="Arial Black" size="15.0" />
-               </font>
-            </MenuButton>
+            <Button mnemonicParsing="false" text="Start" />
+            <Button mnemonicParsing="false" text="Stop" />
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
