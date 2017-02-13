@@ -12,11 +12,18 @@ import javafx.scene.paint.Color;
 
 public class Controller implements Initializable{
 
+    // @FXML private Button startButton;
+    @FXML private Canvas graphics;
+   // @FXML private ColorPicker colorChanger;
+    @FXML private Slider sizeSlider;
+
+    GraphicsContext gc;
+    private int cellSize = 12;
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
-        colorChanger.setValue(Color.BLACK);
+       // colorChanger.setValue(Color.BLACK);
 
         start_Game();
 
@@ -24,13 +31,6 @@ public class Controller implements Initializable{
 
     }
 
-    @FXML private Button startButton;
-    @FXML private Canvas graphics;
-    @FXML private ColorPicker colorChanger;
-    @FXML private Slider sizeSlider;
-
-    GraphicsContext gc;
-    private int cellSize = 10;
 
 
     private void start_Game() {
@@ -53,10 +53,10 @@ public class Controller implements Initializable{
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(1);
 
-        for (double x = 0; x < 600; x += cellSize) {
+        for (double x = 0; x < graphics.getWidth(); x += cellSize) {
             gc.strokeLine(x, 1000, x, 0);
         }
-        for (double y = 0; y < 600; y += cellSize) {
+        for (double y = 0; y < graphics.getHeight(); y += cellSize) {
             gc.strokeLine(0, y, 1000, y);
         }
     }
@@ -81,7 +81,7 @@ public class Controller implements Initializable{
     @FXML
     public void colorChange() {
 
-        gc.setFill(colorChanger.getValue());
+  //      gc.setFill(colorChanger.getValue());
         drawBoard();
     }
 
@@ -97,8 +97,8 @@ public class Controller implements Initializable{
         gc.clearRect(0,0,600,315);
         sizeSlider.setValue(10);
         cellSize = (int) sizeSlider.getValue();
-        colorChanger.setValue(Color.BLACK);
-        gc.setFill(colorChanger.getValue());
+    //    colorChanger.setValue(Color.BLACK);
+        gc.setFill(Color.BLACK);
         drawGrid();
     }
 }

@@ -25,7 +25,7 @@
             <InnerShadow choke="0.1" height="10.0" radius="4.5" width="10.0" />
          </effect>
          <children>
-             <Canvas fx:id="graphics" height="300.0" onDragDone="#draw" width="496.0" BorderPane.alignment="CENTER" />
+             <Canvas fx:id="graphics" height="332.0" onDragDone="#draw" width="496.0" BorderPane.alignment="CENTER" />
          </children>
                   
             </Pane>
