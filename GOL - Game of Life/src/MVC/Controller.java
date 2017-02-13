@@ -1,5 +1,8 @@
 package MVC;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,7 +11,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class Controller implements Initializable{
 
@@ -19,12 +24,18 @@ public class Controller implements Initializable{
 
     GraphicsContext gc;
     private int cellSize = 30;
+    private List<Point> plist;
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
        // colorChanger.setValue(Color.BLACK);
+        
+
+        sizeSlider.setValue(5.0);
+    	plist = new ArrayList<Point>();
+    	draw();
 
         start_Game();
     }
@@ -69,6 +80,11 @@ public class Controller implements Initializable{
     public void draw() {
         drawGrid();
         drawBoard();
+        
+    	GraphicsContext gc = graphics.getGraphicsContext2D();
+        for ( Point p : plist ) {
+            p.draw(gc, Color.BLACK, sizeSlider.getValue());
+        }
     }
 
     @FXML
@@ -101,4 +117,22 @@ public class Controller implements Initializable{
 						    {0, 1, 1, 0},
 						    {1, 0, 0, 1}
 		};
+    
+    private static class Point {
+    	public double x, y;
+    	public void draw(GraphicsContext gc, Paint color, double size) {
+			gc.setFill(Color.BLACK);
+    		gc.fillRect(x-15, y-15, 30, 30);
+    	}
+    }
+    
+
+    
+    public void mouseClicked(MouseEvent event) {
+        Point p = new Point();
+        p.x = event.getX();
+        p.y = event.getY();
+        plist.add(p);
+    	draw();
+    }
 }
