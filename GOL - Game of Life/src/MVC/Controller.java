@@ -18,7 +18,7 @@ public class Controller implements Initializable{
     @FXML private Slider sizeSlider;
 
     GraphicsContext gc;
-    private int cellSize = 12;
+    private int cellSize = 15;
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
@@ -88,13 +88,13 @@ public class Controller implements Initializable{
     @FXML
     public void sizeChange() {
         cellSize = (int) sizeSlider.getValue();
-        gc.clearRect(0,0,600,315);
+        gc.clearRect(0,0,597,317);
         draw();
     }
 
     @FXML
     public void clearBoard() {
-        gc.clearRect(0,0,600,315);
+        gc.clearRect(0,0,597,315);
         sizeSlider.setValue(10);
         cellSize = (int) sizeSlider.getValue();
     //    colorChanger.setValue(Color.BLACK);
