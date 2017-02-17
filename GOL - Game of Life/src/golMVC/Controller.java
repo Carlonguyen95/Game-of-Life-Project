@@ -19,14 +19,6 @@ public class Controller implements Initializable{
     private GraphicsContext gc;
     private int cellSize = 25;
     private byte [][] board = new byte[100][100];
-    /*private byte[][] board = {
-    		
-		    {1, 0, 0, 1},
-		    {0, 1, 1, 0},
-		    {0, 1, 1, 0},
-		    {1, 0, 0, 1},
-};*/
-    
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
@@ -54,13 +46,14 @@ public class Controller implements Initializable{
     	double y = event.getY()/cellSize;
   
     	board[(int)x][(int)y] = 1;
+    	
     	drawBoard();
     	
     }
     
-    public void drawCell(MouseEvent event) { 		
+    public void drawCell(MouseEvent event) {
+    	
          updateBoard(event);
-
 
     }
 
@@ -83,16 +76,13 @@ public class Controller implements Initializable{
     	for (int i = 0; i < board.length; i++) {
     		
             for (int j = 0; j < board[i].length; j++) {
-            	
-                System.out.print(board[i][j]);
-                
+            	                
                 if (board[i][j] == 1) {
                 	
                     gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
                     gc.setFill(colorChanger.getValue());
                 }
             }
-            //System.out.println(" ");
         }
     }
     
@@ -119,38 +109,29 @@ public class Controller implements Initializable{
     	for (int i = 0; i < board.length; i++) {
     		
             for (int j = 0; j < board[i].length; j++) {
-            	
-                System.out.print(board[i][j]);
-                
+            	                
                 if (board[i][j] == 1) {
                 	
                 	draw();                
                 }
             }
-            //System.out.println(" ");
         }
     	drawGrid();
     }
 
     @FXML
     public void clearBoard() {
-    	
-        //gc.clearRect(0,0,graphics.getWidth(),graphics.getHeight());
-        
+    	        
     	for (int i = 0; i < board.length; i++) {
     		
             for (int j = 0; j < board[i].length; j++) {
-            	
-                System.out.print(board[i][j]);
-                
+            	                
                 if (board[i][j] == 1) {
-                	//gc.clearRect(0,0,graphics.getWidth(),graphics.getHeight());
                 	
                     gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
                     board[i][j] = 0;
                 }
             }
-            //System.out.println(" ");
         }
     	
     	drawGrid();
