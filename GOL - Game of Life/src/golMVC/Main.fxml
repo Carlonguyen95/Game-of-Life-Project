@@ -19,10 +19,10 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="419.0" prefWidth="510.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MVC.Controller">
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="golMVC.Controller"> 
 
    <center>   
-      <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
+      <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER"> 
       
                <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -32,7 +32,7 @@
             <InnerShadow choke="0.1" height="10.0" radius="4.5" width="10.0" />
          </effect>
          <children>
-             <Canvas fx:id="graphics" height="335.0" onDragDone="#draw" width="500.0" BorderPane.alignment="CENTER" />
+             <Canvas fx:id="graphics" height="520.0" onMouseClicked="#drawCell" width="790.0" /> 
          </children>
                   
             </Pane>
@@ -46,9 +46,12 @@
       <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Zoom" />
-            <Slider fx:id="sizeSlider" max="50.0" min="1.0" value="5.0" />
+            <Slider fx:id="sizeSlider" max="75.0" min="25.0" onMouseDragged="#sizeChange" />
             <Button mnemonicParsing="false" text="Start" />
-            <Button mnemonicParsing="false" text="Stop" />
+            <Button mnemonicParsing="false" onMouseClicked="#start_Game" text="Load" />
+            <Button mnemonicParsing="false" onMouseClicked="#clearBoard" text="Clear" />
+            <Button mnemonicParsing="false" text="Random" />
+            <ColorPicker fx:id="colorChanger" />
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
