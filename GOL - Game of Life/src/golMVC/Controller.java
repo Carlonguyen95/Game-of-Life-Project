@@ -50,20 +50,25 @@ public class Controller implements Initializable{
     }
     
     
+    
+    public void updateBoard(MouseEvent event) {
+    	
+    	double x = event.getX()/cellSize;
+    	double y = event.getY()/cellSize;
+  
+    	board[(int)x][(int)y] = 1;
+    	
+    	
+    }
+    
     public void drawCell(MouseEvent event) {
-    	
-    	Point p = new Point();
-    	p.x = (int) event.getX();
-    	p.x = (int) event.getY();
-    	
-    	
     	    	
     	for (int i = 0; i < board.length; i++) {
     		
             for (int j = 0; j < board[i].length; j++) {
             	
                 System.out.print(board[i][j]);
-                
+                updateBoard(event);
                 if (board[(int) event.getX()][(int) event.getY()] == 1) {
                 	
                     gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
@@ -108,6 +113,7 @@ public class Controller implements Initializable{
             //System.out.println(" ");
         }
     }
+    
 
     public void draw() {
     	
@@ -157,7 +163,9 @@ public class Controller implements Initializable{
                 
                 if (board[i][j] == 1) {
                 	//gc.clearRect(0,0,graphics.getWidth(),graphics.getHeight());
+                	
                     gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
+                    board[i][j] = 0;
                 }
             }
             //System.out.println(" ");
