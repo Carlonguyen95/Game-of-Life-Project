@@ -9,7 +9,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import java.awt.Point;
 
 public class Controller implements Initializable{
 
@@ -49,36 +48,19 @@ public class Controller implements Initializable{
         System.exit(0);
     }
     
-    
-    
     public void updateBoard(MouseEvent event) {
     	
     	double x = event.getX()/cellSize;
     	double y = event.getY()/cellSize;
   
     	board[(int)x][(int)y] = 1;
-    	
+    	drawBoard();
     	
     }
     
-    public void drawCell(MouseEvent event) {
-    	    	
-    	for (int i = 0; i < board.length; i++) {
-    		
-            for (int j = 0; j < board[i].length; j++) {
-            	
-                System.out.print(board[i][j]);
-                updateBoard(event);
-                if (board[(int) event.getX()][(int) event.getY()] == 1) {
-                	
-                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    gc.setFill(colorChanger.getValue());
-                }
-            }
-            //System.out.println(" ");
-        }
-    	
-    	draw();
+    public void drawCell(MouseEvent event) { 		
+         updateBoard(event);
+
 
     }
 
@@ -147,7 +129,7 @@ public class Controller implements Initializable{
             }
             //System.out.println(" ");
         }
-    	
+    	drawGrid();
     }
 
     @FXML
@@ -174,11 +156,6 @@ public class Controller implements Initializable{
     	drawGrid();
     }
     
-    
-    public void mouseClicked(MouseEvent event) {
-
-    	draw();
-    }
     
 }
 
