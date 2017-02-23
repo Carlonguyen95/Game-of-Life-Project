@@ -1,6 +1,8 @@
 package golController;
 
-import golModel.Board;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +12,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 public class BoardCtrl implements Initializable{
 
@@ -19,7 +22,15 @@ public class BoardCtrl implements Initializable{
 
     private GraphicsContext gc;
     private int cellSize = 10;
-    private byte[][] board = new byte[100][100];
+    //private byte[][] board = new byte[100][100];
+    private byte[][] board = {
+    		{ 1, 0, 0, 1 },
+    		{ 0, 1, 1, 0 },
+    		{ 0, 1, 1, 0 },
+    		{ 1, 0, 0, 1 }
+    		 };
+    private boolean running = false;
+
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
@@ -53,7 +64,6 @@ public class BoardCtrl implements Initializable{
     	double y = event.getY()/cellSize;
   
     	board[(int)x][(int)y] = 1;
-    	
     	drawBoard();
     	
     }
@@ -133,6 +143,42 @@ public class BoardCtrl implements Initializable{
         }
     }
     
+    public void Animation() {
+    	
+    	Timeline timeline = new Timeline();
+    	timeline.setCycleCount(Animation.INDEFINITE);
+    	timeline.setAutoReverse(true);
+    	
+    	KeyFrame keyf =  new KeyFrame(Duration.millis(500), e -> {
+    		drawBoard();
+    });
+    	
+    }
+    
+    @FXML
+    public void run() {    	
+    	while(running) {
+    		System.out.print("Running");
+    		
+    		nextGeneration();
+    	}
+    }
+    
+    public void nextGeneration() {
+    	
+    	for (int i = 0; i < board.length; i++) {
+    		
+            for (int j = 0; j < board[i].length; j++) {
+            	                
+                if (board[i][j] == 1) {
+                	
+                	board[i][j] = 0;
+                }else {
+                	board[i][j] = 1;
+                }
+            }
+        }
+    }    
 
     }
     	
