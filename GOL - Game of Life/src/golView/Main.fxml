@@ -22,7 +22,7 @@
 <BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="golController.BoardCtrl"> 
 
    <center>   
-      <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER"> 
+      <Pane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER"> 
       
                <BorderPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -47,9 +47,10 @@
          <children>
             <Label text="Zoom" />
             <Slider fx:id="sizeSlider" max="75.0" min="10.0" onMouseDragged="#sizeChange" />
-            <Button mnemonicParsing="false" text="Start" />
-            <Button mnemonicParsing="false" text="Load" />
-            <Button mnemonicParsing="false" onMouseClicked="#clearBoard" text="Clear" />
+            <ToggleButton mnemonicParsing="false" fx:id="startPause" onMouseClicked="#toggleBtn" text="Start" />
+            <Button mnemonicParsing="false" onMouseClicked="#stop" text="Stop" />
+            <ToggleButton mnemonicParsing="false" fx:id="eraseBtn" onMouseClicked="#eraseCell" text="Erase" />
+            <Button mnemonicParsing="false" onMouseClicked="#clearBoard" text="Reset" />
             <Button mnemonicParsing="false" text="Random" />
             <ColorPicker fx:id="colorChanger" />
          </children>

@@ -13,30 +13,33 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import javafx.scene.control.ToggleButton;
+
 
 public class BoardCtrl implements Initializable{
 
     @FXML private Canvas graphics;
     @FXML private ColorPicker colorChanger;
     @FXML private Slider sizeSlider;
+    @FXML private ToggleButton startPause;
+    @FXML private ToggleButton eraseBtn;
 
     private GraphicsContext gc;
     private int cellSize = 10;
-    //private byte[][] board = new byte[100][100];
-    private byte[][] board = {
+	private Timeline timeline = new Timeline();
+    private byte[][] board = new byte[100][100];
+    /*private byte[][] board = {
     		{ 1, 0, 0, 1 },
     		{ 0, 1, 1, 0 },
     		{ 0, 1, 1, 0 },
     		{ 1, 0, 0, 1 }
-    		 };
-    private boolean running = false;
-
+    		 };*/
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
-        colorChanger.setValue(Color.BLACK);
+        colorChanger.setValue(Color.GREEN);
         sizeSlider.setValue(10.0);
 
         start_Game();
@@ -93,6 +96,18 @@ public class BoardCtrl implements Initializable{
     	
     	draw();
     }
+    
+    @FXML
+    public void eraseCell(MouseEvent event) {
+    	if (eraseBtn.isSelected()) {
+    	double x = event.getX()/cellSize;
+    	double y = event.getY()/cellSize;
+  
+    	gc.clearRect(cellSize, cellSize, x, y);
+    	
+    	System.out.println("Text");
+    	}
+    }
 
     @FXML
     public void clearBoard() {
@@ -112,6 +127,11 @@ public class BoardCtrl implements Initializable{
         }
     	
     	drawGrid();
+    	timeline.stop();
+    	
+    	if(startPause.isSelected()) {
+    		startPause.setText("Start");
+    	}
     }
     
     public void drawGrid() {
@@ -142,27 +162,27 @@ public class BoardCtrl implements Initializable{
             }
         }
     }
-    
-    public void Animation() {
-    	
-    	Timeline timeline = new Timeline();
-    	timeline.setCycleCount(Animation.INDEFINITE);
-    	timeline.setAutoReverse(true);
-    	
-    	KeyFrame keyf =  new KeyFrame(Duration.millis(500), e -> {
-    		drawBoard();
-    });
-    	
+        
+    @FXML
+    public void run() {    	
+    	Animation();
     }
     
     @FXML
-    public void run() {    	
-    	while(running) {
-    		System.out.print("Running");
-    		
-    		nextGeneration();
+    public void stop(MouseEvent e) {
+    	timeline.stop();
+    	clearBoard();
+    	
+    	if(startPause.isSelected()) {
+    		startPause.setText("Start");
     	}
     }
+    
+    @FXML
+    public void pause() {
+    	timeline.pause();
+    }
+    
     
     public void nextGeneration() {
     	
@@ -173,12 +193,43 @@ public class BoardCtrl implements Initializable{
                 if (board[i][j] == 1) {
                 	
                 	board[i][j] = 0;
+                    gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
+
                 }else {
                 	board[i][j] = 1;
+                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
+
                 }
             }
         }
-    }    
+    	draw();
+    }
+    
+    public void Animation() {
+    	
+    	timeline.setCycleCount(Animation.INDEFINITE);
+    	timeline.setAutoReverse(true);
+    	
+    	// Speed
+    	KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
+    		nextGeneration();
+    	});
+    	
+    	timeline.getKeyFrames().add(keyframe);
+    	timeline.play();
+    }
+    
+    public void toggleBtn(MouseEvent e) {
+    	
+    	if(startPause.isSelected()) {
+    		startPause.setText("Pause");
+    		
+    		run();
+    	}else {
+    		startPause.setText("Start");
+    		pause();
+    	}
+    }
 
     }
     	
