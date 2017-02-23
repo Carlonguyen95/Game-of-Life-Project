@@ -18,13 +18,11 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
         primaryStage.setScene(scene);
-        
     }
 
 	public static void main(String[] args) {
 		
-		launch(args);
-		
+		launch(args);		
 	}
 
 }
