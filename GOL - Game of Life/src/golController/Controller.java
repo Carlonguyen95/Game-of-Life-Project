@@ -1,4 +1,4 @@
-package golMVC;
+package golController;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +16,7 @@ public class Controller implements Initializable{
     @FXML private ColorPicker colorChanger;
     @FXML private Slider sizeSlider;
 
-    private GraphicsContext gc;
+    private GraphicsContext gc; 
     private int cellSize = 25;
     private byte [][] board = new byte[100][100];
     
