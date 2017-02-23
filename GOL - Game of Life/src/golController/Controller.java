@@ -1,5 +1,7 @@
-package golMVC;
+package golController;
 
+import golModel.Model;
+import golModel.Cell;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,15 +19,15 @@ public class Controller implements Initializable{
     @FXML private Slider sizeSlider;
 
     private GraphicsContext gc;
-    private int cellSize = 25;
-    private byte [][] board = new byte[100][100];
+    /*private int cellSize = 10;
+    private byte [][] board = new byte[100][100];*/
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
         colorChanger.setValue(Color.BLACK);
-        sizeSlider.setValue(5.0);
+        sizeSlider.setValue(10.0);
 
         start_Game();
     }
@@ -36,11 +38,11 @@ public class Controller implements Initializable{
     }
 
     public void closeProgram(ActionEvent event) {
-    	
         System.exit(0);
     }
     
-    public void updateBoard(MouseEvent event) {
+    @FXML
+    public void drawCell(MouseEvent event) {
     	
     	double x = event.getX()/cellSize;
     	double y = event.getY()/cellSize;
@@ -51,42 +53,6 @@ public class Controller implements Initializable{
     	
     }
     
-    public void drawCell(MouseEvent event) {
-    	
-         updateBoard(event);
-
-    }
-
-    public void drawGrid() {
-    	
-        gc.setFill(colorChanger.getValue());
-        gc.setStroke(colorChanger.getValue());
-        gc.setLineWidth(1);
-
-        for (double x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 1000, x, 0);
-        }
-        for (double y = 0; y < graphics.getHeight(); y += cellSize) {
-            gc.strokeLine(0, y, 1000, y);
-        }
-    }
-
-    public void drawBoard() {
-
-    	for (int i = 0; i < board.length; i++) {
-    		
-            for (int j = 0; j < board[i].length; j++) {
-            	                
-                if (board[i][j] == 1) {
-                	
-                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    gc.setFill(colorChanger.getValue());
-                }
-            }
-        }
-    }
-    
-
     public void draw() {
     	
         drawGrid();
@@ -104,7 +70,7 @@ public class Controller implements Initializable{
     public void sizeChange(MouseEvent e) {
     	
         cellSize = (int) sizeSlider.getValue();
-        gc.clearRect(0,0,graphics.getWidth(),graphics.getHeight());
+    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
         
     	for (int i = 0; i < board.length; i++) {
     		
@@ -116,12 +82,14 @@ public class Controller implements Initializable{
                 }
             }
         }
+    	
     	drawGrid();
     }
 
     @FXML
     public void clearBoard() {
-    	        
+    	gc.clearRect(cellSize, cellSize, graphics.getWidth(), graphics.getHeight());
+    	
     	for (int i = 0; i < board.length; i++) {
     		
             for (int j = 0; j < board[i].length; j++) {
@@ -137,6 +105,8 @@ public class Controller implements Initializable{
     	drawGrid();
     }
     
-    
-}
+
+    }
+    	
+
 

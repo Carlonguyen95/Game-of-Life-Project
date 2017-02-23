@@ -32,7 +32,7 @@
             <InnerShadow choke="0.1" height="10.0" radius="4.5" width="10.0" />
          </effect>
          <children>
-             <Canvas fx:id="graphics" height="520.0" onMouseClicked="#drawCell" width="790.0" /> 
+             <Canvas fx:id="graphics" height="520.0" onMouseDragged="#drawCell" width="790.0" /> 
          </children>
                   
             </Pane>
@@ -46,9 +46,9 @@
       <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Zoom" />
-            <Slider fx:id="sizeSlider" max="75.0" min="25.0" onMouseDragged="#sizeChange" />
+            <Slider fx:id="sizeSlider" max="75.0" min="10.0" onMouseDragged="#sizeChange" />
             <Button mnemonicParsing="false" text="Start" />
-            <Button mnemonicParsing="false" onMouseClicked="#start_Game" text="Load" />
+            <Button mnemonicParsing="false" text="Load" />
             <Button mnemonicParsing="false" onMouseClicked="#clearBoard" text="Clear" />
             <Button mnemonicParsing="false" text="Random" />
             <ColorPicker fx:id="colorChanger" />
