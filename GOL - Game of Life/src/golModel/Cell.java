@@ -7,4 +7,5 @@ public class Cell {
 	public int getCellSize() {
 		return this.cellSize;
 	}
+	
 }

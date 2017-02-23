@@ -69,9 +69,4 @@ public class Model extends Canvas implements Runnable {
 		
 	}
 	
-	/**
-	 * Draw metoder
-	 */
-
-	
 }
