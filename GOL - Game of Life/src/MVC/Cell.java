@@ -19,11 +19,9 @@ public class Cell {
 		alive = b;
 	}
 	
-	public double getCrdinate() {
+	/*public double getCrdinate() {
 		return coordinate;
-	}
+	}*/
 	
-	public void setCrdinate(double d) {
-		return coordinate;
-	}
+
 }
