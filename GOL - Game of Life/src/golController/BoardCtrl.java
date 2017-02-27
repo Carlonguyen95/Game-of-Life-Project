@@ -191,23 +191,23 @@ public class BoardCtrl implements Initializable{
     		
             for (int j = 0; j < board[i].length; j++) {
             	                
-                if (board[i][j] == 1) {
-                	 //Any live cell with fewer than two live neighbours dies.
-           		 //Any live cell with more than three live neighbours dies
-           		   //Any live cell with two or three live neighbours lives, unchanged, to the next generation.
-           		   //Any dead cell with exactly three live neighbours will come to life. 
-                	
+            	if(board[i][j] == 0) { // hvis den er dod
+            		if(antallNaboer(i,j) == 3) {
+            			gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
+            			board[i][j] = 1;
+            		}           	
+                }
+            	
+            	else { // hvis den lever
+                  if(antallNaboer(i,j)< 2 || antallNaboer(i,j) > 3) {
                     gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-
-                }else {
-                	 //Any dead cell with exactly three live neighbours will come to life. 
-                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-
+                    board[i][j] = 0;
+                  }
                 }
             }
         }
     	draw();
-    	integrityRules();
+
     }
     
     public void Animation() {
@@ -239,94 +239,32 @@ public class BoardCtrl implements Initializable{
     
     
     
-    
-    public int numberOfNeigbours(int i, int j) {
-    int nr = 0;
-    //antar at alle celler som sjekkes ikke er kant-celler (har alltd 8 naboer)
+    public int antallNaboer( int x, int y) {
+
+    	int antall = 0; 
     	
-    // 1 lever, 0 dod
-    
-    if(board[i-1][j] == 1) { //under
-    	nr++;
-    
-    }
-    if(board[i+1][j] == 1) { //over
-    nr++;	
-    	
-    	
-    }
-    if(board[i][j+1] == 1) { //hoyre
-    	nr++;
-    
-    }
-    if(board[i][j-1] == 1) { //venstre
-    nr++;
-    
-    }
-    
-    if(board[i-1][j+1] == 1) { //hoyre diagonalt ned
-    	nr++;
-    
-    }
-      if(board[i-1][j-1] == 1) { //hoyre diagonalt opp
-    nr++;
-    
-    }
-    
-       if(board[i+1][j+1] == 1) { //venstre diagonalt ned
-    	nr++;
-    
-    }
-    
-    if(board[i+1][j-1] == 1) { //venstre diagonalt opp
-    nr++;	
+    	for(int i = x-1; i <= x+1; i++){
+    		
+            if(i < board.length && i > 0){
+            	
+                for(int j = y-1; j <= y + 1; j++){
+                	
+                    if(j < board[i].length && j > 0){
+                    	
+                        if (board[i][j] == 1) {
+                        	
+                            antall++;
+                        }
+                    }
+                }
+            }
+        }
     	
     	
-    }
- 
-    if(nr ==2 || nr == 3) {
-    	return 1;
-    }
-    else {
-    	return 0;
-    }
-   }
-    
-    
-    
-    public void integrityRules() {
-   
-   for(int i = 0; i<board.length; i++) {
-	   for (int j = 0; j <board.length; j++) {
-		   //Any live cell with fewer than two live neighbours dies.
-		   if(board[i][j] == 1 && numberOfNeigbours(i,j) < 2) {
-			   board[i][j] = 0;
-			   gc.clearRect(i*cellSize, j*cellSize, cellSize, cellSize);
-			   
-		   }
-				   
-		   //Any live cell with more than three live neighbours dies
-		   if(board[i][j] == 1 && numberOfNeigbours(i,j) == 0) {
-			   board[i][j] = 0;
-			   gc.clearRect(i*cellSize, j*cellSize, cellSize, cellSize);
-		   }
+    	return antall;
     	
-		   //Any live cell with two or three live neighbours lives, unchanged, to the next generation.
-		   if(board[i][j] == 1 &&  numberOfNeigbours(i,j) == 1 ) {
-			   board[i][j] = 1;
-			   gc.fillRect(i*cellSize, j*cellSize, cellSize, cellSize);
-		   }
-    	
-		   //Any dead cell with exactly three live neighbours will come to life. 
-		   if(board[i][j] == 0 && numberOfNeigbours(i,j)== 1) {
-			   board[i][j] = 1;
-			   gc.fillRect(i*cellSize, j*cellSize, cellSize, cellSize);
-		   }
-    	
-	  } 
-   	}    
-	   
-    }    	
+    }
+    
     	
 }
     
