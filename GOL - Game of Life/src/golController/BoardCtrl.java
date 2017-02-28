@@ -3,12 +3,15 @@ package golController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -23,6 +26,9 @@ public class BoardCtrl implements Initializable{
     @FXML private Slider sizeSlider;
     @FXML private ToggleButton startPause;
     @FXML private ToggleButton eraseBtn;
+    @FXML private ComboBox speedBtn;
+    
+    ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
 
     private GraphicsContext gc;
     private int cellSize = 10;
@@ -34,13 +40,15 @@ public class BoardCtrl implements Initializable{
     		{ 0, 1, 1, 0 },
     		{ 1, 0, 0, 1 }
     		 };*/
-    
+	
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
-        colorChanger.setValue(Color.GREEN);
+        colorChanger.setValue(Color.BLACK);
         sizeSlider.setValue(10.0);
+        speedBtn.setValue("Speed");
+        speedBtn.setItems(speedList);
 
         start_Game();
     }
@@ -131,6 +139,7 @@ public class BoardCtrl implements Initializable{
     	
     	if(startPause.isSelected()) {
     		startPause.setText("Start");
+    		startPause.setSelected(false);
     	}
     }
     
@@ -141,10 +150,10 @@ public class BoardCtrl implements Initializable{
         gc.setLineWidth(1);
 
         for (int x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 1000, x, 0);
+            gc.strokeLine(x, 530, x, 0);
         }
-        for (int y = 0; y < graphics.getHeight(); y += cellSize) {
-            gc.strokeLine(0, y, 1000, y);
+        for (int y = 0; y < graphics.getWidth(); y += cellSize) {
+            gc.strokeLine(0, y, 900, y);
         }
     }
 
@@ -175,6 +184,7 @@ public class BoardCtrl implements Initializable{
     	
     	if(startPause.isSelected()) {
     		startPause.setText("Start");
+    		startPause.setSelected(false);
     	}
     }
     
@@ -211,7 +221,7 @@ public class BoardCtrl implements Initializable{
     	timeline.setAutoReverse(true);
     	
     	// Speed
-    	KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
+    	KeyFrame keyframe =  new KeyFrame(Duration.millis(400), e -> {
     		nextGeneration();
     	});
     	
@@ -230,8 +240,21 @@ public class BoardCtrl implements Initializable{
     		pause();
     	}
     }
-
+    
+    public void speedSlction() {
+    	
+    	if(speedBtn.getValue().equals("1x")) {
+        	timeline.setRate(1);
+    	}
+    	if(speedBtn.getValue().equals("2x")) {
+        	timeline.setRate(2);
+    	}
+    	if(speedBtn.getValue().equals("4x")) {
+        	timeline.setRate(4);
+    	}
     }
+
+}
     	
 
 
