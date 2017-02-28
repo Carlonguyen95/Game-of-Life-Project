@@ -191,22 +191,24 @@ public class BoardCtrl implements Initializable{
     		
             for (int j = 0; j < board[i].length; j++) {
             	                
-            	if(board[i][j] == 0) { // hvis den er dod
-            		if(antallNaboer(i,j) == 3) {
+            	if(board[i][j] == 0) { //the cell is dead
+            		if(neighbours(i,j) == 3) {
             			gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
             			board[i][j] = 1;
             		}           	
                 }
             	
-            	else { // hvis den lever
-                  if(antallNaboer(i,j)< 2 || antallNaboer(i,j) > 3) {
+            	else { // the cell is alive
+                  if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
                     gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
                     board[i][j] = 0;
-                  }
-                }
+                  }               
+                
             }
         }
-    	draw();
+    	
+   	}     
+    draw();
 
     }
     
@@ -237,34 +239,30 @@ public class BoardCtrl implements Initializable{
     }
     
     
-    
-    
-    public int antallNaboer( int x, int y) {
+    public int neighbours(int x, int y) {
 
-    	int antall = 0; 
+    	int nr = -1; //so that the cell doesnt count itself
     	
     	for(int i = x-1; i <= x+1; i++){
     		
-            if(i < board.length && i > 0){
+            if(i < board.length && i > 0){ //cells on the edges (rows)
             	
                 for(int j = y-1; j <= y + 1; j++){
                 	
-                    if(j < board[i].length && j > 0){
+                    if(j < board[i].length && j > 0){ // cells on the edges (columns)
                     	
                         if (board[i][j] == 1) {
                         	
-                            antall++;
+                            nr++;
                         }
                     }
                 }
             }
         }
-    	
-    	
-    	return antall;
+  	
+    	return nr;
     	
     }
     
-    	
+	
 }
-    
