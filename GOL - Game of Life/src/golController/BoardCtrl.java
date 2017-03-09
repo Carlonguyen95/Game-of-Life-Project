@@ -187,13 +187,21 @@ public class BoardCtrl implements Initializable{
     
     public void nextGeneration() {
     	
-    	byte[][] updated = board;
+    	byte[][] updated = new byte[board.length][board[0].length];
+    	
+    	for(int i = 0; i < board.length; i++) { // copy board
+    		for( int j =0; j < board[i].length; j++) {
+    			updated[i][j] = board[i][j];
+    		}
+    	}
+    	
+    	
     	
     	for (int i = 0; i < updated.length; i++) {
     		
-            for (int j = 0; j < board[i].length; j++) {
+            for (int j = 0; j < updated[i].length; j++) {
             	                
-            	if(board[i][j] == 0) { //the cell is dead
+            	if(updated[i][j] == 0) { //the cell is dead
             		if(neighbours(i,j) == 3) {
             			gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 
@@ -210,6 +218,8 @@ public class BoardCtrl implements Initializable{
         }
     	
    	}     
+    	
+    board = updateBoard();
     draw();
     
 
