@@ -176,6 +176,7 @@ public class BoardCtrl implements Initializable{
     	
     	if(startPause.isSelected()) {
     		startPause.setText("Start");
+    		startPause.setSelected(false);
     	}
     }
     
@@ -185,18 +186,16 @@ public class BoardCtrl implements Initializable{
     }
     
     
-    public void nextGeneration() {
-    	
+    public void nextGeneration() { 	
     	byte[][] updated = new byte[board.length][board[0].length];
     	
-    	for(int i = 0; i < board.length; i++) { // copy board
+    	for(int i = 0; i < board.length; i++) { // copies board
     		for( int j =0; j < board[i].length; j++) {
     			updated[i][j] = board[i][j];
     		}
     	}
     	
-    	
-    	
+ 
     	for (int i = 0; i < updated.length; i++) {
     		
             for (int j = 0; j < updated[i].length; j++) {
@@ -210,16 +209,15 @@ public class BoardCtrl implements Initializable{
             	
             	else { // the cell is alive
                   if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
-                    gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
+                	  gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
 
-                  }               
-                
+                  }                          
             }
         }
     	
    	}     
     	
-    board = updateBoard();
+    updateBoard(board);
     draw();
     
 
@@ -255,7 +253,7 @@ public class BoardCtrl implements Initializable{
     public int neighbours(int x, int y) {
 
     	int nr = 0; 
-    	if(board[x][y] == 1) { //so that the cell doesnt count itself
+    	if(board[x][y] == 1) { //so that the cell doesn't count itself
     		nr = -1;
     	}
     	
@@ -281,9 +279,8 @@ public class BoardCtrl implements Initializable{
     }
     
     
-    public byte[][] updateBoard() {
+    public void updateBoard(byte[][ ] updated) {
     	
-    	byte[][] updated = new byte[board.length][board[0].length];
     	
     	for (int i = 0; i < updated.length; i++) {
     		
@@ -291,14 +288,12 @@ public class BoardCtrl implements Initializable{
             	                
             	if(updated[i][j] == 0) { //the cell is dead
             		if(neighbours(i,j) == 3) {
-
             			updated[i][j] = 1;
             		}           	
                 }
             	
             	else { // the cell is alive
                   if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
-
                     updated[i][j] = 0;
                   }               
                 
@@ -307,7 +302,7 @@ public class BoardCtrl implements Initializable{
     	
    	} 
     	
-    	return updated;
+
     }
     
     
