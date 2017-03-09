@@ -217,7 +217,7 @@ public class BoardCtrl implements Initializable{
     	
    	}     
     	
-    updateBoard(board);
+    board = updateBoard();
     draw();
     
 
@@ -279,14 +279,15 @@ public class BoardCtrl implements Initializable{
     }
     
     
-    public void updateBoard(byte[][ ] updated) {
+    public byte[][] updateBoard() {
     	
+    	byte[][] updated = new byte[board.length][board[0].length];
     	
     	for (int i = 0; i < updated.length; i++) {
     		
             for (int j = 0; j < updated[i].length; j++) {
             	                
-            	if(updated[i][j] == 0) { //the cell is dead
+            	if(board[i][j] == 0) { //the cell is dead
             		if(neighbours(i,j) == 3) {
             			updated[i][j] = 1;
             		}           	
@@ -302,7 +303,7 @@ public class BoardCtrl implements Initializable{
     	
    	} 
     	
-
+    	return updated;
     }
     
     
