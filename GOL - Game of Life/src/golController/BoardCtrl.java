@@ -187,21 +187,23 @@ public class BoardCtrl implements Initializable{
     
     public void nextGeneration() {
     	
-    	for (int i = 0; i < board.length; i++) {
+    	byte[][] updated = board;
+    	
+    	for (int i = 0; i < updated.length; i++) {
     		
             for (int j = 0; j < board[i].length; j++) {
             	                
             	if(board[i][j] == 0) { //the cell is dead
             		if(neighbours(i,j) == 3) {
             			gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-            			board[i][j] = 1;
+
             		}           	
                 }
             	
             	else { // the cell is alive
                   if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
                     gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    board[i][j] = 0;
+
                   }               
                 
             }
@@ -209,6 +211,7 @@ public class BoardCtrl implements Initializable{
     	
    	}     
     draw();
+    
 
     }
     
@@ -241,7 +244,10 @@ public class BoardCtrl implements Initializable{
     
     public int neighbours(int x, int y) {
 
-    	int nr = -1; //so that the cell doesnt count itself
+    	int nr = 0; 
+    	if(board[x][y] == 1) { //so that the cell doesnt count itself
+    		nr = -1;
+    	}
     	
     	for(int i = x-1; i <= x+1; i++){
     		
@@ -264,5 +270,35 @@ public class BoardCtrl implements Initializable{
     	
     }
     
-	
+    
+    public byte[][] updateBoard() {
+    	
+    	byte[][] updated = new byte[board.length][board[0].length];
+    	
+    	for (int i = 0; i < updated.length; i++) {
+    		
+            for (int j = 0; j < updated[i].length; j++) {
+            	                
+            	if(updated[i][j] == 0) { //the cell is dead
+            		if(neighbours(i,j) == 3) {
+
+            			updated[i][j] = 1;
+            		}           	
+                }
+            	
+            	else { // the cell is alive
+                  if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
+
+                    updated[i][j] = 0;
+                  }               
+                
+            }
+        }
+    	
+   	} 
+    	
+    	return updated;
+    }
+    
+    
 }
