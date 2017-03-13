@@ -141,10 +141,10 @@ public class BoardCtrl implements Initializable{
         gc.setLineWidth(1);
 
         for (int x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 1000, x, 0);
+            gc.strokeLine(x, 790, x, 0);
         }
-        for (int y = 0; y < graphics.getHeight(); y += cellSize) {
-            gc.strokeLine(0, y, 1000, y);
+        for (int y = 0; y < graphics.getWidth(); y += cellSize) {
+            gc.strokeLine(0, y, 790, y);
         }
     }
 
