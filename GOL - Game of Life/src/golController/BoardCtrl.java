@@ -16,25 +16,22 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 
+/**
+ * @author Guestacc
+ *
+ */
 public class BoardCtrl implements Initializable{
 
     @FXML private Canvas graphics;
     @FXML private ColorPicker colorChanger;
     @FXML private Slider sizeSlider;
     @FXML private ToggleButton startPause;
-    @FXML private ToggleButton eraseBtn;
 
     private GraphicsContext gc;
     private int cellSize = 10;
 	private Timeline timeline = new Timeline();
     private byte[][] board = new byte[100][100];
-    /*private byte[][] board = {
-    		{ 1, 0, 0, 1 },
-    		{ 0, 1, 1, 0 },
-    		{ 0, 1, 1, 0 },
-    		{ 1, 0, 0, 1 }
-    		
-    		 };*/
+
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
@@ -55,23 +52,20 @@ public class BoardCtrl implements Initializable{
     	draw();
     }
     
-    public void draw() {
+    
+    public void toggleBtn(MouseEvent e) {
     	
-        drawGrid();
-        drawBoard();
+    	if(startPause.isSelected()) {
+    		startPause.setText("Pause");
+    		
+    		run();
+    	}else {
+    		startPause.setText("Start");
+    		pause();
+    	}
     }
     
-    @FXML
-    public void drawCell(MouseEvent event) {
-    	
-    	double x = event.getX()/cellSize;
-    	double y = event.getY()/cellSize;
-  
-    	board[(int)x][(int)y] = 1;
-    	drawBoard();
-    	
-    }
-    
+
     @FXML
     public void colorChange() {
 
@@ -99,16 +93,77 @@ public class BoardCtrl implements Initializable{
     }
     
     @FXML
-    public void eraseCell(MouseEvent event) {
-    	if (eraseBtn.isSelected()) {
+    public void drawCell(MouseEvent event) {
+    	
     	double x = event.getX()/cellSize;
     	double y = event.getY()/cellSize;
   
-    	gc.clearRect(cellSize, cellSize, x, y);
+    	board[(int)x][(int)y] = 1;
+    	drawBoard();
     	
-    	System.out.println("Text");
+    }
+    
+    
+    public void run() {    	
+    	Animation();
+    }
+    
+    @FXML
+    public void stop(MouseEvent e) {
+    	timeline.stop();
+    	drawBoard();
+    	
+    	if(startPause.isSelected()) {
+    		startPause.setText("Start");
+    		startPause.setSelected(false);
     	}
     }
+    
+    @FXML
+    public void pause() {
+    	timeline.pause();
+    }
+    
+    
+    /**
+     *Draw metoder  
+     */
+    public void draw() {
+    	
+        drawGrid();
+        drawBoard();
+    }
+    
+    public void drawGrid() {
+
+    	gc.setFill(colorChanger.getValue());
+        gc.setStroke(colorChanger.getValue());
+        gc.setLineWidth(1);
+
+        for (int x = 0; x < graphics.getWidth(); x += cellSize) {
+            gc.strokeLine(x, 1000, x, 0);
+        }
+        for (int y = 0; y < graphics.getHeight(); y += cellSize) {
+            gc.strokeLine(0, y, 1000, y);
+        }
+    }
+
+    public void drawBoard() {
+    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
+    	for (int i = 0; i < board.length; i++) {
+    		
+            for (int j = 0; j < board[i].length; j++) {
+            	                
+                if (board[i][j] == 1) {
+                	
+                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
+                    gc.setFill(colorChanger.getValue());
+                }
+            }
+        }
+    }
+    
+
 
     @FXML
     public void clearBoard() {
@@ -132,58 +187,12 @@ public class BoardCtrl implements Initializable{
     	
     	if(startPause.isSelected()) {
     		startPause.setText("Start");
-    	}
-    }
-    
-    public void drawGrid() {
-
-    	gc.setFill(colorChanger.getValue());
-        gc.setStroke(colorChanger.getValue());
-        gc.setLineWidth(1);
-
-        for (int x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 1000, x, 0);
-        }
-        for (int y = 0; y < graphics.getHeight(); y += cellSize) {
-            gc.strokeLine(0, y, 1000, y);
-        }
-    }
-
-    public void drawBoard() {
-
-    	for (int i = 0; i < board.length; i++) {
-    		
-            for (int j = 0; j < board[i].length; j++) {
-            	                
-                if (board[i][j] == 1) {
-                	
-                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    gc.setFill(colorChanger.getValue());
-                }
-            }
-        }
-    }
-        
-    @FXML
-    public void run() {    	
-    	Animation();
-    }
-    
-    @FXML
-    public void stop(MouseEvent e) {
-    	timeline.stop();
-    	drawBoard();
-    	
-    	if(startPause.isSelected()) {
-    		startPause.setText("Start");
     		startPause.setSelected(false);
     	}
     }
     
-    @FXML
-    public void pause() {
-    	timeline.pause();
-    }
+    
+
     
     
     public void nextGeneration() { 	
@@ -203,6 +212,7 @@ public class BoardCtrl implements Initializable{
             	                
             	if(updated[i][j] == 0) { //the cell is dead
             		if(neighbours(i,j) == 3) {
+
             			gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 
             		}           	
@@ -236,18 +246,6 @@ public class BoardCtrl implements Initializable{
     	timeline.play();
     }
     
-    public void toggleBtn(MouseEvent e) {
-    	
-    	if(startPause.isSelected()) {
-    		startPause.setText("Pause");
-    		
-    		run();
-    	}else {
-    		startPause.setText("Start");
-    		pause();
-    	}
-    }
-    
     
     public int neighbours(int x, int y) {
 
@@ -279,7 +277,7 @@ public class BoardCtrl implements Initializable{
     
     public void updateBoard(byte[][] updated) {
     	
-    //	byte[][] updated = new byte[board.length][board[0].length];
+ 
     	
     	for (int i = 0; i < updated.length; i++) {
     		
@@ -301,7 +299,7 @@ public class BoardCtrl implements Initializable{
     	
    	} 
     	
-    //	return updated;
+
     }
     
     
