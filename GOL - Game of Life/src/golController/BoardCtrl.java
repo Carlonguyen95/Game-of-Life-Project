@@ -3,42 +3,45 @@ package golController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
-
-/**
- * @author Guestacc
- *
- */
 public class BoardCtrl implements Initializable{
 
     @FXML private Canvas graphics;
-    @FXML private ColorPicker colorChanger;
-    @FXML private Slider sizeSlider;
-    @FXML private ToggleButton startPause;
+    @FXML private ColorPicker colorChangerBtn;
+    @FXML private Slider sizeSliderBtn;
+    @FXML private ToggleButton startPauseBtn;
+    @FXML private Button resetBtn;
+    @FXML private ComboBox<String> speedBtn;
+    ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
 
     private GraphicsContext gc;
     private int cellSize = 10;
 	private Timeline timeline = new Timeline();
     private byte[][] board = new byte[100][100];
-
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
-        colorChanger.setValue(Color.GREEN);
-        sizeSlider.setValue(10.0);
+        colorChangerBtn.setValue(Color.GREEN);
+        sizeSliderBtn.setValue(10.0);
+        speedBtn.setValue("Speed"); 
+        speedBtn.setItems(speedList);
 
         start_Game();
     }
@@ -47,36 +50,38 @@ public class BoardCtrl implements Initializable{
         System.exit(0);
     }
     
-    public void start_Game() {
-    	
+    public void start_Game() {  	
     	draw();
     }
     
+	/**
+	 *	Buttons for USERs
+	 * 
+	 */
     
-    public void toggleBtn(MouseEvent e) {
+    public void toggleBtn() {
     	
-    	if(startPause.isSelected()) {
-    		startPause.setText("Pause");
+    	if(startPauseBtn.isSelected()) {
+    		startPauseBtn.setText("Pause");
     		
     		run();
     	}else {
-    		startPause.setText("Start");
+    		startPauseBtn.setText("Start");
     		pause();
     	}
     }
-    
 
     @FXML
     public void colorChange() {
 
-        gc.setFill(colorChanger.getValue());
+        gc.setFill(colorChangerBtn.getValue());
         drawBoard();
     }
 
     @FXML
-    public void sizeChange(MouseEvent e) {
+    public void sizeChange() {
     	
-        cellSize = (int) sizeSlider.getValue();
+        cellSize = (int) sizeSliderBtn.getValue();
     	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
         
     	for (int i = 0; i < board.length; i++) {
@@ -92,7 +97,24 @@ public class BoardCtrl implements Initializable{
     	draw();
     }
     
-    @FXML
+    public void speedSlction() { 
+        
+        if(speedBtn.getValue().equals("1x")) { 
+            timeline.setRate(1); 
+        } 
+        if(speedBtn.getValue().equals("2x")) { 
+            timeline.setRate(2); 
+        } 
+        if(speedBtn.getValue().equals("4x")) { 
+            timeline.setRate(4); 
+        } 
+      } 
+    
+    /**
+     *	Methods for USERs 
+     *
+     */
+
     public void drawCell(MouseEvent event) {
     	
     	double x = event.getX()/cellSize;
@@ -102,32 +124,20 @@ public class BoardCtrl implements Initializable{
     	drawBoard();
     	
     }
-    
-    
+
     public void run() {    	
     	Animation();
     }
     
-    @FXML
-    public void stop(MouseEvent e) {
-    	timeline.stop();
-    	drawBoard();
-    	
-    	if(startPause.isSelected()) {
-    		startPause.setText("Start");
-    		startPause.setSelected(false);
-    	}
-    }
-    
-    @FXML
     public void pause() {
     	timeline.pause();
     }
     
-    
     /**
-     *Draw metoder  
+     *	Draw and clear methods for board, grid and cells
+     *
      */
+
     public void draw() {
     	
         drawGrid();
@@ -136,8 +146,8 @@ public class BoardCtrl implements Initializable{
     
     public void drawGrid() {
 
-    	gc.setFill(colorChanger.getValue());
-        gc.setStroke(colorChanger.getValue());
+    	gc.setFill(colorChangerBtn.getValue());
+        gc.setStroke(colorChangerBtn.getValue());
         gc.setLineWidth(1);
 
         for (int x = 0; x < graphics.getWidth(); x += cellSize) {
@@ -149,7 +159,7 @@ public class BoardCtrl implements Initializable{
     }
 
     public void drawBoard() {
-    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
+    	
     	for (int i = 0; i < board.length; i++) {
     		
             for (int j = 0; j < board[i].length; j++) {
@@ -157,18 +167,16 @@ public class BoardCtrl implements Initializable{
                 if (board[i][j] == 1) {
                 	
                     gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    gc.setFill(colorChanger.getValue());
+                    gc.setFill(colorChangerBtn.getValue());
                 }
             }
         }
     }
-    
-
 
     @FXML
     public void clearBoard() {
     	
-    	gc.clearRect(cellSize, cellSize, graphics.getWidth(), graphics.getHeight());
+    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
     	
     	for (int i = 0; i < board.length; i++) {
     		
@@ -185,15 +193,16 @@ public class BoardCtrl implements Initializable{
     	drawGrid();
     	timeline.stop();
     	
-    	if(startPause.isSelected()) {
-    		startPause.setText("Start");
-    		startPause.setSelected(false);
+    	if(startPauseBtn.isSelected()) {
+    		startPauseBtn.setText("Start");
+    		startPauseBtn.setSelected(false);
     	}
     }
     
-    
-
-    
+    /**
+     *	Next Generation methods
+     * 
+     */
     
     public void nextGeneration() { 	
     	byte[][] updated = new byte[board.length][board[0].length];
@@ -205,7 +214,7 @@ public class BoardCtrl implements Initializable{
     	}
     	
     	updateBoard(updated);
- 
+    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
     	for (int i = 0; i < updated.length; i++) {
     		
             for (int j = 0; j < updated[i].length; j++) {
@@ -228,8 +237,6 @@ public class BoardCtrl implements Initializable{
    	}     
     board = updated;
     draw();
-    
-
     }
     
     public void Animation() {
@@ -273,12 +280,9 @@ public class BoardCtrl implements Initializable{
     	return nr;
     	
     }
-    
-    
+
     public void updateBoard(byte[][] updated) {
-    	
- 
-    	
+
     	for (int i = 0; i < updated.length; i++) {
     		
             for (int j = 0; j < updated[i].length; j++) {
