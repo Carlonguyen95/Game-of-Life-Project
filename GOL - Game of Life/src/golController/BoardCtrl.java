@@ -195,6 +195,7 @@ public class BoardCtrl implements Initializable{
     		}
     	}
     	
+    	updateBoard(updated);
  
     	for (int i = 0; i < updated.length; i++) {
     		
@@ -210,14 +211,12 @@ public class BoardCtrl implements Initializable{
             	else { // the cell is alive
                   if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
                 	  gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-
                   }                          
             }
         }
     	
    	}     
-    	
-    board = updateBoard();
+    board = updated;
     draw();
     
 
@@ -266,7 +265,6 @@ public class BoardCtrl implements Initializable{
                     if(j < board[i].length && j > 0){ // cells on the edges (columns)
                     	
                         if (board[i][j] == 1) {
-                        	
                             nr++;
                         }
                     }
@@ -279,9 +277,9 @@ public class BoardCtrl implements Initializable{
     }
     
     
-    public byte[][] updateBoard() {
+    public void updateBoard(byte[][] updated) {
     	
-    	byte[][] updated = new byte[board.length][board[0].length];
+    //	byte[][] updated = new byte[board.length][board[0].length];
     	
     	for (int i = 0; i < updated.length; i++) {
     		
@@ -303,7 +301,7 @@ public class BoardCtrl implements Initializable{
     	
    	} 
     	
-    	return updated;
+    //	return updated;
     }
     
     
