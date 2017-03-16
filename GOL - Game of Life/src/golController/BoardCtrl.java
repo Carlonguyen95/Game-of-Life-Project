@@ -121,8 +121,7 @@ public class BoardCtrl implements Initializable{
     	double y = event.getY()/cellSize;
   
     	board[(int)x][(int)y] = 1;
-    	drawBoard();
-    	
+    	drawBoard();  	
     }
 
     public void run() {    	
@@ -258,7 +257,7 @@ public class BoardCtrl implements Initializable{
 
     	int nr = 0; 
     	if(board[x][y] == 1) { //so that the cell doesn't count itself
-    		nr = -1;
+    		nr--;
     	}
     	
     	for(int i = x-1; i <= x+1; i++){
@@ -276,9 +275,7 @@ public class BoardCtrl implements Initializable{
                 }
             }
         }
-  	
-    	return nr;
-    	
+    	return nr;   	
     }
 
     public void updateBoard(byte[][] updated) {
@@ -305,6 +302,5 @@ public class BoardCtrl implements Initializable{
     	
 
     }
-    
     
 }
