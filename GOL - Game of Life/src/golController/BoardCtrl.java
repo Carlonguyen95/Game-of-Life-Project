@@ -1,5 +1,11 @@
 package golController;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,9 +19,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
@@ -26,6 +35,8 @@ public class BoardCtrl implements Initializable{
     @FXML private Slider sizeSliderBtn;
     @FXML private ToggleButton startPauseBtn;
     @FXML private Button resetBtn;
+    @FXML private Button loadFileBtn;
+    @FXML private ListView listview;
     @FXML private ComboBox<String> speedBtn;
     ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
 
@@ -38,7 +49,7 @@ public class BoardCtrl implements Initializable{
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
-        colorChangerBtn.setValue(Color.GREEN);
+        colorChangerBtn.setValue(Color.BLACK);
         sizeSliderBtn.setValue(10.0);
         speedBtn.setValue("Speed"); 
         speedBtn.setItems(speedList);
@@ -146,14 +157,14 @@ public class BoardCtrl implements Initializable{
     public void drawGrid() {
 
     	gc.setFill(colorChangerBtn.getValue());
-        gc.setStroke(colorChangerBtn.getValue());
+    	gc.setStroke(colorChangerBtn.getValue());        
         gc.setLineWidth(1);
 
         for (int x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 790, x, 0);
+            gc.strokeLine(x, 900, x, 0);
         }
         for (int y = 0; y < graphics.getWidth(); y += cellSize) {
-            gc.strokeLine(0, y, 790, y);
+            gc.strokeLine(0, y, 900, y);
         }
     }
 
@@ -303,4 +314,28 @@ public class BoardCtrl implements Initializable{
 
     }
     
+    /**
+     * Below are methods for loading and reading predefined gameboard-files into the game
+     * 
+     */
+    
+    public void readGameBoard(Reader r) throws IOException {
+    	
+    }
+    
+    public void readGameBoardFromDisk() throws FileNotFoundException, IOException {
+    	FileChooser file = new FileChooser();
+    	file.getExtensionFilters().addAll(
+    			new ExtensionFilter("LIF, LIFE, JPG, PNG, GIF Files", "*.lif", "*.life", "*.jpg", "*.png", "*.gif"));
+    	
+    	File selectedFile = file.showOpenDialog(null);
+    	
+    	if(selectedFile != null) {
+    		listview.getItems().add(selectedFile.getName());
+    		readGameBoard(new FileReader(selectedFile));
+    	}else {
+    		System.out.println("File is invalid!");
+    	}
+    }
+
 }
