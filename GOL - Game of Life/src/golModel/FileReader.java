@@ -39,34 +39,31 @@ public class FileReader {
 			) {
 			
 
-			int line = lineCounter.read();
+			int line =0; 
 
-			while (line != -1) { // number of lines in the file
+			while (line  != -1) { // number of lines in the file
 				counter ++;
+				line = lineCounter.read();
 			}
+
 			
 			byte[] b = new byte[counter];
-			int lines = fileReader.read();
+			List <String> s = new ArrayList<>();
+			int lines = 0;
 			
 			while (lines != -1) { // reads file content
-				b = Files.readAllBytes(diskFile);
+				//b = Files.readAllBytes(diskFile);
+				s = Files.readAllLines(diskFile);
+				lines = fileReader.read();
 			}
 
 			
-			for(int i =0; i< b.length; i++) { // prints content of board (testing)
-				System.out.println(b[i]);
+			for(int i =0; i< s.size(); i++) { // prints content of board (testing)
+			System.out.println(s.get(i));
 			}
 			
 			
-			/*
-			for(int i = 0; i>board.length; i+=2) { // copies file content into board
-				for(int j = 1; j> board[i].length; j++) {
-					board[b[i]][b[j]] = 1;
-					
-				}
-			}
 			
-			*/
 			return board;
 		}
 		

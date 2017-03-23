@@ -130,11 +130,8 @@ public class BoardCtrl implements Initializable{
         	String path = selectedFile.getAbsolutePath();
         	
         	clearBoard();
-        	byte[][] temp = f.readFromDisk(path);
-
-        	//use array temp to draw first generation. board = temp; (?)
-
-
+        	board = f.readFromDisk(path);
+        	
     	}
     	
     	
@@ -339,8 +336,7 @@ public class BoardCtrl implements Initializable{
     	
    	} 
     	
-
-    }
+  }
     
     
 }
