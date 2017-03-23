@@ -39,20 +39,18 @@ public class FileReader {
 			) {
 			
 
-			int line =0; 
+			int line =-1; 
 
 			while (line  != -1) { // number of lines in the file
 				counter ++;
 				line = lineCounter.read();
 			}
 
-			
-			byte[] b = new byte[counter];
 			List <String> s = new ArrayList<>();
+			
 			int lines = 0;
 			
 			while (lines != -1) { // reads file content
-				//b = Files.readAllBytes(diskFile);
 				s = Files.readAllLines(diskFile);
 				lines = fileReader.read();
 			}
@@ -60,6 +58,20 @@ public class FileReader {
 			
 			for(int i =0; i< s.size(); i++) { // prints content of board (testing)
 			System.out.println(s.get(i));
+			} 
+			
+			for(int i = 0; i< board.length; i++) {
+				for(int j = 0; i < board[i].length; j++ ) {
+					for(int k =0; k < s.size(); k++) {
+						
+						int x = Integer.parseInt(s.get(k).substring(0,2));
+						int y = Integer.parseInt(s.get(k).substring(1,3));
+						
+						board[x][y] = 1;
+						System.out.println(board[i][j]);
+					}
+				
+				}
 			}
 			
 			
@@ -74,7 +86,6 @@ public class FileReader {
 			}
 		return board;
 	}
-	
 	
 	
 }
