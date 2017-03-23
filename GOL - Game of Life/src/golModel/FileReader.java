@@ -26,9 +26,9 @@ public class FileReader {
 		
 	}
 	
-	public byte[][] readFromDisk() throws Exception {
+	public byte[][] readFromDisk(String filePath) throws Exception {
 		
-		Path diskFile = Paths.get(chooseTextFile());
+		Path diskFile = Paths.get(filePath);
 
 		byte[][] board = new byte[rows][columns]; 
 		int counter = 0;
@@ -70,24 +70,6 @@ public class FileReader {
 		return board;
 	}
 	
-	public String chooseTextFile() { // returns file path
-		//add JFileChooser
-		
-		 JFileChooser chooser = new JFileChooser();
-       /* FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Text files", "txt");
-        chooser.addChoosableFileFilter(filter);*/
-
-        int returnVal = chooser.showOpenDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION)
-            return chooser.getSelectedFile().getAbsoluteFile().toString();
-        else
-            return ""; 
-		
-		
-		
-		
-		
-	}
+	
 	
 }

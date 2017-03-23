@@ -13,11 +13,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
+
+import java.io.File;
+
 import golModel.FileReader;
 
 public class BoardCtrl implements Initializable{
@@ -28,6 +33,7 @@ public class BoardCtrl implements Initializable{
     @FXML private ToggleButton startPauseBtn;
     @FXML private Button resetBtn;
     @FXML private ComboBox<String> speedBtn;
+    @FXML private ListView listview;
     ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
 
     private GraphicsContext gc;
@@ -111,11 +117,43 @@ public class BoardCtrl implements Initializable{
         } 
       }    
     
+    @FXML
     public void uploadPattern() throws Exception {
-    	FileReader f = new FileReader(board);
-    	f.readFromDisk();
+    	
+    	FileChooser file = new FileChooser();
+    	
+    	File selectedFile = file.showOpenDialog(null);
+    	
+    	if(selectedFile != null) {
+    		listview.getItems().add(selectedFile.getName());
+    		FileReader f = new FileReader(board);
+        	String path = selectedFile.getAbsolutePath();
+        	
+        	clearBoard();
+        	
+        	byte[][] temp = f.readFromDisk(path);
+        	
+        	//drawBoard(temp);
+
+
+    	}
+    	
     	
     }
+    
+    
+    
+    
+    /*FileChooser file = new FileChooser();
+    	file.getExtensionFilters().addAll(
+    			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
+    	
+    	File selectedFile = file.showOpenDialog(null);
+    	
+    	if(selectedFile != null) {
+    		listview.getItems().add(selectedFile.getName());
+    		readGameBoard(new FileReader(selectedFile));*/
+    
     
     /**
      *	Methods for USERs 
