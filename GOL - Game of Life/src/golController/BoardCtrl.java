@@ -273,11 +273,11 @@ public class BoardCtrl implements Initializable{
     	
     	for(int i = x-1; i <= x+1; i++){
     		
-            if(i < board.length && i > 0){ //cells on the edges (rows)
+            if(i < board.length && i >= 0){ //cells on the edges (rows)
             	
                 for(int j = y-1; j <= y + 1; j++){
                 	
-                    if(j < board[i].length && j > 0){ // cells on the edges (columns)
+                    if(j < board[i].length && j >= 0){ // cells on the edges (columns)
                     	
                         if (board[i][j] == 1) {
                             nr++;
@@ -326,7 +326,7 @@ public class BoardCtrl implements Initializable{
     public void readGameBoardFromDisk() throws FileNotFoundException, IOException {
     	FileChooser file = new FileChooser();
     	file.getExtensionFilters().addAll(
-    			new ExtensionFilter("LIF, LIFE, JPG, PNG, GIF Files", "*.lif", "*.life", "*.jpg", "*.png", "*.gif"));
+    			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
     	
     	File selectedFile = file.showOpenDialog(null);
     	
