@@ -131,8 +131,8 @@ public class BoardCtrl implements Initializable{
         	
         	clearBoard();
         	byte[][] temp = f.readFromDisk(path);
-        	
-        	//drawBoard(temp);
+
+        	//use array temp to draw first generation. board = temp; (?)
 
 
     	}

@@ -35,6 +35,7 @@ public class FileReader {
 		
 		try(
 				InputStream lineCounter = Files.newInputStream(diskFile);
+				InputStream fileReader = Files.newInputStream(diskFile);
 			) {
 			
 
@@ -43,20 +44,16 @@ public class FileReader {
 			while (line != -1) { // number of lines in the file
 				counter ++;
 			}
-
 			
 			byte[] b = new byte[counter];
-
-			
-			InputStream fileReader = Files.newInputStream(diskFile);
 			int lines = fileReader.read();
+			
 			while (lines != -1) { // reads file content
 				b = Files.readAllBytes(diskFile);
-
-
 			}
+
 			
-			for(int i =0; i< b.length; i++) {
+			for(int i =0; i< b.length; i++) { // prints content of board (testing)
 				System.out.println(b[i]);
 			}
 			
