@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
+import golModel.FileReader;
 
 public class BoardCtrl implements Initializable{
 
@@ -108,13 +109,22 @@ public class BoardCtrl implements Initializable{
         if(speedBtn.getValue().equals("4x")) { 
             timeline.setRate(4); 
         } 
-      } 
+      }    
+    
+    public void uploadPattern() throws Exception {
+    	FileReader f = new FileReader(board);
+    	f.readFromDisk();
+    	
+    }
     
     /**
      *	Methods for USERs 
      *
      */
 
+ 
+    
+    
     public void drawCell(MouseEvent event) {
     	
     	double x = event.getX()/cellSize;
@@ -263,11 +273,11 @@ public class BoardCtrl implements Initializable{
     	
     	for(int i = x-1; i <= x+1; i++){
     		
-            if(i < board.length && i > 0){ //cells on the edges (rows)
+            if(i < board.length && i >= 0){ //cells on the edges (rows)
             	
                 for(int j = y-1; j <= y + 1; j++){
                 	
-                    if(j < board[i].length && j > 0){ // cells on the edges (columns)
+                    if(j < board[i].length && j >= 0){ // cells on the edges (columns)
                     	
                         if (board[i][j] == 1) {
                             nr++;

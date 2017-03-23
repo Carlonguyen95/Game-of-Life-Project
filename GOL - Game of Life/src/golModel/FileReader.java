@@ -51,9 +51,10 @@ public class FileReader {
 			}
 			
 			
-			for(int i = 0; i>board.length; i+=2) {
+			for(int i = 0; i>board.length; i+=2) { // copies file content into board
 				for(int j = 1; j> board[i].length; j++) {
 					board[b[i]][b[j]] = 1;
+					
 				}
 			}
 			
@@ -64,14 +65,29 @@ public class FileReader {
 		catch (Exception e) { // filenotfound exception (fix) 
 
 			//handle exception
-			
+			System.out.println(e);
 			}
 		return board;
 	}
 	
-	public String chooseTextFile() {
+	public String chooseTextFile() { // returns file path
 		//add JFileChooser
-		return null;
+		
+		 JFileChooser chooser = new JFileChooser();
+       /* FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Text files", "txt");
+        chooser.addChoosableFileFilter(filter);*/
+
+        int returnVal = chooser.showOpenDialog(null);
+        if(returnVal == JFileChooser.APPROVE_OPTION)
+            return chooser.getSelectedFile().getAbsoluteFile().toString();
+        else
+            return ""; 
+		
+		
+		
+		
+		
 	}
 	
 }
