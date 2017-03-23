@@ -130,7 +130,6 @@ public class BoardCtrl implements Initializable{
         	String path = selectedFile.getAbsolutePath();
         	
         	clearBoard();
-        	
         	byte[][] temp = f.readFromDisk(path);
         	
         	//drawBoard(temp);
@@ -141,18 +140,7 @@ public class BoardCtrl implements Initializable{
     	
     }
     
-    
-    
-    
-    /*FileChooser file = new FileChooser();
-    	file.getExtensionFilters().addAll(
-    			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
-    	
-    	File selectedFile = file.showOpenDialog(null);
-    	
-    	if(selectedFile != null) {
-    		listview.getItems().add(selectedFile.getName());
-    		readGameBoard(new FileReader(selectedFile));*/
+
     
     
     /**

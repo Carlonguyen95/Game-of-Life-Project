@@ -33,24 +33,35 @@ public class FileReader {
 		byte[][] board = new byte[rows][columns]; 
 		int counter = 0;
 		
-		try {
+		try(
+				InputStream lineCounter = Files.newInputStream(diskFile);
+			) {
 			
-			InputStream lineCounter = Files.newInputStream(diskFile);
+
 			int line = lineCounter.read();
+
 			while (line != -1) { // number of lines in the file
 				counter ++;
 			}
+
 			
 			byte[] b = new byte[counter];
+
 			
 			InputStream fileReader = Files.newInputStream(diskFile);
 			int lines = fileReader.read();
 			while (lines != -1) { // reads file content
 				b = Files.readAllBytes(diskFile);
 
+
+			}
+			
+			for(int i =0; i< b.length; i++) {
+				System.out.println(b[i]);
 			}
 			
 			
+			/*
 			for(int i = 0; i>board.length; i+=2) { // copies file content into board
 				for(int j = 1; j> board[i].length; j++) {
 					board[b[i]][b[j]] = 1;
@@ -58,7 +69,7 @@ public class FileReader {
 				}
 			}
 			
-			
+			*/
 			return board;
 		}
 		

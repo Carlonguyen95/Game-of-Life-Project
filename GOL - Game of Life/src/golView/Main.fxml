@@ -19,11 +19,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="golController.BoardCtrl"> 
-
-   <center>
-       <Canvas fx:id="graphics" height="520.0" onMouseDragged="#drawCell" width="790.0" />
-   </center>
+<BorderPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="golController.BoardCtrl">
 
    <bottom>
       <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
@@ -33,11 +29,16 @@
             <ToggleButton fx:id="startPauseBtn" mnemonicParsing="false" onMouseClicked="#toggleBtn" text="Start" />
             <Button fx:id="resetBtn" mnemonicParsing="false" onMouseClicked="#clearBoard" text="Reset" />
             <ColorPicker fx:id="colorChangerBtn" />
-            <ComboBox fx:id="speedBtn" onAction="#speedSlction" prefWidth="100.0" promptText="Speed" /> 
+            <ComboBox fx:id="speedBtn" onAction="#speedSlction" prefWidth="100.0" promptText="Speed" />
+            <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#uploadPattern" text="Load file" />
+            <ListView fx:id="listview" prefHeight="30.0" prefWidth="125.0" /> 
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
       </HBox>
    </bottom>
+   <left>
+       <Canvas fx:id="graphics" height="530.0" onMouseDragged="#drawCell" width="900.0" BorderPane.alignment="CENTER" />
+   </left>
 </BorderPane>
