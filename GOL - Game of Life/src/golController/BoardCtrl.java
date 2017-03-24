@@ -134,12 +134,8 @@ public class BoardCtrl implements Initializable{
         	drawBoard();
         	
     	}
-    	
-    	
+	
     }
-    
-
-    
     
     /**
      *	Methods for USERs 
