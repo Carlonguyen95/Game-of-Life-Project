@@ -17,6 +17,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
@@ -119,6 +120,8 @@ public class BoardCtrl implements Initializable{
     public void uploadPattern() throws Exception { //uploads pattern from file
     	
     	FileChooser file = new FileChooser();
+    	file.getExtensionFilters().addAll(
+    			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
     	
     	File selectedFile = file.showOpenDialog(null);
     	
