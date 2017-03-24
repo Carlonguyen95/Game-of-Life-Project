@@ -13,6 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -23,9 +24,9 @@ import javafx.scene.control.ToggleButton;
 
 import java.io.File;
 
-import golModel.FileReader;
+import golClasses.FileReader;
 
-public class BoardCtrl implements Initializable{
+public class Control implements Initializable{
 
     @FXML private Canvas graphics;
     @FXML private ColorPicker colorChangerBtn;
@@ -33,6 +34,7 @@ public class BoardCtrl implements Initializable{
     @FXML private ToggleButton startPauseBtn;
     @FXML private Button resetBtn;
     @FXML private ComboBox<String> speedBtn;
+    @FXML private ListView listview;
     ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
 
     private GraphicsContext gc;
@@ -124,6 +126,7 @@ public class BoardCtrl implements Initializable{
     			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
     	
     	File selectedFile = file.showOpenDialog(null);
+    	listview.getItems().add(selectedFile.getName());
     	
     	if(selectedFile != null) {
     		FileReader f = new FileReader(board);
@@ -185,10 +188,10 @@ public class BoardCtrl implements Initializable{
         gc.setLineWidth(1);
 
         for (int x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 790, x, 0);
+            gc.strokeLine(x, 900, x, 0);
         }
         for (int y = 0; y < graphics.getWidth(); y += cellSize) {
-            gc.strokeLine(0, y, 790, y);
+            gc.strokeLine(0, y, 900, y);
         }
     }
 

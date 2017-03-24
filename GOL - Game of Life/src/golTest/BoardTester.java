@@ -1,4 +1,4 @@
-package golController;
+package golTest;
 
 public class BoardTester {
 	

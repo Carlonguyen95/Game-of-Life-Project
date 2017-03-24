@@ -1,4 +1,4 @@
-package golModel;
+package golClasses;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;

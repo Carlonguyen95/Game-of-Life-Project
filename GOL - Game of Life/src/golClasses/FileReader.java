@@ -1,7 +1,9 @@
-package golModel;
+package golClasses;
 
 import java.io.*;
 import java.util.*;
+
+import javax.swing.JOptionPane;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -63,16 +65,14 @@ public class FileReader {
 			return board;
 		}
 		
-		catch (Exception e) { // filenotfound exception (fix) 
+		catch (NumberFormatException e) { // filenotfound exception (fix) 
 
 			//handle exception
-			System.out.println(e);
+			 PatternFormatException error = new PatternFormatException();
+			 error.formatError();
 			}
 		return board;
 	}
-	
-	
-	
 	
 	public byte[][] readFromURL() {
 		return null;

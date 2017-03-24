@@ -1,4 +1,4 @@
-package golModel;
+package golClasses;
 
 public class Cell {
 	
