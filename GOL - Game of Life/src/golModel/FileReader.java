@@ -42,7 +42,7 @@ public class FileReader {
 
 				
 		
-			for(int i = 0; i< board.length; i++) { 
+			for(int i = 0; i< board.length; i++) { //puts file content in board array
 				for(int j = 0; j < board[i].length; j++ ) {
 					for(int k =0; k < s.size(); k++) { 
 						if(s.get(k).substring(0,1).equals("#")) { // removes first line
@@ -56,9 +56,7 @@ public class FileReader {
 							board[x][y] = 1;
 							
 						}
-		
-					}
-				
+					}				
 				}
 			}
 				
