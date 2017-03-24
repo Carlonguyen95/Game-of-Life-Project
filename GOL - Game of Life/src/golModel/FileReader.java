@@ -1,14 +1,7 @@
 package golModel;
 
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-
-
-import java.nio.*;
 import java.io.*;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,20 +24,12 @@ public class FileReader {
 		Path diskFile = Paths.get(filePath);
 
 		byte[][] board = new byte[rows][columns]; 
-		int counter = 0;
+
 		
 		try(
-				InputStream lineCounter = Files.newInputStream(diskFile);
-				InputStream fileReader = Files.newInputStream(diskFile);
+			InputStream fileReader = Files.newInputStream(diskFile);
 			) {
 			
-
-			int line =-1; 
-
-			while (line  != -1) { // number of lines in the file
-				counter ++;
-				line = lineCounter.read();
-			}
 
 			List <String> s = new ArrayList<>();
 			
@@ -55,27 +40,28 @@ public class FileReader {
 				lines = fileReader.read();
 			}
 
-			
-			for(int i =0; i< s.size(); i++) { // prints content of board (testing)
-			System.out.println(s.get(i));
-			} 
-			
-			for(int i = 0; i< board.length; i++) {
-				for(int j = 0; i < board[i].length; j++ ) {
-					for(int k =0; k < s.size(); k++) {
+				
+		
+			for(int i = 0; i< board.length; i++) { 
+				for(int j = 0; j < board[i].length; j++ ) {
+					for(int k =0; k < s.size(); k++) { 
+						if(s.get(k).substring(0,1).equals("#")) { // removes first line
+							//add patternformat exception
+							s.remove(s.get(k));
+						}
+						else {
+							int x = Integer.parseInt(s.get(k).substring(0,1));
+							int y = Integer.parseInt(s.get(k).substring(2,3));
 						
-						int x = Integer.parseInt(s.get(k).substring(0,2));
-						int y = Integer.parseInt(s.get(k).substring(1,3));
-						
-						board[x][y] = 1;
-						System.out.println(board[i][j]);
+							board[x][y] = 1;
+							
+						}
+		
 					}
 				
 				}
 			}
-			
-			
-			
+				
 			return board;
 		}
 		
@@ -88,4 +74,9 @@ public class FileReader {
 	}
 	
 	
+	
+	
+	public byte[][] readFromURL() {
+		return null;
+	}
 }
