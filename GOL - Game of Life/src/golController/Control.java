@@ -23,6 +23,10 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
+import java.net.URL;
+import java.net.URLConnection;
+
+import javax.swing.JOptionPane;
 
 import golClasses.FileReader;
 
@@ -33,8 +37,11 @@ public class Control implements Initializable{
     @FXML private Slider sizeSliderBtn;
     @FXML private ToggleButton startPauseBtn;
     @FXML private Button resetBtn;
+    @FXML private Button loadFileBtn;
+    @FXML private Button loadUrlBtn;
     @FXML private ComboBox<String> speedBtn;
     @FXML private ListView listview;
+    
     ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
 
     private GraphicsContext gc;
@@ -46,6 +53,7 @@ public class Control implements Initializable{
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
         gc = graphics.getGraphicsContext2D();
+        
         colorChangerBtn.setValue(Color.GREEN);
         sizeSliderBtn.setValue(10.0);
         speedBtn.setValue("Speed"); 
@@ -137,29 +145,32 @@ public class Control implements Initializable{
         	drawBoard();
         	
     	}
-    	
-    	
     }
     
-
-    
+    @FXML
+    public void loadURL() throws Exception {
+    	String url = new String();
+    	JOptionPane.showInputDialog(url, "Please enter a URL");
+    	
+    	clearBoard();
+    	FileReader u = new FileReader(board);
+    	board = u.readFromURL(url);
+    	drawBoard();
+    }
+   
     
     /**
      *	Methods for USERs 
      *
      */
 
- 
-    
-    
     public void drawCell(MouseEvent event) {
     	
     	double x = event.getX()/cellSize;
     	double y = event.getY()/cellSize;
   
     	board[(int)x][(int)y] = 1;
-    	drawBoard();
-    	
+    	drawBoard(); 	
     }
 
     public void run() {    	
@@ -188,10 +199,10 @@ public class Control implements Initializable{
         gc.setLineWidth(1);
 
         for (int x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 900, x, 0);
+            gc.strokeLine(x, 1000, x, 0);
         }
         for (int y = 0; y < graphics.getWidth(); y += cellSize) {
-            gc.strokeLine(0, y, 900, y);
+            gc.strokeLine(0, y, 1000, y);
         }
     }
 
@@ -312,10 +323,8 @@ public class Control implements Initializable{
                     }
                 }
             }
-        }
-  	
-    	return nr;
-    	
+        }	
+    	return nr;   	
     }
 
     public void updateBoard(byte[][] updated) {
