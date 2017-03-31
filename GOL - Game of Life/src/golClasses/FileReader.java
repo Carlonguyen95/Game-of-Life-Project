@@ -1,6 +1,7 @@
 package golClasses;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -79,11 +80,12 @@ import java.nio.file.Paths;
 			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			) {
 			
-			List <String> s = new ArrayList<>();
-			
 			String inputLine;
 			
+			List <String> s = new ArrayList<>();
+			
 			while ((inputLine = in.readLine()) != null) {
+				s.add(inputLine);
 				in.close();
 			}
 
@@ -108,12 +110,16 @@ import java.nio.file.Paths;
 			return board;
 		}
 		
-		catch (NumberFormatException e) { // filenotfound exception (fix) 
-
-			//handle exception
+		catch (MalformedURLException e) { 
+			
 			 PatternFormatException error = new PatternFormatException();
-			 error.formatError();
+			 error.urlError();
 			}
+		catch(IOException ioe) {
+			
+			PatternFormatException error = new PatternFormatException();
+			error.ioeError();
+		}
 		return board;
 	}
 }

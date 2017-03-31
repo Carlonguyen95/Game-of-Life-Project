@@ -150,7 +150,7 @@ public class Control implements Initializable{
     @FXML
     public void loadURL() throws Exception {
     	String url = new String();
-    	JOptionPane.showInputDialog(url, "Please enter a URL");
+    	url = JOptionPane.showInputDialog(null, "Please enter a URL");
     	
     	clearBoard();
     	FileReader u = new FileReader(board);
