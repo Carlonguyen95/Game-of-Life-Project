@@ -134,9 +134,9 @@ public class Control implements Initializable{
     			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
     	
     	File selectedFile = file.showOpenDialog(null);
-    	listview.getItems().add(selectedFile.getName());
     	
     	if(selectedFile != null) {
+    		listview.getItems().add(selectedFile.getName());
     		FileReader f = new FileReader(board);
         	String path = selectedFile.getAbsolutePath();
         	
@@ -150,12 +150,14 @@ public class Control implements Initializable{
     @FXML
     public void loadURL() throws Exception {
     	String url = new String();
-    	JOptionPane.showInputDialog(url, "Please enter a URL");
+    	url = JOptionPane.showInputDialog(null, "Please enter a URL");
+    	if(url != null) {
+    		clearBoard();
+    		FileReader u = new FileReader(board);
+    		board = u.readFromURL(url);
+    		drawBoard();
+    	}
     	
-    	clearBoard();
-    	FileReader u = new FileReader(board);
-    	board = u.readFromURL(url);
-    	drawBoard();
     }
    
     
