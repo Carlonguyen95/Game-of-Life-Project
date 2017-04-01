@@ -273,8 +273,9 @@ public class Control implements Initializable{
     }
     
     /**
-     * 
-     * 
+     * this method updates the board by applying the GoL rules to the board. 
+     * By using a temporary array that stores the previous state of the board, 
+     * the next generation of the board is created.
      */
     public void nextGeneration() { 	
     	byte[][] updated = new byte[board.length][board[0].length];
@@ -287,30 +288,32 @@ public class Control implements Initializable{
     	
     	updateBoard(updated);
     	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
-    	for (int i = 0; i < updated.length; i++) {
-    		
+    	
+    	for (int i = 0; i < updated.length; i++) {	
             for (int j = 0; j < updated[i].length; j++) {
-            	                
+ 
             	if(updated[i][j] == 0) { //the cell is dead
             		if(neighbours(i,j) == 3) {
-
             			gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 
             		}           	
-                }
-            	
+                }   	
             	else { // the cell is alive
                   if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
                 	  gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                  }                          
+                  	}                          
+            	}
             }
-        }
     	
-   	}     
-    board = updated;
-    draw();
+    	}     
+    	board = updated;
+    	draw();
     }
     
+    /**
+     * This method makes the animation of the game by creating a timeline.
+     * 
+     * */
     public void Animation() {
     	
     	timeline.setCycleCount(Animation.INDEFINITE);
@@ -325,7 +328,13 @@ public class Control implements Initializable{
     	timeline.play();
     }
     
-    
+    /**
+     * This method counts the number of neighbouring cells a given cell has,
+     * by iterating through the board with two for-loops that only checks the 8
+     * cells surrounding it.
+     *@return the number of neighbours the cell has.
+     *@param the x and y coordinates of the cell (placement of the cell in the grid)
+     * */
     public int neighbours(int x, int y) {
 
     	int nr = 0; 
@@ -350,7 +359,14 @@ public class Control implements Initializable{
         }	
     	return nr;   	
     }
-
+    
+    
+    /**
+     * This method updates the board by applying the GoL rules,
+     * by iterating through the board with two for-loops and assigning
+     * 1 or 0 using the GoL rules.
+     * @param the array which contains the previous generation
+     * */
     public void updateBoard(byte[][] updated) {
 
     	for (int i = 0; i < updated.length; i++) {
@@ -373,7 +389,6 @@ public class Control implements Initializable{
     	
    	} 
     	
-  }
-    
+  } 
     
 }
