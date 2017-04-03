@@ -30,7 +30,7 @@ import java.nio.file.Paths;
 	 */
 	public FileReader(byte[][] b) {
 		rows = b.length;
-		columns = b[0].length;
+		columns = b[50].length;
 	}
 	
 	/**
@@ -62,7 +62,7 @@ import java.nio.file.Paths;
 				lines = fileReader.read();
 			}
 
-			for(int i = 0; i< board.length; i++) { //puts file content in board array
+			/*for(int i = 0; i< board.length; i++) { //puts file content in board array
 				for(int j = 0; j < board[i].length; j++ ) {
 					for(int k =0; k < s.size(); k++) { 
 						if(s.get(k).substring(0,1).equals("#")) { // removes first line
@@ -77,25 +77,54 @@ import java.nio.file.Paths;
 						}
 					}				
 				}
-			}
+			}*/
+			
+			/**
+			 * For-løkke for offsets
+			 */
+			int x = 50;
+			int y = 50;
+	    	for(int i = x-50; i <= x + 1; i++){
+	    		
+	            if(i < board.length && i >= 0){ //cells on the edges (rows)
+	            	
+	                for(int j = y-50; j <= y + 1; j++){
+	                	
+	                    if(j < board[i].length && j >= 0){ // cells on the edges (columns)
+	    					for(int k =0; k < s.size(); k++) { 
+	    						if(s.get(k).substring(0,1).equals("#")) { // removes first line
+	    							s.remove(s.get(k));
+	    						}
+	    						else {
+	    							int u = Integer.parseInt(s.get(k).substring(0,1));
+	    							int h = Integer.parseInt(s.get(k).substring(2,3));
+	    						
+	    							board[u][h] = 1;
+	    							
+	    						}                            
+	                        }
+	                    }
+	                }
+	            }
+	        }
 				
 			return board;
-		}
+		}}
 		
-		catch (NumberFormatException e) {  // wrong format in file
-
-			 PatternFormatException error = new PatternFormatException();
-			 error.formatError();
-			}
-		
-
-		catch (IOException ioe) { // general IO exception
-			PatternFormatException error = new PatternFormatException();
-			 error.generalError();
-		}		
-		
-	return board;
-}
+//		catch (NumberFormatException e) {  // wrong format in file
+//
+//			 PatternFormatException error = new PatternFormatException();
+//			 error.formatError();
+//			}
+//		
+//
+//		catch (IOException ioe) { // general IO exception
+//			PatternFormatException error = new PatternFormatException();
+//			 error.generalError();
+//		}		
+//		
+//	return board;
+//}
 	
 	// http://student.cs.hioa.no/~s315613/glider.html
 	
