@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.awt.Point;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,6 +23,11 @@ import java.nio.file.Paths;
 		private int rows;
 		private int columns;
 	
+	/**
+	 * This constructor is invoked when an object is created by this class
+	 * 
+	 * @param b is an byte array given when object is made
+	 */
 	public FileReader(byte[][] b) {
 		rows = b.length;
 		columns = b[0].length;
@@ -47,6 +53,7 @@ import java.nio.file.Paths;
 			) {
 			
 			List <String> s = new ArrayList<>();
+
 			
 			int lines = 0;
 			

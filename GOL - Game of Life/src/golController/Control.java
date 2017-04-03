@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 import golClasses.FileReader;
 
 /**
- *
+ * This class has all the methods and controls that affects the GUI by user.
  * 
  * @author Carlo Nguyen
  * @author Haweya Jama
