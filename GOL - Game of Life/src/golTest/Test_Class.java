@@ -6,7 +6,7 @@ package golTest;
   * 
   *
   */
-public class Test_Class {
+public class Test_Class { 
 	
 	/**
 	 *  this array is we will testing by test method.
