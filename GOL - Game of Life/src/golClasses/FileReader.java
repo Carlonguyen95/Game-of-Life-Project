@@ -61,27 +61,57 @@ import java.nio.file.Paths;
 				s = Files.readAllLines(diskFile);
 				lines = fileReader.read();
 			}
-
-			/*for(int i = 0; i< board.length; i++) { //puts file content in board array
+			
+			int x = 30;
+			int y = 30;
+			
+			for(int i = 0; i< board.length; i++) { //puts file content in board array
 				for(int j = 0; j < board[i].length; j++ ) {
 					for(int k =0; k < s.size(); k++) { 
 						if(s.get(k).substring(0,1).equals("#")) { // removes first line
 							s.remove(s.get(k));
 						}
 						else {
-							int x = Integer.parseInt(s.get(k).substring(0,1));
-							int y = Integer.parseInt(s.get(k).substring(2,3));
 						
-							board[x][y] = 1;
+						
+						if(s.get(k).substring(0,1).equals("-")) { //minus i x aksen
 							
+							if(s.get(k).substring(2,3).equals("-")) { //minus i y aksen
+								 x += Integer.parseInt(s.get(k).substring(1,2));
+								 y += Integer.parseInt(s.get(k).substring(4,5));						 
+								 board[x][y] = 1;
+								 System.out.println("1");
+							}
+							else { // pluss i y aksen
+									 x += Integer.parseInt(s.get(k).substring(0,1));
+									 y += Integer.parseInt(s.get(k).substring(2,3));
+									 board[x][y] = 1;
+									 System.out.println("2");
+							}
 						}
-					}				
+						
+						
+						else { //pluss i x aksen
+							if(s.get(k).substring(2,3).equals("-")) { //minus i y aksen
+									 x += Integer.parseInt(s.get(k).substring(0,1));
+									 y += Integer.parseInt(s.get(k).substring(3,4));
+									 board[x][y] = 1;
+									 System.out.println("3");
+							}
+							else { // pluss i y aksen
+									x += Integer.parseInt(s.get(k).substring(0,1));
+									y += Integer.parseInt(s.get(k).substring(2,3));
+									board[x][y] = 1;
+									 System.out.println("4");
+							}
+						}
+					}			
 				}
-			}*/
+				
 			
-			/**
+		/*	/*
 			 * For-løkke for offsets
-			 */
+			 
 			int x = 50;
 			int y = 50;
 	    	for(int i = x-50; i <= x + 1; i++){
@@ -106,25 +136,25 @@ import java.nio.file.Paths;
 	                    }
 	                }
 	            }
-	        }
+	        }*/
 				
 			return board;
-		}}
+		}
+	}
+	}
+		catch (NumberFormatException e) {  // wrong format in file
+			 PatternFormatException error = new PatternFormatException();
+			 error.formatError();
+			}
 		
-//		catch (NumberFormatException e) {  // wrong format in file
-//
-//			 PatternFormatException error = new PatternFormatException();
-//			 error.formatError();
-//			}
-//		
-//
-//		catch (IOException ioe) { // general IO exception
-//			PatternFormatException error = new PatternFormatException();
-//			 error.generalError();
-//		}		
-//		
-//	return board;
-//}
+
+		catch (IOException ioe) { // general IO exception
+			PatternFormatException error = new PatternFormatException();
+			 error.generalError();
+		}		
+		
+	return board;
+}
 	
 	// http://student.cs.hioa.no/~s315613/glider.html
 	
