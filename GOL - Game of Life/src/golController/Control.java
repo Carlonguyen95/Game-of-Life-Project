@@ -25,7 +25,7 @@ import javafx.scene.control.ToggleButton;
 import java.io.File;
 import javax.swing.JOptionPane;
 
-import golClasses.FileReader;
+import golClasses.FileHandler;
 
 /**
  * This class has all the methods and controls that affects the GUI by user.
@@ -52,6 +52,7 @@ public class Control implements Initializable{
     private int cellSize = 10;
 	private Timeline timeline = new Timeline();
     private byte[][] board = new byte[100][100];
+    private FileHandler reader;
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
@@ -137,25 +138,15 @@ public class Control implements Initializable{
      * 
      * @throws Exception when no file is selected.
      */
-    public void uploadPattern() throws Exception { //uploads pattern from file
-    	
-	    	FileChooser file = new FileChooser();
-	    	// Filtered to only show files with format .lif and .life
-	    	file.getExtensionFilters().addAll(
-	    			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
+    public void uploadPattern() throws Exception {
+	    FileChooser file = new FileChooser();
+	   	File selectedFile = file.showOpenDialog(null);
+	   	file.getExtensionFilters().addAll(
+	   			new ExtensionFilter("RLE", "*.rle"));
 	    	
-	    	// Shows the name of the uploaded file
-	    	File selectedFile = file.showOpenDialog(null);
-	    	
-	    	if(selectedFile != null) {
-	    		listview.getItems().add(selectedFile.getName());
-	    		FileReader f = new FileReader(board);
-	        	String path = selectedFile.getAbsolutePath();
-	        	
-	        	clearBoard();
-	        	board = f.readFromDisk(path);
-	        	drawBoard();
-	    	}
+	    if(selectedFile != null) {
+	    	reader.readFromDisk(file);
+	    }
     }
     
     /**
@@ -172,7 +163,7 @@ public class Control implements Initializable{
     	
     	if(url != null) {
     		clearBoard();
-    		FileReader u = new FileReader(board);
+    		FileHandler u = new FileHandler(board);
     		board = u.readFromURL(url);
     		drawBoard();
     	}
