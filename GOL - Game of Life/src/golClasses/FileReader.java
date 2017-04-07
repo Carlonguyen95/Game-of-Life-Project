@@ -57,7 +57,7 @@ import java.nio.file.Paths;
 			
 
 			String inputLine;
-			String rle = null;
+			String rle = "";
 			
 			while ((inputLine = in.readLine()) != null) { // puts file content in string
 				 if ((inputLine.matches("[b, o, $, !, 0-9]*"))) { // kopier fra den andre koden
@@ -71,7 +71,7 @@ import java.nio.file.Paths;
 			Pattern p = Pattern.compile(("\\d+|[ob]|\\$")); // kopiert fra den andre koden, må endres!
 			Matcher m = p.matcher(rle);
 			while(m.find()){
-				//System.out.println(m.group());
+				System.out.println(m.group());
 			}
 			
 			
