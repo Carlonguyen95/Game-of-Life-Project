@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.Point;
 import java.io.*;
 import java.nio.file.Files;
@@ -49,108 +51,53 @@ import java.nio.file.Paths;
 		byte[][] board = new byte[rows][columns];
 		
 		try(
-			InputStream fileReader = Files.newInputStream(diskFile);
+		
+				BufferedReader in = Files.newBufferedReader(diskFile);
 			) {
 			
-			List <String> s = new ArrayList<>();
 
+			String inputLine;
+			String rle = null;
 			
-			int lines = 0;
+			while ((inputLine = in.readLine()) != null) { // puts file content in string
+				 if ((inputLine.matches("[b, o, $, !, 0-9]*"))) { // kopier fra den andre koden
+					 rle = rle.concat(inputLine + "\n");
+				 }
+		}	
+		
+	
+			// Pattern p = Pattern.compile() // legg til regex utrykket som tolker rle
 			
-			while (lines != -1) { // puts file content in arrayList
-				s = Files.readAllLines(diskFile);
-				lines = fileReader.read();
+			Pattern p = Pattern.compile(("\\d+|[ob]|\\$")); // kopiert fra den andre koden, må endres!
+			Matcher m = p.matcher(rle);
+			while(m.find()){
+				//System.out.println(m.group());
 			}
 			
-			int x = 30;
-			int y = 30;
 			
-			for(int i = 0; i< board.length; i++) { //puts file content in board array
-				for(int j = 0; j < board[i].length; j++ ) {
-					for(int k =0; k < s.size(); k++) { 
-						if(s.get(k).substring(0,1).equals("#")) { // removes first line
-							s.remove(s.get(k));
-						}
-						else {
-						
-						
-						if(s.get(k).substring(0,1).equals("-")) { //minus i x aksen
-							
-							if(s.get(k).substring(2,3).equals("-")) { //minus i y aksen
-								 x += Integer.parseInt(s.get(k).substring(1,2));
-								 y += Integer.parseInt(s.get(k).substring(4,5));						 
-								 board[x][y] = 1;
-								 System.out.println("1");
-							}
-							else { // pluss i y aksen
-									 x += Integer.parseInt(s.get(k).substring(0,1));
-									 y += Integer.parseInt(s.get(k).substring(2,3));
-									 board[x][y] = 1;
-									 System.out.println("2");
-							}
-						}
-						
-						
-						else { //pluss i x aksen
-							if(s.get(k).substring(2,3).equals("-")) { //minus i y aksen
-									 x += Integer.parseInt(s.get(k).substring(0,1));
-									 y += Integer.parseInt(s.get(k).substring(3,4));
-									 board[x][y] = 1;
-									 System.out.println("3");
-							}
-							else { // pluss i y aksen
-									x += Integer.parseInt(s.get(k).substring(0,1));
-									y += Integer.parseInt(s.get(k).substring(2,3));
-									board[x][y] = 1;
-									 System.out.println("4");
-							}
-						}
-					}			
-				}
-				
+			/*
+			Pattern p = Pattern.compile("//d+ //d+");
+			Matcher m = p.matcher("6 44 3 1 6 8");
+			while(m.find()) System.out.println(m.group());
+			System.out.println("TEST");
+		*/
 			
-		/*	/*
-			 * For-løkke for offsets
-			 
-			int x = 50;
-			int y = 50;
-	    	for(int i = x-50; i <= x + 1; i++){
-	    		
-	            if(i < board.length && i >= 0){ //cells on the edges (rows)
-	            	
-	                for(int j = y-50; j <= y + 1; j++){
-	                	
-	                    if(j < board[i].length && j >= 0){ // cells on the edges (columns)
-	    					for(int k =0; k < s.size(); k++) { 
-	    						if(s.get(k).substring(0,1).equals("#")) { // removes first line
-	    							s.remove(s.get(k));
-	    						}
-	    						else {
-	    							int u = Integer.parseInt(s.get(k).substring(0,1));
-	    							int h = Integer.parseInt(s.get(k).substring(2,3));
-	    						
-	    							board[u][h] = 1;
-	    							
-	    						}                            
-	                        }
-	                    }
-	                }
-	            }
-	        }*/
 				
 			return board;
 		}
-	}
-	}
+	
+	
 		catch (NumberFormatException e) {  // wrong format in file
 			 PatternFormatException error = new PatternFormatException();
 			 error.formatError();
+
 			}
 		
 
 		catch (IOException ioe) { // general IO exception
 			PatternFormatException error = new PatternFormatException();
 			 error.generalError();
+
 		}		
 		
 	return board;
