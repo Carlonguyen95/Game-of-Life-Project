@@ -25,14 +25,14 @@ import javafx.scene.control.ToggleButton;
 import java.io.File;
 import javax.swing.JOptionPane;
 
-import golClasses.FileReader;
+import golClasses.Readmetodet;
 
 /**
  * This class has all the methods and controls that affects the GUI by user.
  * 
  * @author Carlo Nguyen
  * @author Haweya Jama
- * @author Idris Milan
+ * @author Idris Milamean
  */
 public class Control implements Initializable{
 
@@ -52,10 +52,11 @@ public class Control implements Initializable{
     private int cellSize = 10;
 	private Timeline timeline = new Timeline();
     private byte[][] board = new byte[100][100];
+    Readmetodet FileRead;
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
-
+    	FileRead =new Readmetodet();
         gc = graphics.getGraphicsContext2D();
         colorChangerBtn.setValue(Color.BLACK);
         sizeSliderBtn.setValue(10.0);
@@ -140,21 +141,27 @@ public class Control implements Initializable{
     public void uploadPattern() throws Exception { //uploads pattern from file
     	
 	    	FileChooser file = new FileChooser();
-	    	// Filtered to only show files with format .lif and .life
+	    	// Filtered to only show files with format.
 	    	file.getExtensionFilters().addAll(
-	    			new ExtensionFilter("LIF, LIFE", "*.lif", "*.life"));
+	    			new ExtensionFilter("*.rle", "*.RLE"));
 	    	
 	    	// Shows the name of the uploaded file
 	    	File selectedFile = file.showOpenDialog(null);
 	    	
 	    	if(selectedFile != null) {
 	    		listview.getItems().add(selectedFile.getName());
-	    		FileReader f = new FileReader(board);
-	        	String path = selectedFile.getAbsolutePath();
+	        	//String path = selectedFile.getAbsolutePath();
 	        	
+	    		
+	    		
+	    		
 	        	clearBoard();
-	        	board = f.readFromDisk(path);
-	        	drawBoard();
+	        	FileRead.readFromDisk(selectedFile);
+	        	rleboard();
+
+	        	
+	        	
+	        	
 	    	}
     }
     
@@ -166,18 +173,21 @@ public class Control implements Initializable{
      * 
      * @throws Exception when no URL is inserted.
      */
-    public void loadURL() throws Exception {
+    
+    
+   /*public void loadURL() throws Exception {
     	String url = new String();
     	url = JOptionPane.showInputDialog(null, "Please enter a URL");
     	
     	if(url != null) {
     		clearBoard();
-    		FileReader u = new FileReader(board);
+    		FileReader fileR = new FileReader(board);
     		board = u.readFromURL(url);
     		drawBoard();
     	}
-    }
+    }*/
     
+
     /**
      * This method allows the user to selfdraw cells on the board, by dragclick with the mouse.
      * Each dragclick on the board will get the pointers coordinate X and Y relative to the Board.
@@ -188,7 +198,7 @@ public class Control implements Initializable{
     	
     	double x = event.getX()/cellSize;
     	double y = event.getY()/cellSize;
-  
+    	
     	board[(int)x][(int)y] = 1;
     	drawBoard();
     }
@@ -202,6 +212,7 @@ public class Control implements Initializable{
     	
         drawGrid();
         drawBoard();
+        rleboard();
     }
     
     /**
@@ -242,6 +253,21 @@ public class Control implements Initializable{
             }
         }
     }
+    
+public void rleboard() {
+    	
+    	for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {                
+                if (board[i][j] == 1) {
+                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
+                    gc.setFill(colorChangerBtn.getValue());
+                }
+            }
+        }
+    }
+    
+    
+    
 
     /**
      * This method clears the current Board
