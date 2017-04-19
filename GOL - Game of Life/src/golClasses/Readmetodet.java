@@ -20,29 +20,21 @@ import java.nio.file.Paths;
  * @author Haweyo
  *
  * */
-	public class Readmetodet extends Control{
+	public class Readmetodet{
 		private int Rows=0;
-		private int columns=0;
+		private int Columns=0;
 		
 	    private byte[][] board = new byte[100][100];
+	     public  byte[][] rle_Board ;
 
 		StringBuilder RLEPattern = new StringBuilder();
 		String line = "";
 	    String Rule;
 	    String rleCode = "";
-	    String rlePattern = "";
+	    String RlePattern = "";
 	    String regEx = "x ?= ?(\\d*), y ?= ?(\\d*), rule ?= ?(B([0-9]+)\\/S(([0-8])+))|(S[0-9]+\\/B[0-9]+)";
 	    String regexWeb= "x ?= ?(\\d*), y ?= ?(\\d*)";
 	    
-
-
-	/**
-	 * This constructor is invoked when an object is created by this class
-	 *
-	 * @param b is an byte array given when object is made
-	 */
-	
-	
 
 	/**
 	 * this method reads file from disk. The file contains a specific pattern formatted in #Life 1.06
@@ -53,151 +45,120 @@ import java.nio.file.Paths;
 	 * @return a byte board with the pattern in the file.
 	 * @throws exception of the type numberFormat or IOException.
 	 */
-	public void readFromDisk(File filePath) throws Exception {
+	    
+	    public void readBoardFromDisk(File path) throws IOException {
 
-		FileReader fileR = new FileReader(filePath);
-        BufferedReader BuReader = new BufferedReader(fileR);
-        
-        
-        
-        while ((line = BuReader.readLine()) != null) {
-            Pattern pattern = Pattern.compile(regEx);
-            Matcher matcher = pattern.matcher(line);
-            
+	        FileReader Fr = new FileReader(path);
+	        BufferedReader Br = new BufferedReader(Fr);
+
+	        try{
+	        while ((line = Br.readLine()) != null) {
+	            Pattern Pt = Pattern.compile(regEx);
+	            Matcher Mt = Pt.matcher(line);
+
+
+	            while (Mt.find()) {
+	            	Rows = Integer.parseInt(Mt.group(1));
+	                System.out.println("Rows = " + Rows);
+	            	Columns = Integer.parseInt(Mt.group(2));
+	                System.out.println("Columns = " + Columns);
+	                Rule = Mt.group(3);
+	                System.out.println("Rule : " + Rule);
+
+
+	            }
+
+	            if (line.matches("[b, o,$,!,0-9]*")) {
+	            	RlePattern = RlePattern.concat(line);
+
+	            }
+
+	        }
+	        System.out.println(RlePattern);
+	        
           
-            try{
-        
-            while (matcher.find()) {
-                Rows = Integer.parseInt(matcher.group(1));
-                System.out.println("Row = " + Rows);
-                columns = Integer.parseInt(matcher.group(2));
-                System.out.println("Colum = " + columns);
-                Rule = matcher.group(3);
-                System.out.println("Rule : " + Rule);
-                convertRleToSimpleRLe(rlePattern);
+	        }
 
-            }     } 
-
-            
-        
-
-            	
-            
+          	
+          
 		catch (NumberFormatException e) {  // wrong format in file
 			 PatternFormatException error = new PatternFormatException();
 			 error.formatError();
 
 			}
-        
-    
-		System.out.println(rlePattern);
-         
 
-         }
+	        SimpleRLe(RlePattern);
+
+
+	    }
+
+
+	    public String SimpleRLe(String rlePattern) {
+
+	        StringBuilder simpleRle = new StringBuilder();
+	        Pattern pattern = Pattern.compile("\\d+|[ob]|\\$");
+	        Matcher matcher = pattern.matcher(rlePattern);
+
+	        while (matcher.find()) {
+	            int num = 1;
+	            if (matcher.group().matches("\\d+")) {
+	                num = Integer.parseInt(matcher.group());
+	                matcher.find();
+	            }
+	            for (int i = 0; i < num; i++) {
+	                simpleRle.append(matcher.group());
+	            }
+	        }
+
+	        System.out.println(simpleRle.toString());
+
+	       rle_to_Array(simpleRle.toString());
+	        return simpleRle.toString();
+
+
+	    }
+
+
+	    public byte[][] rle_to_Array(String rle) {
+
+	        int x = 0;
+	        int y = 0;
+
+	        rle_Board = new byte[Rows][Columns];
+
+	        for (int i = 0; i < rle.length(); i++) {
+	             if (rle.charAt(i) == '$') {
+	                x = 0;
+	                y++;
+	            }
+	            if (rle.charAt(i) == 'o') {	rle_Board[x][y] = 1; x++;
+	            
+	            }
+	            if (rle.charAt(i) == 'b') { rle_Board[x][y] = 0; x++;
+	            }
+
+	        	}
+	        System.out.println(Arrays.deepToString(rle_Board));
+	        return rle_Board;
+	        	
+	        	
+	        	
+
+
+	    }
+	    
+	    
+
+	  	    
+
+
+
+
 
 	
-        
-
-        }
 
 	
 
-
-    public String convertRleToSimpleRLe(String rlePattern) {
-
-        StringBuilder simpleRle = new StringBuilder();
-        Pattern pattern = Pattern.compile("\\d+|[ob]|\\$");
-        Matcher matcher = pattern.matcher(rlePattern);
-
-        while (matcher.find()) {
-            int num = 1;
-            if (matcher.group().matches("\\d+")) {
-                num = Integer.parseInt(matcher.group());
-                matcher.find();
-            }
-            for (int i = 0; i < num; i++) {
-                simpleRle.append(matcher.group());
-                
-//                if (matcher.group(2).matches("b")) {
-//                    if (matcher.group(1)==null) {
-//                        Rows++;
-//                    } else {
-//                        Rows = Integer.parseInt(matcher.group(1));
-//                    }
-//                } else if (matcher.group(2).matches("o")) {
-//                    if (matcher.group(1)==null) {
-//                        board[columns][Rows] = 1;
-//                        columns++;
-//                    } else {
-//                        for (int j = columns; columns < (i+Integer.parseInt(matcher.group(1))); columns++) {
-//                            board[Rows][columns] = 1;
-//                        }
-//                    }
-//
-//                } else if (matcher.group(2).matches("\\$")) {
-//                    if (matcher.group(1)==null) {
-//                    	columns++;
-//                        Rows = 0;
-//                    } else {
-//                    	columns=Integer.parseInt(matcher.group(1));
-//                    	columns = 0;
-//                    }
-//                }
-
-
-            }
-
-
-        }
-
-        System.out.println(simpleRle.toString());
-
-       rleToArray(simpleRle.toString());
-        return simpleRle.toString();
-
-
-    }
-
-
-    public void rleToArray(String rle) {
-
-        int x = 0;
-        int y = 0;
-
-        board = new byte[Rows][columns];
-
-        for (int i = 0; i < rle.length(); i++) {
-             if (rle.charAt(i) == '$') {
-                x = 0;
-                y++;
-            }
-            if (rle.charAt(i) == 'o') {
-
-                board[x][y] = 1;
-                x++;
-            }
-            if (rle.charAt(i) == 'b') {
-
-                board[x][y] = 0;
-                x++;
-                
-                drawBoard();
-            }
-
-        }
-
-        
-        
-        System.out.println(Arrays.deepToString(board));
-        
-    	
-
-
-    }
-
-
-  
-	// http://student.cs.hioa.no/~s315613/glider.html
 
 
 	/**
@@ -214,7 +175,7 @@ import java.nio.file.Paths;
 	public byte[][] readFromURL(String url) throws Exception, PatternFormatException,
 	MalformedURLException {
 
-		byte[][] board = new byte[Rows][columns];
+		byte[][] board = new byte[Rows][Columns];
 		URL destination = new URL(url);
 		URLConnection conn = destination.openConnection();
 

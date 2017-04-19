@@ -23,6 +23,8 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
+import java.util.Arrays;
+
 import javax.swing.JOptionPane;
 
 import golClasses.Readmetodet;
@@ -138,6 +140,12 @@ public class Control implements Initializable{
      * 
      * @throws Exception when no file is selected.
      */
+    
+
+    
+   
+    
+    
     public void uploadPattern() throws Exception { //uploads pattern from file
     	
 	    	FileChooser file = new FileChooser();
@@ -146,18 +154,17 @@ public class Control implements Initializable{
 	    			new ExtensionFilter("*.rle", "*.RLE"));
 	    	
 	    	// Shows the name of the uploaded file
-	    	File selectedFile = file.showOpenDialog(null);
+	    	File path = file.showOpenDialog(null);
 	    	
-	    	if(selectedFile != null) {
-	    		listview.getItems().add(selectedFile.getName());
-	        	//String path = selectedFile.getAbsolutePath();
+	    	if(path != null) {
+	    		listview.getItems().add(path.getName());
 	        	
-	    		
-	    		
-	    		
-	        	clearBoard();
-	        	FileRead.readFromDisk(selectedFile);
-	        	rleboard();
+	        	FileRead.readBoardFromDisk(path);
+	        
+	 
+	        	
+
+	        	
 
 	        	
 	        	
