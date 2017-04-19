@@ -54,7 +54,7 @@ public class Control implements Initializable{
     private int cellSize = 10;
 	private Timeline timeline = new Timeline();
     private byte[][] board = new byte[100][100];
-    Readmetodet FileRead;
+    private Readmetodet FileRead;
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
@@ -159,16 +159,9 @@ public class Control implements Initializable{
 	    	if(path != null) {
 	    		listview.getItems().add(path.getName());
 	        	
-	        	FileRead.readBoardFromDisk(path);
-	        
-	 
+	        	board = FileRead.readBoardFromDisk(path);
 	        	
-
-	        	
-
-	        	
-	        	
-	        	
+	        	drawBoard();
 	    	}
     }
     

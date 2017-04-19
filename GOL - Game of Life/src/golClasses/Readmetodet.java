@@ -25,7 +25,7 @@ import java.nio.file.Paths;
 		private int Columns=0;
 		
 	    private byte[][] board = new byte[100][100];
-	     public  byte[][] rle_Board ;
+	    public  byte[][] rle_Board ;
 
 		StringBuilder RLEPattern = new StringBuilder();
 		String line = "";
@@ -46,7 +46,7 @@ import java.nio.file.Paths;
 	 * @throws exception of the type numberFormat or IOException.
 	 */
 	    
-	    public void readBoardFromDisk(File path) throws IOException {
+	    public byte[][] readBoardFromDisk(File path) throws IOException {
 
 	        FileReader Fr = new FileReader(path);
 	        BufferedReader Br = new BufferedReader(Fr);
@@ -65,31 +65,24 @@ import java.nio.file.Paths;
 	                Rule = Mt.group(3);
 	                System.out.println("Rule : " + Rule);
 
-
 	            }
 
-	            if (line.matches("[b, o,$,!,0-9]*")) {
+	            if ((line.matches("[b, o, $, !, 0-9]*"))) {
 	            	RlePattern = RlePattern.concat(line);
-
 	            }
 
 	        }
 	        System.out.println(RlePattern);
-	        
-          
-	        }
 
-          	
-          
+	        }
+   
 		catch (NumberFormatException e) {  // wrong format in file
 			 PatternFormatException error = new PatternFormatException();
 			 error.formatError();
 
 			}
-
 	        SimpleRLe(RlePattern);
-
-
+			return board;
 	    }
 
 
@@ -110,14 +103,10 @@ import java.nio.file.Paths;
 	            }
 	        }
 
-	        System.out.println(simpleRle.toString());
-
+	       System.out.println(simpleRle.toString());
 	       rle_to_Array(simpleRle.toString());
-	        return simpleRle.toString();
-
-
+	       return simpleRle.toString();
 	    }
-
 
 	    public byte[][] rle_to_Array(String rle) {
 
@@ -127,39 +116,22 @@ import java.nio.file.Paths;
 	        rle_Board = new byte[Rows][Columns];
 
 	        for (int i = 0; i < rle.length(); i++) {
-	             if (rle.charAt(i) == '$') {
+	            if (rle.charAt(i) == '$') {
 	                x = 0;
 	                y++;
+	             }
+	            if (rle.charAt(i) == 'o') {	
+	            	rle_Board[x][y] = 1; 
+	            	x++;
 	            }
-	            if (rle.charAt(i) == 'o') {	rle_Board[x][y] = 1; x++;
-	            
+	            if (rle.charAt(i) == 'b') { 
+	            	rle_Board[x][y] = 0; 
+	            	x++;
 	            }
-	            if (rle.charAt(i) == 'b') { rle_Board[x][y] = 0; x++;
-	            }
-
-	        	}
+	        }
 	        System.out.println(Arrays.deepToString(rle_Board));
-	        return rle_Board;
-	        	
-	        	
-	        	
-
-
+	        return board = rle_Board;
 	    }
-	    
-	    
-
-	  	    
-
-
-
-
-
-	
-
-	
-
-
 
 	/**
 	 * this method reads pattern from URL.

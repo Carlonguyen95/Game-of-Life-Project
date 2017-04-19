@@ -30,7 +30,7 @@
             <Button fx:id="resetBtn" mnemonicParsing="false" onMouseClicked="#clearBoard" text="Reset" />
             <ColorPicker fx:id="colorChangerBtn" />
             <ComboBox fx:id="speedBtn" onAction="#speedSlction" prefWidth="100.0" promptText="Speed" />
-            <Button fx:id="loadUrlBtn" onAction="#loadURL" mnemonicParsing="false" text="URL" />
+            <Button fx:id="loadUrlBtn" onAction="#uploadPattern" mnemonicParsing="false" text="URL" />
             <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#uploadPattern" text="Load file" />
             <ListView fx:id="listview" prefHeight="30.0" prefWidth="125.0" /> 
          </children>
