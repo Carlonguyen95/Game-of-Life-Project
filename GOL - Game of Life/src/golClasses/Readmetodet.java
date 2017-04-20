@@ -23,6 +23,7 @@ import java.io.*;
 		
 	    private byte[][] board = new byte[300][300];
 	    private byte[][] rle_Board;
+	    private PatternFormatException error = new PatternFormatException();
 
 		StringBuilder RLEPattern = new StringBuilder();
 		String line = "";
@@ -71,10 +72,9 @@ import java.io.*;
 	        }
    
 		catch (NumberFormatException e) {  // wrong format in file
-			 PatternFormatException error = new PatternFormatException();
 			 error.formatError();
-
 			}
+
 	        SimpleRLe(RlePattern);
 			return board;
 	    
@@ -109,12 +109,12 @@ import java.io.*;
 	        int y = 0;
 
 	        rle_Board = new byte[rows][columns];
-
+	        
 	        for (int i = 0; i < rle.length(); i++) {
 	            if (rle.charAt(i) == '$') {
 	                x = 0;
 	                y++;
-	             }
+	            }
 	            if (rle.charAt(i) == 'o') {	
 	            	rle_Board[x][y] = 1;
 	            	x++;

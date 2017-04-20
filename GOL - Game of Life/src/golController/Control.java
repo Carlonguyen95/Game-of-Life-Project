@@ -27,6 +27,7 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
+import golClasses.Board;
 import golClasses.Readmetodet;
 
 /**
@@ -38,6 +39,7 @@ import golClasses.Readmetodet;
  */
 public class Control implements Initializable{
 
+	// Data field
     @FXML private Canvas graphics;
     @FXML private ColorPicker colorChangerBtn;
     @FXML private Slider sizeSliderBtn;
@@ -49,16 +51,18 @@ public class Control implements Initializable{
     @FXML private ListView listview;
     
     ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
-
+    
+    // Objects
     private GraphicsContext gc;
     private int cellSize = 10;
 	private Timeline timeline = new Timeline();
-    private byte[][] board = new byte[100][100];
+    private byte[][] gameBoard = new byte[100][100];
     private Readmetodet FileRead;
+    private Board board;
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
-    	FileRead =new Readmetodet();
+    	FileRead = new Readmetodet();
         gc = graphics.getGraphicsContext2D();
         colorChangerBtn.setValue(Color.BLACK);
         sizeSliderBtn.setValue(10.0);
@@ -140,9 +144,6 @@ public class Control implements Initializable{
      * 
      * @throws Exception when no file is selected.
      */
-    
-
-   
     public void uploadPattern() throws Exception { //uploads pattern from file
     		
 	    	FileChooser file = new FileChooser();
@@ -157,7 +158,7 @@ public class Control implements Initializable{
 	    		clearBoard();
 	    		listview.getItems().add(path.getName());
 	        	
-	        	board = FileRead.readBoardFromDisk(path);
+	        	gameBoard = FileRead.readBoardFromDisk(path);
 	        	
 	        	drawBoard();
 	    	}
@@ -179,7 +180,7 @@ public class Control implements Initializable{
     	
     	if(url != null) {
     		clearBoard();
-    		FileReader fileR = new FileReader(board);
+    		Readmetodet fileR = new Readmetodet();
     		board = u.readFromURL(url);
     		drawBoard();
     	}
@@ -197,7 +198,7 @@ public class Control implements Initializable{
     	double x = event.getX()/cellSize;
     	double y = event.getY()/cellSize;
     	
-    	board[(int)x][(int)y] = 1;
+    	gameBoard[(int)x][(int)y] = 1;
     	drawBoard();
     }
     
@@ -242,9 +243,9 @@ public class Control implements Initializable{
      */
     public void drawBoard() {
     	
-    	for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {                
-                if (board[i][j] == 1) {
+    	for (int i = 0; i < gameBoard.length; i++) {
+            for (int j = 0; j < gameBoard[i].length; j++) {                
+                if (gameBoard[i][j] == 1) {
                     gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
                     gc.setFill(colorChangerBtn.getValue());
                 }
@@ -254,9 +255,9 @@ public class Control implements Initializable{
     
 public void rleboard() {
     	
-    	for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {                
-                if (board[i][j] == 1) {
+    	for (int i = 0; i < gameBoard.length; i++) {
+            for (int j = 0; j < gameBoard[i].length; j++) {                
+                if (gameBoard[i][j] == 1) {
                     gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
                     gc.setFill(colorChangerBtn.getValue());
                 }
@@ -278,11 +279,11 @@ public void rleboard() {
     	
     	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
     	
-    	for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {                
-                if (board[i][j] == 1) {
+    	for (int i = 0; i < gameBoard.length; i++) {
+            for (int j = 0; j < gameBoard[i].length; j++) {                
+                if (gameBoard[i][j] == 1) {
                     gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    board[i][j] = 0;
+                    gameBoard[i][j] = 0;
                 }
             }
         }
@@ -302,11 +303,11 @@ public void rleboard() {
      * the next generation of the board is created.
      */
     public void nextGeneration() { 	
-    	byte[][] updated = new byte[board.length][board[0].length];
+    	byte[][] updated = new byte[gameBoard.length][gameBoard[0].length];
     	
-    	for(int i = 0; i < board.length; i++) { // copies board
-    		for( int j =0; j < board[i].length; j++) {
-    			updated[i][j] = board[i][j];
+    	for(int i = 0; i < gameBoard.length; i++) { // copies board
+    		for( int j =0; j < gameBoard[i].length; j++) {
+    			updated[i][j] = gameBoard[i][j];
     		}
     	}
     	
@@ -330,7 +331,7 @@ public void rleboard() {
             }
     	
     	}     
-    	board = updated;
+    	gameBoard = updated;
     	draw();
     }
     
@@ -362,19 +363,19 @@ public void rleboard() {
     public int neighbours(int x, int y) {
 
     	int nr = 0; 
-    	if(board[x][y] == 1) { //so that the cell doesn't count itself
+    	if(gameBoard[x][y] == 1) { //so that the cell doesn't count itself
     		nr = -1;
     	}
     	
     	for(int i = x-1; i <= x+1; i++){
     		
-            if(i < board.length && i >= 0){ //cells on the edges (rows)
+            if(i < gameBoard.length && i >= 0){ //cells on the edges (rows)
             	
                 for(int j = y-1; j <= y + 1; j++){
                 	
-                    if(j < board[i].length && j >= 0){ // cells on the edges (columns)
+                    if(j < gameBoard[i].length && j >= 0){ // cells on the edges (columns)
                     	
-                        if (board[i][j] == 1) {
+                        if (gameBoard[i][j] == 1) {
                             nr++;
                         }
                     }
@@ -397,7 +398,7 @@ public void rleboard() {
     		
             for (int j = 0; j < updated[i].length; j++) {
             	                
-            	if(board[i][j] == 0) { //the cell is dead
+            	if(gameBoard[i][j] == 0) { //the cell is dead
             		if(neighbours(i,j) == 3) {
             			updated[i][j] = 1;
             		}           	
