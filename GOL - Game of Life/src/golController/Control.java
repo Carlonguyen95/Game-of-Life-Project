@@ -27,7 +27,7 @@ import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
-import golClasses.Readmetodet;
+import golClasses.*;
 
 /**
  * This class has all the methods and controls that affects the GUI by user.
@@ -172,18 +172,18 @@ public class Control implements Initializable{
      * @throws Exception when no URL is inserted.
      */
     
-    
-   /*public void loadURL() throws Exception {
+    @FXML
+   public void loadURL() throws Exception {
     	String url = new String();
     	url = JOptionPane.showInputDialog(null, "Please enter a URL");
     	
     	if(url != null) {
     		clearBoard();
-    		FileReader fileR = new FileReader(board);
-    		board = u.readFromURL(url);
+    		Readmetodet fileR = new Readmetodet();
+    		board = fileR.readFromURL(url);
     		drawBoard();
     	}
-    }*/
+    }
     
 
     /**
