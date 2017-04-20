@@ -90,8 +90,6 @@ import java.io.*;
 
 			URL destination = new URL(url);
 			URLConnection conn = destination.openConnection();
-			
-			
 
 
 			try(
@@ -99,10 +97,9 @@ import java.io.*;
 				new InputStreamReader(conn.getInputStream()));
 				) {
 
-				String inputLine;
+				String inputLine = " ";
 				 
-				while ((inputLine = in.readLine()) != null) { // puts webpage content in arraylist
-					
+				while ((inputLine = in.readLine()) != null) { // puts webpage content in arraylist		
 				
 				Pattern P = Pattern.compile(regEx);
 		        Matcher M = P.matcher(inputLine);
@@ -119,16 +116,16 @@ import java.io.*;
 		            if ((inputLine.matches("[b, o, $, !, 0-9]*"))) {
 		            	RlePattern = RlePattern.concat(inputLine);
 		            }
-
 		        
 		        System.out.println(RlePattern);
-
-		
-				
-
-			return board;
+			
 		}
+				
 				}
+			
+			
+			
+			
 
 			catch (NumberFormatException e) {  // wrong format in file
 				 PatternFormatException error = new PatternFormatException();
@@ -145,8 +142,9 @@ import java.io.*;
 				PatternFormatException error = new PatternFormatException();
 				 error.generalError();
 			}
-
+			SimpleRLe(RlePattern);
 			return board;
+			
 		}
 
 
