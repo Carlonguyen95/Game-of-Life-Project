@@ -77,6 +77,7 @@ import java.io.*;
 			}
 	        SimpleRLe(RlePattern);
 			return board;
+	    
 	    }
 
 

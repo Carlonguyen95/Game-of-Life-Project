@@ -142,12 +142,9 @@ public class Control implements Initializable{
      */
     
 
-    
    
-    
-    
     public void uploadPattern() throws Exception { //uploads pattern from file
-    		clearBoard();
+    		
 	    	FileChooser file = new FileChooser();
 	    	// Filtered to only show files with format.
 	    	file.getExtensionFilters().addAll(
@@ -157,6 +154,7 @@ public class Control implements Initializable{
 	    	File path = file.showOpenDialog(null);
 	    	
 	    	if(path != null) {
+	    		clearBoard();
 	    		listview.getItems().add(path.getName());
 	        	
 	        	board = FileRead.readBoardFromDisk(path);
