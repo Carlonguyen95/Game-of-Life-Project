@@ -1,16 +1,13 @@
 package golClasses;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import golController.Control;
-import java.awt.Point;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 /** This class reads files given by user either by URL or file from disk
  * and transforms the information in the files to byte arrays
@@ -21,21 +18,20 @@ import java.nio.file.Paths;
  *
  * */
 	public class Readmetodet{
-		private int Rows=0;
-		private int Columns=0;
+		private int rows=0;
+		private int columns=0;
 		
-	    private byte[][] board = new byte[100][100];
-	    public  byte[][] rle_Board ;
+	    private byte[][] board = new byte[300][300];
+	    private byte[][] rle_Board;
 
 		StringBuilder RLEPattern = new StringBuilder();
 		String line = "";
-	    String Rule;
+	    String rule;
 	    String rleCode = "";
 	    String RlePattern = "";
 	    String regEx = "x ?= ?(\\d*), y ?= ?(\\d*), rule ?= ?(B([0-9]+)\\/S(([0-8])+))|(S[0-9]+\\/B[0-9]+)";
 	    String regexWeb= "x ?= ?(\\d*), y ?= ?(\\d*)";
 	    
-
 	/**
 	 * this method reads file from disk. The file contains a specific pattern formatted in #Life 1.06
 	 * Any other format will be caught as an pattern exception.
@@ -56,15 +52,13 @@ import java.nio.file.Paths;
 	            Pattern Pt = Pattern.compile(regEx);
 	            Matcher Mt = Pt.matcher(line);
 
-
 	            while (Mt.find()) {
-	            	Rows = Integer.parseInt(Mt.group(1));
-	                System.out.println("Rows = " + Rows);
-	            	Columns = Integer.parseInt(Mt.group(2));
-	                System.out.println("Columns = " + Columns);
-	                Rule = Mt.group(3);
-	                System.out.println("Rule : " + Rule);
-
+	            	rows = Integer.parseInt(Mt.group(1));
+	                System.out.println("Rows : " + rows);
+	            	columns = Integer.parseInt(Mt.group(2));
+	                System.out.println("Columns : " + columns);
+	                rule = Mt.group(3);
+	                System.out.println("Rule : " + rule);
 	            }
 
 	            if ((line.matches("[b, o, $, !, 0-9]*"))) {
@@ -113,7 +107,7 @@ import java.nio.file.Paths;
 	        int x = 0;
 	        int y = 0;
 
-	        rle_Board = new byte[Rows][Columns];
+	        rle_Board = new byte[rows][columns];
 
 	        for (int i = 0; i < rle.length(); i++) {
 	            if (rle.charAt(i) == '$') {
@@ -121,11 +115,11 @@ import java.nio.file.Paths;
 	                y++;
 	             }
 	            if (rle.charAt(i) == 'o') {	
-	            	rle_Board[x][y] = 1; 
+	            	rle_Board[x][y] = 1;
 	            	x++;
 	            }
 	            if (rle.charAt(i) == 'b') { 
-	            	rle_Board[x][y] = 0; 
+	            	rle_Board[x][y] = 0;
 	            	x++;
 	            }
 	        }
@@ -147,7 +141,7 @@ import java.nio.file.Paths;
 	public byte[][] readFromURL(String url) throws Exception, PatternFormatException,
 	MalformedURLException {
 
-		byte[][] board = new byte[Rows][Columns];
+		byte[][] board = new byte[rows][columns];
 		URL destination = new URL(url);
 		URLConnection conn = destination.openConnection();
 
