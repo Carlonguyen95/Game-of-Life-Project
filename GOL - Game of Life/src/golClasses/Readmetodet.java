@@ -28,7 +28,7 @@ import java.io.*;
 
 		StringBuilder RLEPattern = new StringBuilder();
 		String line = "";
-	    String rule;
+	    String rule = "";
 	    String rleCode = "";
 	    String RlePattern = "";
 	    String regEx = "x ?= ?(\\d*), y ?= ?(\\d*), rule ?= ?(B([0-9]+)\\/S(([0-8])+))|(S[0-9]+\\/B[0-9]+)";
@@ -61,7 +61,7 @@ import java.io.*;
 	                System.out.println("Rows : " + rows);
 	            	columns = Integer.parseInt(Mt.group(2));
 	                System.out.println("Columns : " + columns);
-	                rule = Mt.group(3);
+	                rule = Mt.group(2);
 	                System.out.println("Rule : " + rule);
 	            }
 
@@ -79,6 +79,10 @@ import java.io.*;
 			 error.formatError();
 
 			}
+	        
+	    /* catch (ArrayIndexOutOfBoundsException a) {
+	    	 System.out.println(".");
+	     }*/
 	        SimpleRLe(RlePattern);
 			return board;
 	    
@@ -109,7 +113,7 @@ import java.io.*;
 		                System.out.println("Rows : " + rows);
 		            	columns = Integer.parseInt(M.group(2));
 		                System.out.println("Columns : " + columns);
-		                rule = M.group(3);
+		                rule = M.group(2);
 		                System.out.println("Rule : " + rule);
 		            }
 

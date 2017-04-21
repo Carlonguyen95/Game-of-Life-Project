@@ -58,7 +58,7 @@ public class Control implements Initializable{
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
-    	FileRead =new Readmetodet();
+    	FileRead = new Readmetodet();
         gc = graphics.getGraphicsContext2D();
         colorChangerBtn.setValue(Color.BLACK);
         sizeSliderBtn.setValue(10.0);
