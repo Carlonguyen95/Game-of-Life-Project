@@ -1,28 +1,45 @@
+/**
+* This class represent the static board.
+* 
+* @author Carlo Nguyen
+* @author Haweya Jama
+* @author Idris Milamean
+*/
+
 package golClasses;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
+import javafx.scene.paint.Color;
 
 public class Board {
-
+	
+	// Data field
+	private byte[][] board = new byte[100][100];
+	private int cellSize = 10;
+	
+	private Canvas graphics;
+	private ColorPicker colorChangerBtn;
+	private Slider sizeSliderBtn;
+	private GraphicsContext gc;
+	
+	public Board(GraphicsContext gc, Canvas graphics) {
+		this.gc = gc;
+		this.graphics = graphics;
+	}
+	
 	/**
-	 * This class has all the methods and controls that affects the GUI by user.
-	 * 
-	 * @author Carlo Nguyen
-	 * @author Haweya Jama
-	 * @author Idris Milamean
-	 */
-
-	    private Canvas graphics;
-	    private ColorPicker colorChangerBtn;
-	    private Slider sizeSliderBtn;
-
-	    private GraphicsContext gc;
-	    private int cellSize = 10;
-	    private byte[][] board = new byte[100][100];
-	    private Readmetodet FileRead;
+	* This is a "helping-method" which contains two main draw-methods.
+	* drawGrid draws the grid of the board.
+	* drawBoard draws the board's array.
+	*/
+	public void draw() {  	
+		drawGrid();
+	    drawBoard();
+	    rleboard();
+	}
 
 	    /**
 	     * This method is connected to a colorpicker.
@@ -50,26 +67,14 @@ public class Board {
 	    }
 	    
 	    /**
-	     * This is a "helping-method" which contains two main draw-methods.
-	     * drawGrid draws the grid of the board.
-	     * drawBoard draws the board's array.
-	     */
-	    public void draw() {
-	    	
-	        drawGrid();
-	        drawBoard();
-	        rleboard();
-	    }
-	    
-	    /**
 	     * This method draws the grid of the board.
 	     * for-loops for X and Y, which adds the size of the cell each iterate to the grid
 	     * according to the height and width of the Canvas.
 	     */
 	    public void drawGrid() {
-
-	    	gc.setFill(colorChangerBtn.getValue());
-	        gc.setStroke(colorChangerBtn.getValue());
+	    	
+	    	gc.setFill(Color.BLACK);
+	        gc.setStroke(Color.BLACK);
 	        gc.setLineWidth(1);
 
 	        for (int x = 0; x < graphics.getWidth(); x += cellSize) {

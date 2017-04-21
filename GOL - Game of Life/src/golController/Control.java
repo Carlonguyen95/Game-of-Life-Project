@@ -23,9 +23,7 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
-import java.util.Arrays;
 
-import javax.swing.JOptionPane;
 
 import golClasses.Board;
 import golClasses.Readmetodet;
@@ -39,7 +37,7 @@ import golClasses.Readmetodet;
  */
 public class Control implements Initializable{
 
-	// Data field
+	// Data field to FXML
     @FXML private Canvas graphics;
     @FXML private ColorPicker colorChangerBtn;
     @FXML private Slider sizeSliderBtn;
@@ -52,24 +50,33 @@ public class Control implements Initializable{
     
     ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
     
-    // Objects
+    // Data field
     private GraphicsContext gc;
     private int cellSize = 10;
 	private Timeline timeline = new Timeline();
     private byte[][] gameBoard = new byte[100][100];
-    private Readmetodet FileRead;
-    private Board board;
+    
+    //Objects
+    Readmetodet FileRead;
+    Board board;
     
     @Override
     public void initialize(java.net.URL location,java.util.ResourceBundle resources){
-    	FileRead = new Readmetodet();
+    	
+    	// Setting up Graphics
         gc = graphics.getGraphicsContext2D();
+        
+        // Setting up Buttons
         colorChangerBtn.setValue(Color.BLACK);
         sizeSliderBtn.setValue(10.0);
         speedBtn.setValue("Speed"); 
         speedBtn.setItems(speedList);
-
-        draw();
+        
+        FileRead = new Readmetodet();
+        
+        // Setting up Board
+        Board board = new Board(gc, graphics);
+        board.draw();
     }
     
     public void closeProgram(ActionEvent event) {
@@ -102,7 +109,7 @@ public class Control implements Initializable{
     public void colorChange() {
 
         gc.setFill(colorChangerBtn.getValue());
-        drawBoard();
+        board.drawBoard();
     }
 
     /**
@@ -115,7 +122,7 @@ public class Control implements Initializable{
     	
         cellSize = (int) sizeSliderBtn.getValue();
     	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
-        draw();
+        board.draw();
     }
     
     /**
@@ -155,12 +162,12 @@ public class Control implements Initializable{
 	    	File path = file.showOpenDialog(null);
 	    	
 	    	if(path != null) {
-	    		clearBoard();
+	    		board.clearBoard();
 	    		listview.getItems().add(path.getName());
 	        	
 	        	gameBoard = FileRead.readBoardFromDisk(path);
 	        	
-	        	drawBoard();
+	        	board.drawBoard();
 	    	}
     }
     
@@ -199,140 +206,11 @@ public class Control implements Initializable{
     	double y = event.getY()/cellSize;
     	
     	gameBoard[(int)x][(int)y] = 1;
-    	drawBoard();
+    	board.drawBoard();
     }
     
-    /**
-     * This is a "helping-method" which contains two main draw-methods.
-     * drawGrid draws the grid of the board.
-     * drawBoard draws the board's array.
-     */
-    public void draw() {
-    	
-        drawGrid();
-        drawBoard();
-        rleboard();
-    }
-    
-    /**
-     * This method draws the grid of the board.
-     * for-loops for X and Y, which adds the size of the cell each iterate to the grid
-     * according to the height and width of the Canvas.
-     */
-    public void drawGrid() {
-
-    	gc.setFill(colorChangerBtn.getValue());
-        gc.setStroke(colorChangerBtn.getValue());
-        // Thickness of the grid
-        gc.setLineWidth(1);
-
-        for (int x = 0; x < graphics.getWidth(); x += cellSize) {
-            gc.strokeLine(x, 1000, x, 0);
-        }
-        for (int y = 0; y < graphics.getWidth(); y += cellSize) {
-            gc.strokeLine(0, y, 1000, y);
-        }
-    }
-
-    /**
-     * This method draws the board
-     * If the X and Y is equal to 1 there is a living cell.
-     * 
-     * @param i is point to X axis
-     * @param j is point to Y axis
-     */
-    public void drawBoard() {
-    	
-    	for (int i = 0; i < gameBoard.length; i++) {
-            for (int j = 0; j < gameBoard[i].length; j++) {                
-                if (gameBoard[i][j] == 1) {
-                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    gc.setFill(colorChangerBtn.getValue());
-                }
-            }
-        }
-    }
-    
-public void rleboard() {
-    	
-    	for (int i = 0; i < gameBoard.length; i++) {
-            for (int j = 0; j < gameBoard[i].length; j++) {                
-                if (gameBoard[i][j] == 1) {
-                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    gc.setFill(colorChangerBtn.getValue());
-                }
-            }
-        }
-    }
-    
-    
-    
-
-    /**
-     * This method clears the current Board
-     * Clears the board first.
-     * Then a for-loop that search board for any living cells
-     * if true, then set that coordinate [x][y] equal to 0
-     * Draw grid again and stop the Animation.
-     */
-    public void clearBoard() {
-    	
-    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
-    	
-    	for (int i = 0; i < gameBoard.length; i++) {
-            for (int j = 0; j < gameBoard[i].length; j++) {                
-                if (gameBoard[i][j] == 1) {
-                    gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                    gameBoard[i][j] = 0;
-                }
-            }
-        }
-    	
-    	drawGrid();
-    	timeline.stop();
-    	
-    	if(startPauseBtn.isSelected()) {
-    		startPauseBtn.setText("Start");
-    		startPauseBtn.setSelected(false);
-    	}
-    }
-    
-    /**
-     * this method updates the board by applying the GoL rules to the board. 
-     * By using a temporary array that stores the previous state of the board, 
-     * the next generation of the board is created.
-     */
-    public void nextGeneration() { 	
-    	byte[][] updated = new byte[gameBoard.length][gameBoard[0].length];
-    	
-    	for(int i = 0; i < gameBoard.length; i++) { // copies board
-    		for( int j =0; j < gameBoard[i].length; j++) {
-    			updated[i][j] = gameBoard[i][j];
-    		}
-    	}
-    	
-    	updateBoard(updated);
-    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
-    	
-    	for (int i = 0; i < updated.length; i++) {	
-            for (int j = 0; j < updated[i].length; j++) {
- 
-            	if(updated[i][j] == 0) { //the cell is dead
-            		if(neighbours(i,j) == 3) {
-            			gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-
-            		}           	
-                }   	
-            	else { // the cell is alive
-                  if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
-                	  gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-                  	}                          
-            	}
-            }
-    	
-    	}     
-    	gameBoard = updated;
-    	draw();
+    public void resetBoard() {
+    	board.clearBoard();
     }
     
     /**
@@ -346,74 +224,11 @@ public void rleboard() {
     	
     	// Speed
     	KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
-    		nextGeneration();
+    		board.nextGeneration();
     	});
     	
     	timeline.getKeyFrames().add(keyframe);
     	timeline.play();
     }
-    
-    /**
-     * This method counts the number of neighbouring cells a given cell has,
-     * by iterating through the board with two for-loops that only checks the 8
-     * cells surrounding it.
-     *@return the number of neighbours the cell has.
-     *@param the x and y coordinates of the cell (placement of the cell in the grid)
-     * */
-    public int neighbours(int x, int y) {
-
-    	int nr = 0; 
-    	if(gameBoard[x][y] == 1) { //so that the cell doesn't count itself
-    		nr = -1;
-    	}
-    	
-    	for(int i = x-1; i <= x+1; i++){
-    		
-            if(i < gameBoard.length && i >= 0){ //cells on the edges (rows)
-            	
-                for(int j = y-1; j <= y + 1; j++){
-                	
-                    if(j < gameBoard[i].length && j >= 0){ // cells on the edges (columns)
-                    	
-                        if (gameBoard[i][j] == 1) {
-                            nr++;
-                        }
-                    }
-                }
-            }
-        }
-    	return nr;   	
-    }
-    
-    
-    /**
-     * This method updates the board by applying the GoL rules,
-     * by iterating through the board with two for-loops and assigning
-     * 1 or 0 using the GoL rules.
-     * @param the array which contains the previous generation
-     * */
-    public void updateBoard(byte[][] updated) {
-
-    	for (int i = 0; i < updated.length; i++) {
-    		
-            for (int j = 0; j < updated[i].length; j++) {
-            	                
-            	if(gameBoard[i][j] == 0) { //the cell is dead
-            		if(neighbours(i,j) == 3) {
-            			updated[i][j] = 1;
-            		}           	
-                }
-            	
-            	else { // the cell is alive
-                  if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
-                    updated[i][j] = 0;
-                  }               
-                
-            }
-        }
-    	
-   	} 
-    	
-  } 
     
 }

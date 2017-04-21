@@ -28,7 +28,7 @@
             <Label text="Zoom" />
             <Slider fx:id="sizeSliderBtn" max="75.0" min="10.0" onMouseDragged="#sizeChange" />
             <ToggleButton fx:id="startPauseBtn" mnemonicParsing="false" onMouseClicked="#toggleBtn" text="Start" />
-            <Button fx:id="resetBtn" mnemonicParsing="false" onMouseClicked="#clearBoard" text="Reset" />
+            <Button fx:id="resetBtn" mnemonicParsing="false" onMouseClicked="#resetBoard" text="Reset" />
             <ColorPicker fx:id="colorChangerBtn" />
             <ComboBox fx:id="speedBtn" onAction="#speedSlction" prefWidth="100.0" promptText="Speed" />
             <Button fx:id="loadUrlBtn" onAction="#uploadPattern" mnemonicParsing="false" text="URL" />
