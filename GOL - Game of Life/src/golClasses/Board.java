@@ -13,7 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
-
+import java.lang.Exception;
 public class Board {
 	
 	// Data field
@@ -25,9 +25,23 @@ public class Board {
 	private Slider sizeSliderBtn;
 	private GraphicsContext gc;
 	
-	public Board(GraphicsContext gc, Canvas graphics) {
+	public Board(GraphicsContext gc, Canvas graphics, ColorPicker colorChangerBtn) {
 		this.gc = gc;
 		this.graphics = graphics;
+		this.colorChangerBtn = colorChangerBtn;
+		
+		byte[][] board = new byte[100][100];
+		this.board = board;
+	}
+	
+	public void setCellState(int x, int y) throws Exception {
+		try {
+			board[x][y] = 1;
+		}
+		
+		catch(NullPointerException np) {
+			//handle 
+		}
 	}
 	
 	/**
@@ -38,8 +52,9 @@ public class Board {
 	public void draw() {  	
 		drawGrid();
 	    drawBoard();
-	    rleboard();
+
 	}
+	
 
 	    /**
 	     * This method is connected to a colorpicker.
@@ -103,19 +118,6 @@ public class Board {
 	            }
 	        }
 	    }
-	    
-	public void rleboard() {
-	    	
-	    	for (int i = 0; i < board.length; i++) {
-	            for (int j = 0; j < board[i].length; j++) {                
-	                if (board[i][j] == 1) {
-	                    gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
-	                    gc.setFill(colorChangerBtn.getValue());
-	                }
-	            }
-	        }
-	    }
-	    
 	    
 	    
 

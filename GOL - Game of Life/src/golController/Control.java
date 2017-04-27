@@ -75,7 +75,8 @@ public class Control implements Initializable{
         FileRead = new Readmetodet();
         
         // Setting up Board
-        Board board = new Board(gc, graphics);
+        Board board = new Board(gc, graphics,colorChangerBtn);
+        this.board = board;
         board.draw();
     }
     
@@ -109,7 +110,7 @@ public class Control implements Initializable{
     public void colorChange() {
 
         gc.setFill(colorChangerBtn.getValue());
-        board.drawBoard();
+        board.draw();
     }
 
     /**
@@ -205,7 +206,14 @@ public class Control implements Initializable{
     	double x = event.getX()/cellSize;
     	double y = event.getY()/cellSize;
     	
-    	gameBoard[(int)x][(int)y] = 1;
+    	//gameBoard[(int)x][(int)y] = 1;
+    
+    	try {
+			board.setCellState((int) x,(int) y);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	board.drawBoard();
     }
     
