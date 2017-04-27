@@ -42,7 +42,7 @@ public class DynamicBoard extends Board {
 	public void setCellState(int x, int y) throws Exception {
 		try {
 			yBoard.add(y,(byte)1);
-			board.add(y,yBoard);
+			board.get(x).add((byte) 1);
 			if(board.get(x).get(y) == 1) {
 				System.out.println("endret");
 			}
@@ -56,8 +56,7 @@ public class DynamicBoard extends Board {
 			//handle exception
 			e.printStackTrace();
 			//	board.add(x).add(y);
-		}
-		
+		}	
 		
 	}
 	
