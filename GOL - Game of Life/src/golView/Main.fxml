@@ -26,12 +26,12 @@
       <HBox alignment="CENTER_LEFT" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Zoom" />
-            <Slider fx:id="sizeSliderBtn" max="75.0" min="10.0" onMouseDragged="#sizeChange" />
+            <Slider fx:id="sizeSliderBtn" max="75.0" min="5.0" onMouseDragged="#sizeChange" />
             <ToggleButton fx:id="startPauseBtn" mnemonicParsing="false" onMouseClicked="#toggleBtn" text="Start" />
             <Button fx:id="resetBtn" mnemonicParsing="false" onMouseClicked="#resetBoard" text="Reset" />
             <ColorPicker fx:id="colorChangerBtn" />
             <ComboBox fx:id="speedBtn" onAction="#speedSlction" prefWidth="100.0" promptText="Speed" />
-            <Button fx:id="loadUrlBtn" onAction="#uploadPattern" mnemonicParsing="false" text="URL" />
+            <Button fx:id="loadUrlBtn" onAction="#loadURL" mnemonicParsing="false" text="URL" />
             <Button fx:id="loadFileBtn" mnemonicParsing="false" onAction="#uploadPattern" text="Load file" />
             <ListView fx:id="listview" prefHeight="30.0" prefWidth="125.0" /> 
          </children>

@@ -24,6 +24,7 @@ import javafx.scene.control.ToggleButton;
 
 import java.io.File;
 
+import javax.swing.JOptionPane;
 
 import golClasses.Board;
 import golClasses.Readmetodet;
@@ -38,205 +39,208 @@ import golClasses.Readmetodet;
 public class Control implements Initializable{
 
 	// Data field to FXML
-    @FXML private Canvas graphics;
-    @FXML private ColorPicker colorChangerBtn;
-    @FXML private Slider sizeSliderBtn;
-    @FXML private ToggleButton startPauseBtn;
-    @FXML private Button resetBtn;
-    @FXML private Button loadFileBtn;
-    @FXML private Button loadUrlBtn;
-    @FXML private ComboBox<String> speedBtn;
-    @FXML private ListView listview;
-    
-    ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
-    
-    // Data field
-    private GraphicsContext gc;
-    private int cellSize = 10;
+	@FXML private Canvas graphics;
+	@FXML private ColorPicker colorChangerBtn;
+	@FXML private Slider sizeSliderBtn;
+	@FXML private ToggleButton startPauseBtn;
+	@FXML private Button resetBtn;
+	@FXML private Button loadFileBtn;
+	@FXML private Button loadUrlBtn;
+	@FXML private ComboBox<String> speedBtn;
+	@FXML private ListView<String> listview;
+
+	ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
+
+	// Data field
+	private GraphicsContext gc;
 	private Timeline timeline = new Timeline();
-    private byte[][] gameBoard = new byte[100][100];
-    
-    //Objects
-    Readmetodet FileRead;
-    Board board;
-    
-    @Override
-    public void initialize(java.net.URL location,java.util.ResourceBundle resources){
-    	
-    	// Setting up Graphics
-        gc = graphics.getGraphicsContext2D();
-        
-        // Setting up Buttons
-        colorChangerBtn.setValue(Color.BLACK);
-        sizeSliderBtn.setValue(10.0);
-        speedBtn.setValue("Speed"); 
-        speedBtn.setItems(speedList);
-        
-        FileRead = new Readmetodet();
-        
-        // Setting up Board
-        Board board = new Board(gc, graphics,colorChangerBtn);
-        this.board = board;
-        board.draw();
-    }
-    
-    public void closeProgram(ActionEvent event) {
-        System.exit(0);
-    }
-    
+	private byte[][] gameBoard = new byte[100][100];
+
+	//Objects
+	Readmetodet FileRead;
+	Board board;
+
+	@Override
+	public void initialize(java.net.URL location,java.util.ResourceBundle resources){
+
+		// Setting up Graphics
+		gc = graphics.getGraphicsContext2D();
+
+		// Setting up Buttons
+		colorChangerBtn.setValue(Color.BLACK);
+		sizeSliderBtn.setValue(5.0);
+		speedBtn.setValue("Speed"); 
+		speedBtn.setItems(speedList);
+
+		FileRead = new Readmetodet();
+
+		// Setting up Board
+		Board board = new Board(gc, graphics,colorChangerBtn, sizeSliderBtn);
+		this.board = board;
+		board.draw();
+	}
+
+	public void closeProgram(ActionEvent event) {
+		System.exit(0);
+	}
+
 	/**
 	 * This method is connected to a togglebutton.
 	 * Allows the user to start the game, and pause it anytime.
 	 * When the Start-button is pressed, Animation() method will execute.
 	 */
-    public void toggleBtn() {
-    	
-    	if(startPauseBtn.isSelected()) {
-    		startPauseBtn.setText("Pause");
-    		
-    		Animation();
-    	}else {
-    		startPauseBtn.setText("Start");
-    		timeline.pause();
-    	}
-    }
+	public void toggleBtn() {
 
-    /**
-     * This method is connected to a colorpicker.
-     * Allows the user to select color to the board and drawn cells.
-     * The color will be changed after each sequence of drawBoard() is executed.
-     * gc is a variable assigned to Canvas, and returns the GraphicsContext associated with this Canvas.
-     */
-    public void colorChange() {
+		if(startPauseBtn.isSelected()) {
+			startPauseBtn.setText("Pause");
 
-        gc.setFill(colorChangerBtn.getValue());
-        board.draw();
-    }
+			Animation();
+		}else {
+			startPauseBtn.setText("Start");
+			timeline.pause();
+		}
+	}
 
-    /**
-     * This method is connected to a slider.
-     * Allows the user to select size to the board and drawn cells.
-     * The method sets the new size to cellSize, gc clears the board, then draw() is executed.
-     * And draws everything to the screen.
-     */
-    public void sizeChange() {
-    	
-        cellSize = (int) sizeSliderBtn.getValue();
-    	gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
-        board.draw();
-    }
-    
-    /**
-     * This method is connected to a combobox.
-     * Allows user to select the direction/speed at which the Animation is expected to be played.
-     */
-    public void speedSlction() { 
-        
-        if(speedBtn.getValue().equals("1x")) { 
-            timeline.setRate(1); 
-        } 
-        if(speedBtn.getValue().equals("2x")) { 
-            timeline.setRate(2); 
-        } 
-        if(speedBtn.getValue().equals("4x")) { 
-            timeline.setRate(4); 
-        } 
-      }    
-    
-    /**
-     * This method is connected to a button.
-     * Allows the user to upload a pattern-file into the board.
-     * Format are filtered to .lif and .life
-     * When pattern is loaded, clearBoard() clears the current board. 
-     * Board gets assigned to new values and being drawn to the screen.
-     * 
-     * @throws Exception when no file is selected.
-     */
-    public void uploadPattern() throws Exception { //uploads pattern from file
-    		
-	    	FileChooser file = new FileChooser();
-	    	// Filtered to only show files with format.
-	    	file.getExtensionFilters().addAll(
-	    			new ExtensionFilter("*.rle", "*.RLE"));
-	    	
-	    	// Shows the name of the uploaded file
-	    	File path = file.showOpenDialog(null);
-	    	
-	    	if(path != null) {
-	    		board.clearBoard();
-	    		listview.getItems().add(path.getName());
-	        	
-	        	gameBoard = FileRead.readBoardFromDisk(path);
-	        	
-	        	board.drawBoard();
-	    	}
-    }
-    
-    /**
-     * This method is connected to a button.
-     * Allows user to input a pattern via URL into the board.
-     * When URL is loaded, clearBoard() clears the current board. 
-     * Board gets assigned to new values and being drawn to the screen.
-     * 
-     * @throws Exception when no URL is inserted.
-     */
-    
-    
-   /*public void loadURL() throws Exception {
-    	String url = new String();
-    	url = JOptionPane.showInputDialog(null, "Please enter a URL");
-    	
-    	if(url != null) {
-    		clearBoard();
-    		Readmetodet fileR = new Readmetodet();
-    		board = u.readFromURL(url);
-    		drawBoard();
-    	}
-    }*/
-    
+	/**
+	 * This method is connected to a colorpicker.
+	 * Allows the user to select color to the board and drawn cells.
+	 * The color will be changed after each sequence of drawBoard() is executed.
+	 * gc is a variable assigned to Canvas, and returns the GraphicsContext associated with this Canvas.
+	 */
+	public void colorChange() {
 
-    /**
-     * This method allows the user to selfdraw cells on the board, by dragclick with the mouse.
-     * Each dragclick on the board will get the pointers coordinate X and Y relative to the Board.
-     * The value X and Y get casted into integer values, then put into Board's array.
-     * Board[x][y] is equal to 1 means there is a living cell on that coordinate.
-     */
-    public void drawCell(MouseEvent event) {
-    	
-    	double x = event.getX()/cellSize;
-    	double y = event.getY()/cellSize;
-    	
-    	//gameBoard[(int)x][(int)y] = 1;
-    
-    	try {
+		gc.setFill(colorChangerBtn.getValue());
+		board.draw();
+	}
+
+	/**
+	 * This method is connected to a slider.
+	 * Allows the user to select size to the board and drawn cells.
+	 * The method sets the new size to cellSize, gc clears the board, then draw() is executed.
+	 * And draws everything to the screen.
+	 */
+	public void sizeChange() {
+		board.sizeChange();
+	}
+
+	/**
+	 * This method is connected to a combobox.
+	 * Allows user to select the direction/speed at which the Animation is expected to be played.
+	 */
+	public void speedSlction() { 
+
+		if(speedBtn.getValue().equals("1x")) { 
+			timeline.setRate(1); 
+		} 
+		if(speedBtn.getValue().equals("2x")) { 
+			timeline.setRate(2); 
+		} 
+		if(speedBtn.getValue().equals("4x")) { 
+			timeline.setRate(4); 
+		} 
+	}    
+
+	/**
+	 * This method is connected to a button.
+	 * Allows the user to upload a pattern-file into the board.
+	 * Format are filtered to .lif and .life
+	 * When pattern is loaded, clearBoard() clears the current board. 
+	 * Board gets assigned to new values and being drawn to the screen.
+	 * 
+	 * @throws Exception when no file is selected.
+	 */
+	public void uploadPattern() throws Exception { //uploads pattern from file
+		FileChooser file = new FileChooser();
+		// Filtered to only show files with format.
+		file.getExtensionFilters().addAll(
+				new ExtensionFilter("*.rle", "*.RLE"));
+
+		// Shows the name of the uploaded file
+		File path = file.showOpenDialog(null);
+
+		if(path != null) {
+			board.clearBoard();
+			listview.getItems().add(path.getName());
+			Readmetodet fileR = new Readmetodet();
+			gameBoard = fileR.readBoardFromDisk(path);
+			board.setBoard(gameBoard);
+			board.drawBoard();
+
+		}
+	}
+
+	/**
+	 * This method is connected to a button.
+	 * Allows user to input a pattern via URL into the board.
+	 * When URL is loaded, clearBoard() clears the current board. 
+	 * Board gets assigned to new values and being drawn to the screen.
+	 * 
+	 * @throws Exception when no URL is inserted.
+	 */
+	public void loadURL() throws Exception {
+		String url = new String();
+		url = JOptionPane.showInputDialog(null, "Please enter a URL");
+
+		if(url != null) {
+			board.clearBoard();
+			Readmetodet fileR = new Readmetodet();
+			gameBoard = fileR.readFromURL(url);
+			board.setBoard(gameBoard);
+			board.drawBoard();
+		}
+	}
+
+
+	/**
+	 * This method allows the user to selfdraw cells on the board, by dragclick with the mouse.
+	 * Each dragclick on the board will get the pointers coordinate X and Y relative to the Board.
+	 * The value X and Y get casted into integer values, then put into Board's array.
+	 * Board[x][y] is equal to 1 means there is a living cell on that coordinate.
+	 */
+	public void drawCell(MouseEvent event) {
+
+		double x = event.getX()/board.getCellSize();
+		double y = event.getY()/board.getCellSize();
+
+		//gameBoard[(int)x][(int)y] = 1;
+
+		try {
 			board.setCellState((int) x,(int) y);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	board.drawBoard();
-    }
-    
-    public void resetBoard() {
-    	board.clearBoard();
-    }
-    
-    /**
-     * This method makes the animation of the game by creating a timeline.
-     * 
-     * */
-    public void Animation() {
-    	
-    	timeline.setCycleCount(Animation.INDEFINITE);
-    	timeline.setAutoReverse(true);
-    	
-    	// Speed
-    	KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
-    		board.nextGeneration();
-    	});
-    	
-    	timeline.getKeyFrames().add(keyframe);
-    	timeline.play();
-    }
-    
+		board.drawBoard();
+	}
+
+	public void resetBoard() {
+		gameBoard = board.getBoard();
+		board.clearBoard();
+		
+
+		if(startPauseBtn.isSelected()) {
+			startPauseBtn.setText("Start");
+			startPauseBtn.setSelected(false);
+
+			timeline.stop();
+		}
+	}
+
+	/**
+	 * This method makes the animation of the game by creating a timeline.
+	 * 
+	 * */
+	public void Animation() {
+
+		timeline.setCycleCount(Animation.INDEFINITE);
+		timeline.setAutoReverse(true);
+
+		// Speed
+		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
+			board.nextGeneration();
+		});
+
+		timeline.getKeyFrames().add(keyframe);
+		timeline.play();
+	}
+
 }
