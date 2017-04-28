@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
+import java.util.*;
 
 
 /** This class reads files given by user either by URL or file from disk
@@ -42,6 +43,15 @@ import java.io.*;
 	 * @return a byte board with the pattern in the file.
 	 * @throws exception of the type numberFormat or IOException.
 	 */
+	    
+	    
+	    //converts dynamic board to static 
+	    public byte[][] convertArray(ArrayList<List<Byte>> b) {
+	    	byte[][] byteArray = b.stream().map(u->u.stream().mapToInt(i->i).toArray()).toArray(byte[][]::new);
+	    	return byteArray;
+
+	    	
+	    }
 	    
 	    public byte[][] readBoardFromDisk(File path) throws IOException {
 
