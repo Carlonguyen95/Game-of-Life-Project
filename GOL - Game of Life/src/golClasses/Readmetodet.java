@@ -45,7 +45,7 @@ import java.util.*;
 	 */
 	    
 	    
-	    //converts dynamic board to static 
+	    //converts dynamic board to static two dimentional array
 	    public byte[][] convertArray(ArrayList<List<Byte>> b) {
 	    	byte[][] byteArray = b.stream().map(u->u.stream().mapToInt(i->i).toArray()).toArray(byte[][]::new);
 	    	return byteArray;

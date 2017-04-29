@@ -177,20 +177,16 @@ public class DynamicBoard extends Board {
 
 		List<List<Byte>> updated = new ArrayList<>();
 
-		int index = 0;
-		int indeks = 0;
-		
-		while(index < 300) { // makes the board 300x300
-			List <Byte> yUpdated = new ArrayList<>();
-			while (indeks < 300) {
-				yUpdated.add(indeks,(byte)0);		
-				indeks++;
-			}
-			indeks=0;
-			updated.add(index,yUpdated);			
-			index++;		
-		}
+		for(int i = 0; i < board.size(); i++) { //copies board content into updated
+			ArrayList<Byte> inner = new ArrayList<Byte>();
 
+			for(int j = 0; j < board.get(i).size(); j++) {
+				inner.add(board.get(i).get(j));
+			}
+
+			updated.add(inner);
+
+		}
 		updateBoard(updated);
 		gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
 
@@ -215,12 +211,12 @@ public class DynamicBoard extends Board {
 		draw();
 
 	}
-	
+
 	@Override
 	public int neighbours(int x, int y) {
-		
+
 		int nr = 0;
-			
+
 		if(board.get(x).get(y) == 1) {
 			nr  = -1;
 		}
@@ -240,7 +236,7 @@ public class DynamicBoard extends Board {
 				}
 			}
 		}
-		//System.out.println("x = " + x + " y = " + y + " neighbours: " + nr); 
+
 		return nr; 
 	}
 
