@@ -65,7 +65,7 @@ public class Board {
 		return cellSize;
 	}
 	
-
+ 
 	/**
 	 * This method is connected to a slider.
 	 * Allows the user to select size to the board and drawn cells.

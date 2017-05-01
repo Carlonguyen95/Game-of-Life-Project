@@ -73,7 +73,7 @@ public class DynamicBoard extends Board {
 	public void setCellState(int x, int y) throws Exception {
 
 		try {		
-			board.get(x).set(y,(byte)1);
+			board.get(x).set(y,(byte)1); 
 
 
 		}

@@ -49,7 +49,7 @@ public class Control implements Initializable{
 	@FXML private ComboBox<String> speedBtn;
 	@FXML private ListView<String> listview;
 
-	ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "4x");
+	ObservableList<String> speedList = FXCollections.observableArrayList("1x", "2x", "3x","4x");
 
 	// Data field
 	private GraphicsContext gc;
@@ -134,6 +134,9 @@ public class Control implements Initializable{
 		} 
 		if(speedBtn.getValue().equals("2x")) { 
 			timeline.setRate(2); 
+		} 
+		if(speedBtn.getValue().equals("3x")) { 
+			timeline.setRate(3); 
 		} 
 		if(speedBtn.getValue().equals("4x")) { 
 			timeline.setRate(4); 
