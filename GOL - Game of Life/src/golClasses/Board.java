@@ -20,10 +20,10 @@ public class Board {
 	private byte[][] board = new byte[100][100];
 	private int cellSize = 5;
 
-	private Canvas graphics;
-	private ColorPicker colorChangerBtn;
-	private GraphicsContext gc;
-	private Slider sizeSliderBtn;
+	protected Canvas graphics;
+	protected ColorPicker colorChangerBtn;
+	protected GraphicsContext gc;
+	protected Slider sizeSliderBtn;
 
 	public Board(GraphicsContext gc, Canvas graphics, ColorPicker colorChangerBtn, Slider sizeSliderBtn) {
 		this.gc = gc;
@@ -34,7 +34,12 @@ public class Board {
 		byte[][] board = new byte[100][100];
 		this.board = board;
 	}
-
+	
+	
+	/**
+	 * This method makes a given cell alive (changing the value to 1)
+	 * @param x and y variables that tells us where the cell is on the board
+	 * */
 	public void setCellState(int x, int y) throws Exception {
 		try {
 			board[x][y] = 1;
@@ -68,7 +73,6 @@ public class Board {
 	 * And draws everything to the screen.
 	 */
 	public void sizeChange() {
-
 		cellSize = (int) sizeSliderBtn.getValue();
 		gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
 		draw();

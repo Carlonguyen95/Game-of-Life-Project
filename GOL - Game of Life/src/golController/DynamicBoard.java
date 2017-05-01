@@ -1,3 +1,11 @@
+/**
+ * This class represent the dynamic Game board.
+ * 
+ * @author Carlo Nguyen
+ * @author Haweya Jama
+ * @author Idris Milamean
+ */
+
 package golController;
 
 import java.util.ArrayList;
@@ -15,7 +23,7 @@ public class DynamicBoard extends Board {
 
 	// Data field
 	private List<List<Byte>> board = new ArrayList<>();
-	private int cellSize = 10;
+	private int cellSize = 5;
 
 	private Canvas graphics;
 	private ColorPicker colorChangerBtn;
@@ -23,15 +31,16 @@ public class DynamicBoard extends Board {
 	private GraphicsContext gc;
 
 	public DynamicBoard(GraphicsContext gc, Canvas graphics, ColorPicker colorChangerBtn, Slider sizeSliderBtn) {
-		super(gc,graphics,colorChangerBtn, sizeSliderBtn);
+		super(gc,graphics,colorChangerBtn,sizeSliderBtn);
 		this.gc = gc;
 		this.graphics = graphics;
 		this.colorChangerBtn = colorChangerBtn;
+		this.sizeSliderBtn = sizeSliderBtn;		
 
 		int index = 0;
 		int indeks = 0;
 
-		while(index < 300) { // makes the board 100x100
+		while(index < 300) { // makes the board 300x300
 			List <Byte> yBoard = new ArrayList<>();
 			while (indeks < 300) {
 				yBoard.add(indeks,(byte)0);		
@@ -43,18 +52,29 @@ public class DynamicBoard extends Board {
 		}
 	}
 
+	/**
+	 * This method is connected to a slider.
+	 * Allows the user to select size to the board and drawn cells.
+	 * The method sets the new size to cellSize, gc clears the board, then draw() is executed.
+	 * And draws everything to the screen.
+	 */
+	public void sizeChange() {
+		cellSize = (int) sizeSliderBtn.getValue();
+		gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
+		draw();
+	}
+
+	/**
+	 * This method makes a given cell alive (changing the value to 1)
+	 * overridden to fit the dynamic board
+	 * @param x and y variables that tells us where the cell is on the board
+	 * */
 	@Override
 	public void setCellState(int x, int y) throws Exception {
 
 		try {		
 			board.get(x).set(y,(byte)1);
 
-			if(board.get(x).get(y) == 1) {
-				System.out.println("endret");
-			}
-			else {
-				System.out.println("ikke endret");
-			}
 
 		}
 
@@ -65,10 +85,15 @@ public class DynamicBoard extends Board {
 		}	
 
 	}
-
-	public int getCellState(int x, int y) {
+	
+	/**
+	 * this method returns a cells state (if its dead or alive)
+	 * @param x and y variables that tells us where in the list the cell is and a
+	 * 2D arraylist of the board
+	 * */
+	public int getCellState(List<List<Byte>> b,int x, int y) {
 		try {
-			return board.get(x).get(y);
+			return b.get(x).get(y);
 
 		}
 
@@ -80,20 +105,23 @@ public class DynamicBoard extends Board {
 
 	}
 
-
-	public void rectangle() { //makes the grid rectangular (equally many rows and columns)
+	/**
+	 * this method makes the array rectangular (equally many rows and columns)
+	 * after the user has clicked in a specific place on the grid
+	 * */
+	public void rectangular() { 
 
 		int col = board.size(); //x
-		int rows = board.get(col).size(); //y
+		int rows = board.get(0).size(); //y
 
 		int index = 0;
 		int indeks = 0;
 
 
 		if(col > rows) {
-			while(index <= 100) { // makes the board 100x100
+			while(index <= 300) {
 				List <Byte> yBoard = new ArrayList<>();
-				while (indeks <= 100) {
+				while (indeks <= 300) {
 					yBoard.add(indeks,(byte)0);		
 					indeks++;
 				}
@@ -136,13 +164,27 @@ public class DynamicBoard extends Board {
 		}
 	}
 
-
+	/**
+	 * This is a "helping-method" which contains two main draw-methods.
+	 * drawGrid draws the grid of the board.
+	 * drawBoard draws the board's array.
+	 */
 	public void draw() {  	
 		drawGrid();
 		drawBoard();
 
 	}
 
+	
+	
+	/**
+	 * This method draws the board
+	 * If the X and Y is equal to 1 there is a living cell.
+	 * overrides the method in Board to fit the dynamic board
+	 * 
+	 * @param i is point to X axis
+	 * @param j is point to Y axis
+	 */
 	@Override
 	public void drawBoard() {
 		for (int i = 0; i < board.size(); i++) {
@@ -159,7 +201,14 @@ public class DynamicBoard extends Board {
 	}
 
 
-	//fiks
+	/**
+	 * This method clears the current Board
+	 * Clears the board first.
+	 * Then a for-loop that search board for any living cells
+	 * if true, then set that coordinate [x][y] equal to 0
+	 * Draw grid again and stop the Animation.
+	 * overrides the method in Board to fit the dynamic board
+	 */
 	@Override
 	public void clearBoard() {
 
@@ -178,26 +227,35 @@ public class DynamicBoard extends Board {
 		drawGrid();
 	}
 
-
-	//use set/get cellstate methods
+	
+	/**
+	 * this method updates the board by applying the GoL rules to the board. 
+	 * By using a temporary array that stores the previous state of the board, 
+	 * the next generation of the board is created.
+	 * overrides the method in Board to fit the dynamic board
+	 */
 	@Override
 	public void nextGeneration() {
 
 		List<List<Byte>> updated = new ArrayList<>();
 
-		for(int i = 0; i < board.size(); i++) { // copies board
-			for( int j =0; j < board.get(i).size(); j++) {
-				updated.get(i).set(j, (byte) board.get(i).get(j)); //??
-			}
-		}
+		for(int i = 0; i < board.size(); i++) { //copies board content into updated
+			ArrayList<Byte> inner = new ArrayList<Byte>();
 
+			for(int j = 0; j < board.get(i).size(); j++) {
+				inner.add(board.get(i).get(j));
+			}
+
+			updated.add(inner);
+
+		}
 		updateBoard(updated);
 		gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
 
 		for (int i = 0; i < updated.size(); i++) {	
 			for (int j = 0; j < updated.get(i).size(); j++) {
 
-				if(updated.get(i).get(j) == 0) { //the cell is dead
+				if(getCellState(updated,i,j) == 1) { //the cell is dead
 					if(neighbours(i,j) == 3) {
 						gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 
@@ -212,19 +270,27 @@ public class DynamicBoard extends Board {
 
 		}     
 		board = updated;
-		//rectangular();
 		draw();
+		rectangular();
 
+	}
 
+	//threads
+	public void nextGenerationConcurrentPrintPerformance() {
+
+	}
+	//threads 
+	public synchronized void nextGenerationConcurrent() {
 
 	}
 
 	@Override
 	public int neighbours(int x, int y) {
 
-		int nr = 0; 
-		if(board.get(x).get(y) == 1) { //so that the cell doesn't count itself
-			nr = -1;
+		int nr = 0;
+
+		if(board.get(x).get(y) == 1) {
+			nr  = -1;
 		}
 
 		for(int i = x-1; i <= x+1; i++){
@@ -242,27 +308,24 @@ public class DynamicBoard extends Board {
 				}
 			}
 		}
+
 		return nr; 
 	}
 
-
-	//fiks
 	public void updateBoard( List<List<Byte>> updated) {
 
 		for (int i = 0; i < updated.size(); i++) {
-
 			for (int j = 0; j < updated.get(i).size(); j++) {
 
-				if(board.get(i).get(j) == 0) { //the cell is dead
+				if(updated.get(i).get(j) == 0) { //the cell is dead
 					if(neighbours(i,j) == 3) {
 						updated.get(i).set(j,(byte)1);
-
 					}           	
 				}
 
 				else { // the cell is alive
 					if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
-						updated.get(i).set(j, (byte) 0);
+						updated.get(i).set(j, (byte)0);
 					}               
 
 				}

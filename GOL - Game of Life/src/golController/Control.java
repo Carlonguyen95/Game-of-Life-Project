@@ -58,7 +58,7 @@ public class Control implements Initializable{
 
 	//Objects
 	Readmetodet FileRead;
-	Board board;
+	DynamicBoard board;
 
 	@Override
 	public void initialize(java.net.URL location,java.util.ResourceBundle resources){
@@ -75,7 +75,7 @@ public class Control implements Initializable{
 		FileRead = new Readmetodet();
 
 		// Setting up Board
-		Board board = new Board(gc, graphics,colorChangerBtn, sizeSliderBtn);
+		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
 		this.board = board;
 		board.draw();
 	}

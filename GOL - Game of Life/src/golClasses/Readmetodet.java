@@ -34,7 +34,7 @@ public class Readmetodet{
 	String regexWeb= "x ?= ?(\\d*), y ?= ?(\\d*)";
 
 	/**
-	 * this method reads file from disk. The file contains a specific pattern formatted in #Life 1.06
+	 * this method reads file from disk. The file contains a specific pattern formatted in #RLE
 	 * Any other format will be caught as an pattern exception.
 	 * The information is then stored in a temporary arrayList.
 	 * Lastly the arrayList is used to fill a byte array representing the board.
@@ -74,13 +74,13 @@ public class Readmetodet{
 			error.formatError();
 		}
 
-		SimpleRLe(RlePattern);
+		rle(RlePattern);
 		return board;
 
 	}
 
 
-	public String SimpleRLe(String rlePattern) {
+	public String rle(String rlePattern) {
 
 		StringBuilder simpleRle = new StringBuilder();
 		Pattern pattern = Pattern.compile("\\d+|[ob]|\\$");
@@ -98,11 +98,11 @@ public class Readmetodet{
 		}
 
 		System.out.println(simpleRle.toString());
-		rle_to_Array(simpleRle.toString());
+		rleConverter(simpleRle.toString());
 		return simpleRle.toString();
 	}
 
-	public byte[][] rle_to_Array(String rle) {
+	public byte[][] rleConverter(String rle) {
 
 		int x = 0;
 		int y = 0;
@@ -191,7 +191,7 @@ public class Readmetodet{
 			PatternFormatException error = new PatternFormatException();
 			error.generalError();
 		}
-		SimpleRLe(RlePattern);
+		rle(RlePattern);
 		return board;
 
 	}
