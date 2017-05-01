@@ -199,17 +199,24 @@ public class Control implements Initializable{
 	 */
 	public void drawCell(MouseEvent event) {
 
-		double x = event.getX()/board.getCellSize();
-		double y = event.getY()/board.getCellSize();
+		int x = (int) event.getX()/board.getCellSize();
+		int y = (int) event.getY()/board.getCellSize();
 
 		//gameBoard[(int)x][(int)y] = 1;
 
 		try {
-			board.setCellState((int) x,(int) y);
+			
+			if(x>=0 && y>= 0 && x <gc.getCanvas().getWidth() && y < gc.getCanvas().getHeight())  {
+				board.board.get(x).set(y, (byte) 1);
+						gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
+						gc.setFill(colorChangerBtn.getValue());
+					}
+				
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		board.drawBoard();
+		
 	}
 
 	public void resetBoard() {

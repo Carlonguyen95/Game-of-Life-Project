@@ -22,8 +22,8 @@ import golClasses.*;
 public class DynamicBoard extends Board {  
 
 	// Data field
-	private List<List<Byte>> board = new ArrayList<>();
-	private int cellSize = 5;
+	protected List<List<Byte>> board = new ArrayList<>();
+	private int cellSize = 15;
 
 	private Canvas graphics;
 	private ColorPicker colorChangerBtn;
@@ -198,6 +198,11 @@ public class DynamicBoard extends Board {
 
 		//rectangular();	
 
+	}
+	
+	 
+	public int getCellSize(){
+		return this.cellSize;
 	}
 
 
