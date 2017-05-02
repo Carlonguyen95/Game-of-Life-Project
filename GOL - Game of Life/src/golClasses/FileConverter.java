@@ -17,7 +17,7 @@ import java.io.*;
  * @author Haweyo
  *
  * */
-public class Readmetodet{
+public class FileConverter{
 	private int rows=0;
 	private int columns=0;
 
@@ -33,7 +33,16 @@ public class Readmetodet{
 	String regEx = "x ?= ?(\\d*), y ?= ?(\\d*), rule ?= ?(B([0-9]+)\\/S(([0-8])+))|(S[0-9]+\\/B[0-9]+)";
 	String regexWeb= "x ?= ?(\\d*), y ?= ?(\\d*)";
 
-	/**
+
+    
+    //converts dynamic board to static two dimentional array
+    public byte[][] convertArray(ArrayList<List<Byte>> b) {
+    	byte[][] byteArray = b.stream().map(u->u.stream().mapToInt(i->i).toArray()).toArray(byte[][]::new);
+    	return byteArray;
+
+    	
+    }
+		/**
 	 * this method reads file from disk. The file contains a specific pattern formatted in #RLE
 	 * Any other format will be caught as an pattern exception.
 	 * The information is then stored in a temporary arrayList.
@@ -54,11 +63,9 @@ public class Readmetodet{
 
 				while (Mt.find()) {
 					rows = Integer.parseInt(Mt.group(1));
-					System.out.println("Rows : " + rows);
 					columns = Integer.parseInt(Mt.group(2));
-					System.out.println("Columns : " + columns);
 					rule = Mt.group(3);
-					System.out.println("Rule : " + rule);
+
 				}
 
 				if ((line.matches("[b, o, $, !, 0-9]*"))) {
@@ -66,7 +73,7 @@ public class Readmetodet{
 				}
 
 			}
-			System.out.println(RlePattern);
+			
 
 		}
 
@@ -97,7 +104,7 @@ public class Readmetodet{
 			}
 		}
 
-		System.out.println(simpleRle.toString());
+
 		rleConverter(simpleRle.toString());
 		return simpleRle.toString();
 	}
@@ -123,7 +130,7 @@ public class Readmetodet{
 				x++;
 			}
 		}
-		System.out.println(Arrays.deepToString(rle_Board));
+
 		return board = rle_Board;
 	}
 
@@ -159,18 +166,15 @@ public class Readmetodet{
 				while (M.find()) {
 
 					rows = Integer.parseInt(M.group(1));
-					System.out.println("Rows : " + rows);
 					columns = Integer.parseInt(M.group(2));
-					System.out.println("Columns : " + columns);
 					rule = M.group(2);
-					System.out.println("Rule : " + rule);
+				
 				}
 
 				if ((inputLine.matches("[b, o, $, !, 0-9]*"))) {
 					RlePattern = RlePattern.concat(inputLine);
 				}
 
-				System.out.println(RlePattern);
 
 			}
 

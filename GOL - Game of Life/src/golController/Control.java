@@ -27,7 +27,8 @@ import java.io.File;
 import javax.swing.JOptionPane;
 
 import golClasses.Board;
-import golClasses.Readmetodet;
+import golClasses.FileConverter;
+
 
 /**
  * This class has all the methods and controls that affects the GUI by user.
@@ -57,7 +58,7 @@ public class Control implements Initializable{
 	private byte[][] gameBoard = new byte[100][100];
 
 	//Objects
-	Readmetodet FileRead;
+	FileConverter FileRead;
 	DynamicBoard board;
 
 	@Override
@@ -72,7 +73,7 @@ public class Control implements Initializable{
 		speedBtn.setValue("Speed"); 
 		speedBtn.setItems(speedList);
 
-		FileRead = new Readmetodet();
+		FileRead = new FileConverter();
 
 		// Setting up Board
 		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
@@ -164,7 +165,7 @@ public class Control implements Initializable{
 		if(path != null) {
 			board.clearBoard();
 			listview.getItems().add(path.getName());
-			Readmetodet fileR = new Readmetodet();
+			FileConverter fileR = new FileConverter();
 			gameBoard = fileR.readBoardFromDisk(path);
 			board.setBoard(gameBoard);
 			board.drawBoard();
@@ -186,7 +187,8 @@ public class Control implements Initializable{
 
 		if(url != null) {
 			board.clearBoard();
-			Readmetodet fileR = new Readmetodet();
+			
+			FileConverter fileR = new FileConverter();
 			gameBoard = fileR.readFromURL(url);
 			board.setBoard(gameBoard);
 			board.drawBoard();

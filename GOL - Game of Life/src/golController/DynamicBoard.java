@@ -23,7 +23,7 @@ public class DynamicBoard extends Board {
 
 	// Data field
 	protected List<List<Byte>> board = new ArrayList<>();
-	private int cellSize = 15;
+	protected int cellSize = 15;
 
 	private Canvas graphics;
 	private ColorPicker colorChangerBtn;
@@ -231,7 +231,19 @@ public class DynamicBoard extends Board {
 
 		drawGrid();
 	}
-
+	@Override
+	public void setBoard(byte[][] gameBoard) {
+		List<List<Byte>> newBoard = new ArrayList<List<Byte>>();
+		
+		for(int i=0;i<gameBoard.length;i++){
+	        newBoard.add(new ArrayList<Byte>());
+	        for(int j=0;j<gameBoard[0].length;j++){
+	            newBoard.get(i).add(gameBoard[i][j]);
+	        }
+	    }
+		
+	board = newBoard;	
+	}
 	
 	/**
 	 * this method updates the board by applying the GoL rules to the board. 
