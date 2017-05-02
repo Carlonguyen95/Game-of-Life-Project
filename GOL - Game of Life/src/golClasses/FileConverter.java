@@ -34,14 +34,6 @@ public class FileConverter{
 	String regexWeb= "x ?= ?(\\d*), y ?= ?(\\d*)";
 
 
-    
-    //converts dynamic board to static two dimentional array
-    public byte[][] convertArray(ArrayList<List<Byte>> b) {
-    	byte[][] byteArray = b.stream().map(u->u.stream().mapToInt(i->i).toArray()).toArray(byte[][]::new);
-    	return byteArray;
-
-    	
-    }
 		/**
 	 * this method reads file from disk. The file contains a specific pattern formatted in #RLE
 	 * Any other format will be caught as an pattern exception.
