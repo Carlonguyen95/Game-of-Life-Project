@@ -23,11 +23,14 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
+import java.util.concurrent.*;
 
 import javax.swing.JOptionPane;
 
 import golClasses.Board;
 import golClasses.FileConverter;
+import golClasses.Pool;
+
 
 
 /**
@@ -56,6 +59,7 @@ public class Control implements Initializable{
 	private GraphicsContext gc;
 	private Timeline timeline = new Timeline();
 	private byte[][] gameBoard = new byte[100][100];
+	Pool p;
 
 	//Objects
 	FileConverter FileRead;
@@ -78,6 +82,16 @@ public class Control implements Initializable{
 		// Setting up Board
 		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
 		this.board = board;
+		
+		// start thread
+		//  p.setTask(() -> {board.nextGenerationConcurrent();});
+		  try {
+			 // p.clearWorkers();
+		  }
+		  catch(Exception e) { //specify exception
+			//  p.clearWorkers();
+		  }
+		
 		board.draw();
 	}
 

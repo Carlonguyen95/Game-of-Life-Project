@@ -40,9 +40,9 @@ public class DynamicBoard extends Board {
 		int index = 0;
 		int indeks = 0;
 
-		while(index < 300) { // makes the board 300x300
+		while(index < 500) { // makes the board 500x500 (as a starting point)
 			List <Byte> yBoard = new ArrayList<>();
-			while (indeks < 300) {
+			while (indeks < 500) {
 				yBoard.add(indeks,(byte)0);		
 				indeks++;
 			}
@@ -119,9 +119,9 @@ public class DynamicBoard extends Board {
 
 
 		if(col > rows) {
-			while(index <= 300) {
+			while(index <= col) {
 				List <Byte> yBoard = new ArrayList<>();
-				while (indeks <= 300) {
+				while (indeks <= rows) {
 					yBoard.add(indeks,(byte)0);		
 					indeks++;
 				}
@@ -196,7 +196,7 @@ public class DynamicBoard extends Board {
 			}
 		}
 
-		//rectangular();	
+		rectangular();	
 
 	}
 	
@@ -253,7 +253,6 @@ public class DynamicBoard extends Board {
 	 */
 	@Override
 	public void nextGeneration() {
-
 		List<List<Byte>> updated = new ArrayList<>();
 
 		for(int i = 0; i < board.size(); i++) { //copies board content into updated
@@ -284,7 +283,6 @@ public class DynamicBoard extends Board {
 					}                          
 				}
 			}
-
 		}     
 		board = updated;
 		draw();
@@ -294,11 +292,17 @@ public class DynamicBoard extends Board {
 
 	//threads
 	public void nextGenerationConcurrentPrintPerformance() {
-
+		long start = System.currentTimeMillis();
+		//neighbours();
+		long elapsed = System.currentTimeMillis() - start;
+		System.out.println("Counting time (ms): " + elapsed);
 	}
 	//threads 
 	public synchronized void nextGenerationConcurrent() {
-
+		//split board, give each side a task and run nextGeneration();
+	 
+		int split = board.size()/Runtime.getRuntime().availableProcessors();
+		
 	}
 
 	@Override
