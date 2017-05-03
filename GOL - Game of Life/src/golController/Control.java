@@ -1,6 +1,7 @@
 package golController;
 
 import javafx.animation.Animation;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -23,7 +24,11 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.*;
+import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
@@ -81,23 +86,27 @@ public class Control implements Initializable{
 
 		// Setting up Board
 		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
+		//board = Collections.synchronizedList(new ArrayList(byte);
+
 		this.board = board;
-		
+
+
 		// start thread
-		//  p.setTask(() -> {board.nextGenerationConcurrent();});
-		  try {
-			 // p.clearWorkers();
-		  }
-		  catch(Exception e) { //specify exception
+		try {
+			
+			//  p.setTask(() -> {board.nextGenerationConcurrent();});
+			// p.clearWorkers();
+		}
+		catch(Exception e) { //specify exception
 			//  p.clearWorkers();
-		  }
-		
+		}
+
 		board.draw();
 	}
 
 	public void closeProgram(ActionEvent event) {
 		System.exit(0);
-	}
+	} 
 
 	/**
 	 * This method is connected to a togglebutton.
@@ -201,7 +210,7 @@ public class Control implements Initializable{
 
 		if(url != null) {
 			board.clearBoard();
-			
+
 			FileConverter fileR = new FileConverter();
 			gameBoard = fileR.readFromURL(url);
 			board.setBoard(gameBoard);
@@ -224,24 +233,25 @@ public class Control implements Initializable{
 		//gameBoard[(int)x][(int)y] = 1;
 
 		try {
-			
+
 			if(x>=0 && y>= 0 && x <gc.getCanvas().getWidth() && y < gc.getCanvas().getHeight())  {
 				board.board.get(x).set(y, (byte) 1);
-						gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
-						gc.setFill(colorChangerBtn.getValue());
-					}
-				
-			
+				gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
+				gc.setFill(colorChangerBtn.getValue());
+				board.rectangular(x, y);
+			}
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void resetBoard() {
 		gameBoard = board.getBoard();
 		board.clearBoard();
-		
+
 
 		if(startPauseBtn.isSelected()) {
 			startPauseBtn.setText("Start");

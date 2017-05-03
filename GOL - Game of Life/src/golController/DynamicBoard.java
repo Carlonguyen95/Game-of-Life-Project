@@ -9,7 +9,10 @@
 package golController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -75,7 +78,6 @@ public class DynamicBoard extends Board {
 		try {		
 			board.get(x).set(y,(byte)1); 
 
-
 		}
 
 		catch(IndexOutOfBoundsException e) {
@@ -85,7 +87,7 @@ public class DynamicBoard extends Board {
 		}	
 
 	}
-	
+
 	/**
 	 * this method returns a cells state (if its dead or alive)
 	 * @param x and y variables that tells us where in the list the cell is and a
@@ -106,40 +108,20 @@ public class DynamicBoard extends Board {
 	}
 
 	/**
-	 * this method makes the array rectangular (equally many rows and columns)
+	 * this method makes the array rectangular 
 	 * after the user has clicked in a specific place on the grid
+	 * (everything behind the given cell)
 	 * */
-	public void rectangular() { 
+	public void rectangular(int x, int y) { 
 
-		int col = board.size(); //x
-		int rows = board.get(0).size(); //y
-
-		int index = 0;
-		int indeks = 0;
-
-
-		if(col > rows) {
-			while(index <= col) {
-				List <Byte> yBoard = new ArrayList<>();
-				while (indeks <= rows) {
-					yBoard.add(indeks,(byte)0);		
-					indeks++;
+		for(int i =x-1; i>= 0; i--) {
+			for(int j =y-1; j>= 0; j--) {
+				if(board.get(i).get(j) != 1) {
+					board.get(i).set(j,(byte)0);
 				}
-				board.add(index,yBoard);			
-				index++;		
 			}
 		}
 
-		else if (col < rows) {
-			while(col != rows) {
-				board.get(index).set(col,(byte)0);
-				col++;
-				rows++;
-				index++;
-
-			}
-
-		}
 
 	}
 
@@ -162,7 +144,7 @@ public class DynamicBoard extends Board {
 		for (int y = 0; y < graphics.getWidth(); y += cellSize) {
 			gc.strokeLine(0, y, 1000, y);
 		}
-	}
+	} 
 
 	/**
 	 * This is a "helping-method" which contains two main draw-methods.
@@ -175,8 +157,8 @@ public class DynamicBoard extends Board {
 
 	}
 
-	
-	
+
+
 	/**
 	 * This method draws the board
 	 * If the X and Y is equal to 1 there is a living cell.
@@ -192,15 +174,16 @@ public class DynamicBoard extends Board {
 				if (board.get(i).get(j) == 1) { //getCellState
 					gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 					gc.setFill(colorChangerBtn.getValue());
+					rectangular(i,j);
 				}
 			}
 		}
 
-		rectangular();	
+
 
 	}
-	
-	 
+
+
 	public int getCellSize(){
 		return this.cellSize;
 	}
@@ -234,17 +217,17 @@ public class DynamicBoard extends Board {
 	@Override
 	public void setBoard(byte[][] gameBoard) {
 		List<List<Byte>> newBoard = new ArrayList<List<Byte>>();
-		
+
 		for(int i=0;i<gameBoard.length;i++){
-	        newBoard.add(new ArrayList<Byte>());
-	        for(int j=0;j<gameBoard[0].length;j++){
-	            newBoard.get(i).add(gameBoard[i][j]);
-	        }
-	    }
-		
-	board = newBoard;	
+			newBoard.add(new ArrayList<Byte>());
+			for(int j=0;j<gameBoard[0].length;j++){
+				newBoard.get(i).add(gameBoard[i][j]);
+			}
+		}
+
+		board = newBoard;	
 	}
-	
+
 	/**
 	 * this method updates the board by applying the GoL rules to the board. 
 	 * By using a temporary array that stores the previous state of the board, 
@@ -286,7 +269,22 @@ public class DynamicBoard extends Board {
 		}     
 		board = updated;
 		draw();
-		rectangular();
+		//		rectangular();
+
+	}
+
+	//threads (method = task)
+	public synchronized void nextGenerationConcurrent() {
+		//split board, give each side a task and run nextGeneration();
+		
+		board = Collections.synchronizedList( new ArrayList<List<Byte>>());
+		int n = board.size()/Runtime.getRuntime().availableProcessors();
+		
+		ExecutorService executor = Executors.newCachedThreadPool();
+		Executors.newFixedThreadPool(n);
+		
+		
+
 
 	}
 
@@ -297,13 +295,7 @@ public class DynamicBoard extends Board {
 		long elapsed = System.currentTimeMillis() - start;
 		System.out.println("Counting time (ms): " + elapsed);
 	}
-	//threads 
-	public synchronized void nextGenerationConcurrent() {
-		//split board, give each side a task and run nextGeneration();
-	 
-		int split = board.size()/Runtime.getRuntime().availableProcessors();
-		
-	}
+
 
 	@Override
 	public int neighbours(int x, int y) {

@@ -6,7 +6,7 @@ import java.util.List;
 public class Pool {
 	
 	private int numWorkers = Runtime.getRuntime().availableProcessors();
-	private List<Runnable> wrkPool = new ArrayList<Runnable>();
+	private List<Thread> wrkPool = new ArrayList<Thread>();
 	
 	public Pool() {}
 	
