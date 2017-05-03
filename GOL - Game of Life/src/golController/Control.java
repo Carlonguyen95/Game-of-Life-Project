@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 import golClasses.Board;
 import golClasses.FileConverter;
 import golClasses.Pool;
+import golClasses.Error;
 
 
 
@@ -64,7 +65,7 @@ public class Control implements Initializable{
 	private GraphicsContext gc;
 	private Timeline timeline = new Timeline();
 	private byte[][] gameBoard = new byte[100][100];
-	Pool p;
+	private Error er;
 
 	//Objects
 	FileConverter FileRead;
@@ -83,22 +84,22 @@ public class Control implements Initializable{
 		speedBtn.setItems(speedList);
 
 		FileRead = new FileConverter();
+		Error er = new Error();
 
 		// Setting up Board
 		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
 		//board = Collections.synchronizedList(new ArrayList(byte);
 
 		this.board = board;
-
-
+		Pool p = new Pool();
+		p.setTask(() -> {board.nextGenerationConcurrent();});
 		// start thread
 		try {
-			
-			//  p.setTask(() -> {board.nextGenerationConcurrent();});
-			// p.clearWorkers();
+			p.runThreads();
+			p.clearWorkers();
 		}
 		catch(Exception e) { //specify exception
-			//  p.clearWorkers();
+			  p.clearWorkers();
 		}
 
 		board.draw();
@@ -230,7 +231,6 @@ public class Control implements Initializable{
 		int x = (int) event.getX()/board.getCellSize();
 		int y = (int) event.getY()/board.getCellSize();
 
-		//gameBoard[(int)x][(int)y] = 1;
 
 		try {
 
@@ -242,8 +242,9 @@ public class Control implements Initializable{
 			}
 
 
-		} catch (Exception e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
+			er.generalError();
 		}
 
 	}

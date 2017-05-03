@@ -23,7 +23,7 @@ public class FileConverter{
 
 	private byte[][] board = new byte[300][300];
 	private byte[][] rle_Board;
-	private PatternFormatException error = new PatternFormatException();
+	private Error error = new Error();
 
 	StringBuilder RLEPattern = new StringBuilder();
 	String line = "";
@@ -105,8 +105,8 @@ public class FileConverter{
 
 		int x = 0;
 		int y = 0;
-
-		rle_Board = new byte[100][100];
+		try {
+		rle_Board = new byte[1000][1000];
 
 		for (int i = 0; i < rle.length(); i++) {
 			if (rle.charAt(i) == '$') {
@@ -122,8 +122,13 @@ public class FileConverter{
 				x++;
 			}
 		}
-
 		return board = rle_Board;
+		}
+	catch(Exception e) {
+		Error error = new Error();
+		error.generalError();
+		return null;
+	}
 	}
 
 	/**
@@ -137,7 +142,7 @@ public class FileConverter{
 	 * @throws exception of the type numberFormat or IOException.
 	 */
 
-	public byte[][] readFromURL(String url) throws Exception, PatternFormatException,
+	public byte[][] readFromURL(String url) throws Exception, Error,
 	MalformedURLException {
 
 		URL destination = new URL(url);
@@ -173,18 +178,18 @@ public class FileConverter{
 		}
 
 		catch (NumberFormatException e) {  // wrong format in file
-			PatternFormatException error = new PatternFormatException();
+			Error error = new Error();
 			error.urlError();
 		}
 
 		catch (MalformedURLException m) { // invalid URL
-			PatternFormatException error = new PatternFormatException();
+			Error error = new Error();
 			error.malformedURLError();
 		}
 
 
 		catch (IOException ioe) { //general IO exception
-			PatternFormatException error = new PatternFormatException();
+			Error error = new Error();
 			error.generalError();
 		}
 		rle(RlePattern);

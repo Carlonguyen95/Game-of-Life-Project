@@ -24,7 +24,8 @@ public class Board {
 	protected ColorPicker colorChangerBtn;
 	protected GraphicsContext gc;
 	protected Slider sizeSliderBtn;
-
+	
+	 @Deprecated
 	public Board(GraphicsContext gc, Canvas graphics, ColorPicker colorChangerBtn, Slider sizeSliderBtn) {
 		this.gc = gc;
 		this.graphics = graphics;
