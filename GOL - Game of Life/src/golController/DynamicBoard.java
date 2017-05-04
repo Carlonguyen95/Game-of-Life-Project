@@ -313,7 +313,8 @@ public class DynamicBoard extends Board {
 		//split board, give each side a task and run nextGeneration();
 
 		board = Collections.synchronizedList( new ArrayList<List<Byte>>());
-		int n = board.size()/Runtime.getRuntime().availableProcessors();	
+		int n = board.size()/Runtime.getRuntime().availableProcessors();
+		
 
 	}
 	/**
