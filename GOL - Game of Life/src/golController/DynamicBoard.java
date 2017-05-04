@@ -27,6 +27,9 @@ public class DynamicBoard extends Board {
 	// Data field
 	protected List<List<Byte>> board = new ArrayList<>();
 	protected int cellSize = 15;
+	int index = 0;
+	int indeks = index;
+	int boardSize = indeks;
 
 	private Canvas graphics;
 	private ColorPicker colorChangerBtn;
@@ -40,12 +43,9 @@ public class DynamicBoard extends Board {
 		this.colorChangerBtn = colorChangerBtn;
 		this.sizeSliderBtn = sizeSliderBtn;		
 
-		int index = 0;
-		int indeks = 0;
-
-		while(index < 500) { // makes the board 500x500 (as a starting point)
+		while(index < 100) { // makes the board 500x500 (as a starting point)
 			List <Byte> yBoard = new ArrayList<>();
-			while (indeks < 500) {
+			while (indeks < 100) {
 				yBoard.add(indeks,(byte)0);		
 				indeks++;
 			}
@@ -104,7 +104,6 @@ public class DynamicBoard extends Board {
 
 			return 0;
 		}	
-
 	}
 
 	/**
@@ -121,8 +120,6 @@ public class DynamicBoard extends Board {
 				}
 			}
 		}
-
-
 	}
 
 
@@ -154,10 +151,7 @@ public class DynamicBoard extends Board {
 	public void draw() {  	
 		drawGrid();
 		drawBoard();
-
 	}
-
-
 
 	/**
 	 * This method draws the board
@@ -174,13 +168,9 @@ public class DynamicBoard extends Board {
 				if (board.get(i).get(j) == 1) { //getCellState
 					gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 					gc.setFill(colorChangerBtn.getValue());
-					rectangular(i,j);
 				}
 			}
 		}
-
-
-
 	}
 
 
@@ -269,8 +259,9 @@ public class DynamicBoard extends Board {
 		}     
 		board = updated;
 		draw();
-		//		rectangular();
-
+		//increaseBelow();
+		//increaseUpper();
+		checkIncrease();
 	}
 
 	//threads (method = task)
@@ -347,6 +338,75 @@ public class DynamicBoard extends Board {
 		} 
 
 	}
-
-
+	
+	public void increaseBelow(){
+		int increase = 2;
+		boardSize += increase;
+		
+		
+		for(int x = 0; x < increase; x++){
+			List<Byte> innerArray = new ArrayList<>();
+			for(int y = 0; y < boardSize-increase; y++){
+				innerArray.add((byte) 0);
+			}
+			board.add(innerArray);
+		}
+		
+		for(int x = 0; x < boardSize; x++){
+			for(int y = 0; y < increase; y++){
+				board.get(x).add((byte) 0);
+			}
+		}
+	}
+		
+	public void increaseUpper(){
+		int increase = 2;
+		boardSize += increase;
+		for(int x = 0; x < increase; x++){
+			List<Byte> innerArray = new ArrayList<>();
+			for(int y = 0; y < boardSize-increase; y++){
+				innerArray.add(0,(byte) 0);
+			}
+			board.add(0, innerArray);
+		}
+		
+		for(int x = 0; x < boardSize; x++){
+			for(int y = 0; y < increase; y++){
+				board.get(x).add(0, (byte) 0);
+			}
+		}
+	}
+	
+	public void checkIncrease(){
+		int minX = 0;
+		int minY = 0;
+		int maxX = boardSize-1;
+		int maxY = boardSize-1;
+		
+		for(int y = 0; y < boardSize; y++){
+			if(board.get(minX).get(y) != null){
+				increaseUpper();
+				increaseBelow();
+				return;
+			}
+			if(board.get(maxX).get(y) != null){
+				increaseUpper();
+				increaseBelow();
+				return;
+			}
+		}
+		
+		for(int x = 0; x < boardSize; x++){
+			if(board.get(x).get(minY) != null){
+				increaseUpper();
+				increaseBelow();
+				return;
+			}
+			if(board.get(x).get(maxY) != null){
+				increaseUpper();
+				increaseBelow();
+				return;
+			}
+		}
+	}
 }

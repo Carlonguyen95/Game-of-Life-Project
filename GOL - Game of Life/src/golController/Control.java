@@ -272,6 +272,7 @@ public class Control implements Initializable{
 
 		// Speed
 		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
+			//board.checkIncrease();
 			board.nextGeneration();
 		});
 
