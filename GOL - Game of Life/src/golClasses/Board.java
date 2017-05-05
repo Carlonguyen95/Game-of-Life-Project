@@ -234,7 +234,6 @@ public class Board {
 					if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
 						updated[i][j] = 0;
 					}               
-
 				}
 			}
 

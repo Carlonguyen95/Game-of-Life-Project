@@ -250,7 +250,6 @@ public class Control implements Initializable{
 		}
 	}
 
-
 	/**
 	 * this method clears the board by killing all the alive cells.
 	 * */
