@@ -3,7 +3,7 @@ package golTest;
 import static org.junit.Assert.*;
 
 /**
- * This class tests the static board by ...
+ * This class tests the static board.
  * 
  * @author Carlo Nguyen
  * @author Haweya Jama

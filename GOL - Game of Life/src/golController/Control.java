@@ -236,29 +236,21 @@ public class Control implements Initializable{
 
 
 		try {
-
-
-			if(x > board.board.size() || y> board.board.get(0).size()) { // outside the boardSize
-				board.checkExpand(x,y);
-				board.setCellState(x, y);
+			if(x>=0 && y>= 0 && x <gc.getCanvas().getWidth() && y < gc.getCanvas().getHeight())  {
+				board.board.get(x).set(y, (byte) 1);
 				gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
 				gc.setFill(colorChangerBtn.getValue());
 
 			}
-			else {
-				board.board.get(x).add(y, (byte) 1);
-				gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
-				gc.setFill(colorChangerBtn.getValue());
-
-			}
-
-		} catch (Exception e) {	
+		} 
+		
+		catch (Exception e) {	
 			Error err = new Error();
 			err.generalError();
 		}
 	}
-	
-	
+
+
 	/**
 	 * this method clears the board by killing all the alive cells.
 	 * */

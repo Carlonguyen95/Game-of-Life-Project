@@ -9,8 +9,8 @@ import org.junit.Test;
 import golController.DynamicBoard;
 
 /**
- * This class is used to testing the NextGeneration method, by using JUNIT testing,
- * it checks if if it's working in the right way by setting up 'expected results'.
+ * This class is used to testing the NextGeneration method
+ * in the dynamic board
  * 
  * @author Carlo Nguyen
  * @author Haweya Jama

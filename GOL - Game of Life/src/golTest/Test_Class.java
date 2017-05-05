@@ -26,14 +26,13 @@ public class Test_Class {
         { 0, 0, 0, 0 }
  
         };
-    /**
+   
+  /**
     * This  method return condition for each cell, where the board is formatted as a 1D table
 	* we used StringBuffer cause it can be modifiedAt any point in time it contains some particular sequence of characters,
  	* but the length and content of the sequence can be changed through certain method calls.
  	* we used (for statement) to go through each sell, this method updates the value of the object that invoked the method
  	*/
-     
- 
   @Override  
   public String toString() {
 	  StringBuffer DOfBoard = new StringBuffer("");
