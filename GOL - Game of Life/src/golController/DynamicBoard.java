@@ -20,17 +20,13 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
 
-import golClasses.*;
-import golClasses.Error;
-
-public class DynamicBoard extends Board {  
+public class DynamicBoard {  
 
 	// Data field
-	protected List<List<Byte>> board = new ArrayList<>();
+	public List<List<Byte>> board = new ArrayList<>();
+	protected List<List<Boolean>> boolBoard = new ArrayList<>();
 	protected int cellSize = 15;
-	int index = 0;
-	int indeks = index;
-	int boardSize = indeks;
+	private int boardSize = 150;
 
 	private Canvas graphics;
 	private ColorPicker colorChangerBtn;
@@ -38,21 +34,23 @@ public class DynamicBoard extends Board {
 	private GraphicsContext gc;
 
 	public DynamicBoard(GraphicsContext gc, Canvas graphics, ColorPicker colorChangerBtn, Slider sizeSliderBtn) {
-		super(gc,graphics,colorChangerBtn,sizeSliderBtn);
+		//super(gc,graphics,colorChangerBtn,sizeSliderBtn);
 		this.gc = gc;
 		this.graphics = graphics;
 		this.colorChangerBtn = colorChangerBtn;
-		this.sizeSliderBtn = sizeSliderBtn;		
-
-		while(index < 100) { // makes the board 500x500 (as a starting point)
-			List <Byte> yBoard = new ArrayList<>();
-			while (indeks < 100) {
-				yBoard.add(indeks,(byte)0);		
-				indeks++;
+		this.sizeSliderBtn = sizeSliderBtn;
+	}
+	
+	public void init(){
+		for (int x = 0; x < boardSize; x++){
+			List <Byte> innerBoard = new ArrayList<>();
+			List <Boolean> innerBoolBoard = new ArrayList<>();
+			for (int y = 0; y < boardSize; y++){
+				innerBoard.add((byte) 0);
+				innerBoolBoard.add(false);
 			}
-			indeks=0;
-			board.add(index,yBoard);			
-			index++;		
+			board.add(innerBoard);
+			boolBoard.add(innerBoolBoard);
 		}
 	}
 
@@ -68,37 +66,22 @@ public class DynamicBoard extends Board {
 		draw();
 	}
 
-
 	/**
 	 * This method makes a given cell alive (changing the value to 1)
 	 * overridden to fit the dynamic board
 	 * @param x and y variables that tells us where the cell is on the board
 	 * */
-	@Override
 	public void setCellState(int x, int y) throws Exception {
 
-		try {
-			if(x > board.size() || y > board.get(0).size()) {
+		try {		
+			board.get(x).set(y,(byte)1); 
 
-				ArrayList<Byte> yBoard = new ArrayList<Byte>();
-				while(index < x-board.size()) { // makes the board 500x500 (as a starting point)
-					while (indeks <x-board.size()) {
-						yBoard.add(indeks,(byte)0);		
-						indeks++;
-					}
-
-
-
-					board.get(x).set(y,(byte)1); 
-
-				}
-
-			}
 		}
-		catch(IndexOutOfBoundsException e) {
-			Error err = new Error();
-			err.generalError();
 
+		catch(IndexOutOfBoundsException e) {
+
+			e.printStackTrace();
+			//	board.add(x).add(y);
 		}	
 
 	}
@@ -111,40 +94,38 @@ public class DynamicBoard extends Board {
 	public int getCellState(List<List<Byte>> b,int x, int y) {
 		try {
 			return b.get(x).get(y);
+
 		}
 
 		catch(IndexOutOfBoundsException e) {
-			Error err = new Error();
-			err.generalError();
+			//handle exception
 
 			return 0;
 		}	
 	}
 
 	/**
-	 * helping method for the Class DynamicBoardTest, to check if the
-	 * dynamic board is working
-	 * @param x and y coordinates for the given cell
-	 * @return 0 if the cell is dead, and 1 if the cell is alive
+	 * this method makes the array rectangular 
+	 * after the user has clicked in a specific place on the grid
+	 * (everything behind the given cell)
 	 * */
+	public void rectangular(int x, int y) { 
 
-	public int getCellStateTest(int x, int y) {
-		try {
-			return board.get(x).get(y);
-		}
-		catch (Exception e) {
-			Error err = new Error();
-			err.generalError();
-			return 0;
+		for(int i =x-1; i>= 0; i--) {
+			for(int j =y-1; j>= 0; j--) {
+				if(board.get(i).get(j) != 1) {
+					board.get(i).set(j,(byte)0);
+				}
+			}
 		}
 	}
+
 
 	/**
 	 * This method draws the grid of the board.
 	 * for-loops for X and Y, which adds the size of the cell each iterate to the grid
 	 * according to the height and width of the Canvas.
 	 */
-	@Override
 	public void drawGrid() {
 
 		gc.setFill(Color.BLACK);
@@ -157,8 +138,8 @@ public class DynamicBoard extends Board {
 		for (int y = 0; y < graphics.getWidth(); y += cellSize) {
 			gc.strokeLine(0, y, 1000, y);
 		}
-	} 
-
+	}
+	
 	/**
 	 * This is a "helping-method" which contains two main draw-methods.
 	 * drawGrid draws the grid of the board.
@@ -177,25 +158,24 @@ public class DynamicBoard extends Board {
 	 * @param i is point to X axis
 	 * @param j is point to Y axis
 	 */
-	@Override
 	public void drawBoard() {
 		for (int i = 0; i < board.size(); i++) {
 			for (int j = 0; j < board.get(i).size(); j++) {                
 				if (board.get(i).get(j) == 1) { //getCellState
 					gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 					gc.setFill(colorChangerBtn.getValue());
-					//rectangular(i,j);
-
 				}
 			}
 		}
 	}
 
 	/**
-	 * returns the variable cellsSize
-	 * @return cellSize
-	 * */
-	public int getCellSize(){ return this.cellSize;}
+	 * 
+	 * @return
+	 */
+	public int getCellSize(){
+		return this.cellSize;
+	}
 
 
 	/**
@@ -206,7 +186,6 @@ public class DynamicBoard extends Board {
 	 * Draw grid again and stop the Animation.
 	 * overrides the method in Board to fit the dynamic board
 	 */
-	@Override
 	public void clearBoard() {
 
 		gc.clearRect(0, 0, graphics.getWidth(), graphics.getHeight());
@@ -223,35 +202,22 @@ public class DynamicBoard extends Board {
 
 		drawGrid();
 	}
-
+	
 	/**
-	 * this metohd converts a given static 2d board into a dynamic Arraylist. the static
-	 * array has information about what cells are alive and which are not, which will be
-	 * set in the new board. the static board is the information from a diskFile or URL.
-	 * overrides the method from board to fit the dynamic board
-	 * @param the static 2d board 
-	 * */
-
-	@Override
+	 * 
+	 * @param gameBoard
+	 */
 	public void setBoard(byte[][] gameBoard) {
 		List<List<Byte>> newBoard = new ArrayList<List<Byte>>();
-		int valX = 0;
-		int valY =0;
 
 		for(int i=0;i<gameBoard.length;i++){
 			newBoard.add(new ArrayList<Byte>());
 			for(int j=0;j<gameBoard[0].length;j++){
 				newBoard.get(i).add(gameBoard[i][j]);
-
-				valX = i;
-				valY = j;
-
 			}
 		}
 
-		board = newBoard;
-
-
+		board = newBoard;	
 	}
 
 	/**
@@ -260,18 +226,14 @@ public class DynamicBoard extends Board {
 	 * the next generation of the board is created.
 	 * overrides the method in Board to fit the dynamic board
 	 */
-	@Override
 	public void nextGeneration() {
 		List<List<Byte>> updated = new ArrayList<>();
-		int tempX = 0;
-		int tempY = 0;
 
 		for(int i = 0; i < board.size(); i++) { //copies board content into updated
 			ArrayList<Byte> inner = new ArrayList<Byte>();
 
 			for(int j = 0; j < board.get(i).size(); j++) {
 				inner.add(board.get(i).get(j));
-
 			}
 
 			updated.add(inner);
@@ -287,42 +249,37 @@ public class DynamicBoard extends Board {
 					if(neighbours(i,j) == 3) {
 						gc.fillRect(i*cellSize, j*cellSize,cellSize,cellSize);
 
-
 					}           	
 				}   	
 				else { // the cell is alive
 					if(neighbours(i,j)< 2 || neighbours(i,j) > 3) {
 						gc.clearRect(i*cellSize, j*cellSize,cellSize,cellSize);
-
 					}                          
 				}
 			}
 		}     
 		board = updated;
 		draw();
-
+		checkIncrease();
 	}
 
 	/**
-	 * this method splits the nextGeneration method into several tasks that are given to
-	 * multiple threads, optimalize the performance. 
-	 *(due to a lack of time we couldn't finish implementing threads.)
-	 * */
+	 * 
+	 */
 	public synchronized void nextGenerationConcurrent() {
 		//split board, give each side a task and run nextGeneration();
-
+		
 		board = Collections.synchronizedList( new ArrayList<List<Byte>>());
 		int n = board.size()/Runtime.getRuntime().availableProcessors();
-
+		
 		ExecutorService executor = Executors.newCachedThreadPool();
 		Executors.newFixedThreadPool(n);
 
 	}
 
 	/**
-	 * this method prints out the performance of the nextGeneration(); 
-	 * method. (due to a lack of time we couldn't finish implementing threads.)
-	 * */
+	 * 
+	 */
 	public void nextGenerationConcurrentPrintPerformance() {
 		long start = System.currentTimeMillis();
 		//neighbours();
@@ -332,19 +289,16 @@ public class DynamicBoard extends Board {
 
 
 	/**
-	 * This method counts the number of neighbouring cells a given cell has,
-	 * by iterating through the board with two for-loops that only checks the 8
-	 * cells surrounding it. 
-	 * overrides the method in Board to fit the dynamic board
-	 *@return the number of neighbours the cell has.
-	 *@param the x and y coordinates of the cell (placement of the cell in the grid)
-	 * */
-	@Override
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public int neighbours(int x, int y) {
 
 		int nr = 0;
 
-		if(board.get(x).get(y) == 1) { // so that the cell doesn't count itself
+		if(board.get(x).get(y) == 1) {
 			nr  = -1;
 		}
 
@@ -366,13 +320,11 @@ public class DynamicBoard extends Board {
 
 		return nr; 
 	}
-
+	
 	/**
-	 * This method updates the board by applying the GoL rules,
-	 * by iterating through the board with two for-loops and assigning
-	 * 1 or 0 using the GoL rules.
-	 * @param the ArrayList which contains the previous generation
-	 * */
+	 * 
+	 * @param updated
+	 */
 	public void updateBoard( List<List<Byte>> updated) {
 
 		for (int i = 0; i < updated.size(); i++) {
@@ -395,118 +347,84 @@ public class DynamicBoard extends Board {
 		} 
 
 	}
-
+	
 	/**
-	 * this method checks if its necessary to expand the board by checking
-	 * the given cell. if it is, it expands the board by calling on two other methods
-	 * (due to a lack of time we couldn't finish making the board dynamic.)
-	 * @param the coordinates for the cell
-	 * */
-	public void checkExpand(int x, int y){
-
-		int minX = 0;
-		int minY = 0;
-		int maxX = boardSize-1;
-		int maxY = boardSize-1;
-
-		for(int j = 0; y < boardSize; y++){
-			if(board.get(minX).get(y) != null){
-				expandUpper(x,y);
-				expandBelow(x,y);
-				return;
-			}
-			if(board.get(maxX).get(y) != null){
-				expandUpper(x,y);
-				expandBelow(x,y);
-				return;
-			}
-		}
-
-		for(int i = 0; x < boardSize; x++){
-			if(board.get(x).get(minY) != null){
-				expandUpper(x,y);
-				expandBelow(x,y);
-				return;
-			}
-			if(board.get(x).get(maxY) != null){
-				expandUpper(x,y);
-				expandBelow(x,y);
-				return;
-			}
-		}
-	}
-
-	/**
-	 * this method expands the board with two cells south-east from the given
-	 * cell point. (due to a lack of time we couldn't finish making the board dynamic.)
-	 * @param the coordinates for the cell.
-	 * */
-	public void expandBelow(int i, int j){
-
-		int expand = 2;
-		boardSize += expand;
-
-		int boardSizeX = i-board.size();
-		int boardSizeY = j-board.get(0).size();
-		List<Byte> innerArray = new ArrayList<>();
-
-		for(int x = i; x < boardSizeX; x++){
-			for(int y = j; y < boardSizeY; y++){
+	 * 
+	 */
+	public void increaseBelow(){
+		int increase = 2;
+		boardSize += increase;
+		
+		
+		for(int x = 0; x < increase; x++){
+			List<Byte> innerArray = new ArrayList<>();
+			for(int y = 0; y < boardSize-increase; y++){
 				innerArray.add((byte) 0);
 			}
 			board.add(innerArray);
 		}
-
-		for(int x = i; x < boardSize; x++){
-			for(int y = j; y < expand; y++){
+		
+		for(int x = 0; x < boardSize; x++){
+			for(int y = 0; y < increase; y++){
 				board.get(x).add((byte) 0);
 			}
 		}
 	}
-
+	
 	/**
-	 * this method expands the board with two cells north-west from the given
-	 * cell point (due to a lack of time we couldn't finish making the board dynamic.)
-	 * @param the coordinates for the cell.
-	 * */
-	public void expandUpper(int i,int j){
-		int expand = 2;
-		boardSize += expand;
-
-		int boardSizeX = i-board.size();
-		int boardSizeY = j-board.get(0).size();
-		List<Byte> innerArray = new ArrayList<>();
-
-		for(int x = i; x < boardSizeX; x++){
-			for(int y = j; y < boardSizeY; y++){
+	 * 
+	 */
+	public void increaseUpper(){
+		int increase = 2;
+		boardSize += increase;
+		for(int x = 0; x < increase; x++){
+			List<Byte> innerArray = new ArrayList<>();
+			for(int y = 0; y < boardSize-increase; y++){
 				innerArray.add(0,(byte) 0);
 			}
-			board.add(0,innerArray);
+			board.add(0, innerArray);
 		}
-
-		for(int x = i; x < boardSize; x++){
-			for(int y = j; y < expand; y++){
-				board.get(x).add(0,(byte) 0);
+		
+		for(int x = 0; x < boardSize; x++){
+			for(int y = 0; y < increase; y++){
+				board.get(x).add(0, (byte) 0);
 			}
 		}
 	}
-
-
+	
 	/**
-	 * this method expands the dynamic board by adding cells
-	 * behind the given cell
-	 * (due to a lack of time we couldn't finish making the board dynamic.)
-	 * @param x y coordinates to the cell*/
-	public void expandBehind(int x, int y) { 
-
-		for(int i =x-1; i>= 0; i--) {
-			for(int j =y-1; j>= 0; j--) {
-				if(board.get(i).get(j) != 1) {
-					board.get(i).set(j,(byte)0);
-				}
+	 * 
+	 */
+	public void checkIncrease(){
+		int minX = 0;
+		int minY = 0;
+		int maxX = boardSize-1;
+		int maxY = boardSize-1;
+		
+		for(int y = 0; y < boardSize; y++){
+			if(board.get(minX).get(y) == 1){
+				increaseUpper();
+				increaseBelow();
+				return;
+			}
+			if(board.get(maxX).get(y) == 1){
+				increaseUpper();
+				increaseBelow();
+				return;
+			}
+		}
+		
+		for(int x = 0; x < boardSize; x++){
+			if(board.get(x).get(minY) == 1){
+				increaseUpper();
+				increaseBelow();
+				return;
+			}
+			if(board.get(x).get(maxY) == 1){
+				increaseUpper();
+				increaseBelow();
+				return;
 			}
 		}
 	}
-
-
 }
