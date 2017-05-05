@@ -120,7 +120,7 @@ public class DynamicBoard extends Board {
 			return 0;
 		}	
 	}
-	
+
 	/**
 	 * helping method for the Class DynamicBoardTest, to check if the
 	 * dynamic board is working
@@ -133,11 +133,11 @@ public class DynamicBoard extends Board {
 			return board.get(x).get(y);
 		}
 		catch (Exception e) {
-			er.generalError();
+			Error err = new Error();
+			err.generalError();
 			return 0;
 		}
 	}
-
 
 	/**
 	 * This method draws the grid of the board.
@@ -306,7 +306,7 @@ public class DynamicBoard extends Board {
 	/**
 	 * this method splits the nextGeneration method into several tasks that are given to
 	 * multiple threads, optimalize the performance. 
-	*(due to a lack of time we couldn't finish implementing threads.)
+	 *(due to a lack of time we couldn't finish implementing threads.)
 	 * */
 	public synchronized void nextGenerationConcurrent() {
 		//split board, give each side a task and run nextGeneration();
