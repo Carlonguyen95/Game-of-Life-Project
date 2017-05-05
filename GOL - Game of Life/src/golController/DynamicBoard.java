@@ -131,7 +131,7 @@ public class DynamicBoard extends Board {
 			return 0;
 		}
 	}
-
+ 
 
 	/**
 	 * This method draws the grid of the board.
