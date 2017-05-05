@@ -9,7 +9,6 @@
 package golController;
 
 import javafx.animation.Animation;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -56,6 +55,7 @@ public class Control implements Initializable{
 	// Data field
 	private GraphicsContext gc;
 	private Timeline timeline = new Timeline();
+	
 	private byte[][] gameBoard = new byte[300][300];
 
 	//Objects
@@ -187,6 +187,7 @@ public class Control implements Initializable{
 			gameBoard = fileR.readBoardFromDisk(path);
 			board.setBoard(gameBoard);
 			board.drawBoard();
+		
 		}
 	}
 

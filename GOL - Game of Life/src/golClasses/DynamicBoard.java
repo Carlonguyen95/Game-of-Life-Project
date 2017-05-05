@@ -26,7 +26,7 @@ public class DynamicBoard {
 	public List<List<Byte>> board = new ArrayList<>();
 	protected List<List<Boolean>> boolBoard = new ArrayList<>();
 	protected int cellSize = 15;
-	private int boardSize = 150;
+	private int boardSize = 300;
 
 	private Canvas graphics;
 	private ColorPicker colorChangerBtn;
@@ -40,6 +40,9 @@ public class DynamicBoard {
 		this.colorChangerBtn = colorChangerBtn;
 		this.sizeSliderBtn = sizeSliderBtn;
 	}
+	
+
+	
 	
 	public void init(){
 		for (int x = 0; x < boardSize; x++){
@@ -217,7 +220,8 @@ public class DynamicBoard {
 			}
 		}
 
-		board = newBoard;	
+		board = newBoard;
+		
 	}
 
 	/**
@@ -353,7 +357,7 @@ public class DynamicBoard {
 	 */
 	public void increaseBelow(){
 		int increase = 2;
-		boardSize += increase;
+		//board.size() += increase;
 		
 		
 		for(int x = 0; x < increase; x++){
@@ -376,16 +380,16 @@ public class DynamicBoard {
 	 */
 	public void increaseUpper(){
 		int increase = 2;
-		boardSize += increase;
+		//board.size() += increase;
 		for(int x = 0; x < increase; x++){
 			List<Byte> innerArray = new ArrayList<>();
-			for(int y = 0; y < boardSize-increase; y++){
+			for(int y = 0; y < board.size()-increase; y++){
 				innerArray.add(0,(byte) 0);
 			}
 			board.add(0, innerArray);
 		}
 		
-		for(int x = 0; x < boardSize; x++){
+		for(int x = 0; x < board.size(); x++){
 			for(int y = 0; y < increase; y++){
 				board.get(x).add(0, (byte) 0);
 			}
@@ -398,10 +402,10 @@ public class DynamicBoard {
 	public void checkIncrease(){
 		int minX = 0;
 		int minY = 0;
-		int maxX = boardSize-1;
-		int maxY = boardSize-1;
+		int maxX = board.size()-1;
+		int maxY = board.get(0).size()-1;
 		
-		for(int y = 0; y < boardSize; y++){
+		for(int y = 0; y < board.size(); y++){
 			if(board.get(minX).get(y) == 1){
 				increaseUpper();
 				increaseBelow();
@@ -414,7 +418,7 @@ public class DynamicBoard {
 			}
 		}
 		
-		for(int x = 0; x < boardSize; x++){
+		for(int x = 0; x < board.size(); x++){
 			if(board.get(x).get(minY) == 1){
 				increaseUpper();
 				increaseBelow();
@@ -427,4 +431,6 @@ public class DynamicBoard {
 			}
 		}
 	}
+	
+	
 }

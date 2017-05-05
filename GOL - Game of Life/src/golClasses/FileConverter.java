@@ -57,29 +57,25 @@ public class FileConverter{
 					rows = Integer.parseInt(Mt.group(1));
 					columns = Integer.parseInt(Mt.group(2));
 					rule = Mt.group(3);
-
 				}
 
 				if ((line.matches("[b, o, $, !, 0-9]*"))) {
 					RlePattern = RlePattern.concat(line);
 				}
-
 			}
-			
-
 		}
 
 		catch (NumberFormatException e) {  // wrong format in file
 			error.formatError();
 		}
 
-		rle(RlePattern);
+		String pattern = readrlepattern(RlePattern);
+		createBoard(pattern);
 		return board;
-
 	}
 
 
-	public String rle(String rlePattern) {
+	public String readrlepattern(String rlePattern) {
 
 		StringBuilder simpleRle = new StringBuilder();
 		Pattern pattern = Pattern.compile("\\d+|[ob]|\\$");
@@ -97,11 +93,10 @@ public class FileConverter{
 		}
 
 
-		rleConverter(simpleRle.toString());
 		return simpleRle.toString();
 	}
 
-	public byte[][] rleConverter(String rle) {
+	public void createBoard(String rle) {
 
 		int x = 0;
 		int y = 0;
@@ -124,7 +119,7 @@ public class FileConverter{
 			}
 		}
 
-		return board = rle_Board;
+		board = rle_Board;
 	}
 
 	/**
@@ -188,7 +183,7 @@ public class FileConverter{
 			PatternFormatException error = new PatternFormatException();
 			error.generalError();
 		}
-		rle(RlePattern);
+		readrlepattern(RlePattern);
 		return board;
 
 	}
