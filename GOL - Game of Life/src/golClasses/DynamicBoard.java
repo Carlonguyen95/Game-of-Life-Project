@@ -6,7 +6,7 @@
  * @author Idris Milamean
  */
 
-package golController;
+package golClasses;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,9 +19,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.paint.Color;
-
-import golClasses.Board;
-import golClasses.Error;
 
 public class DynamicBoard extends Board {  
 
@@ -285,6 +282,7 @@ public class DynamicBoard extends Board {
 		board = updated;
 		draw();
 		//checkExpand(); (remove this as a comment to run as a Dynamic board)
+		checkExpand();
 	}
 
 	/**

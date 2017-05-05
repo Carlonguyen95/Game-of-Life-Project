@@ -1,14 +1,3 @@
-package golClasses;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.io.*;
-
-
 /** This class reads files given by user either by URL or file from disk
  * and transforms the information in the files to byte arrays
  * that can be used for making patterns.
@@ -17,6 +6,16 @@ import java.io.*;
  * @author Haweyo
  *
  * */
+
+package golClasses;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.io.*;
+
 public class FileConverter{
 	private int rows=0;
 	private int columns=0;
@@ -46,7 +45,6 @@ public class FileConverter{
 		FileReader Fr = new FileReader(path);
 		BufferedReader Br = new BufferedReader(Fr);
 
-		try{
 			while ((line = Br.readLine()) != null) {
 				Pattern Pt = Pattern.compile(regEx);
 				Matcher Mt = Pt.matcher(line);
@@ -55,25 +53,13 @@ public class FileConverter{
 					rows = Integer.parseInt(Mt.group(1));
 					columns = Integer.parseInt(Mt.group(2));
 					rule = Mt.group(3);
-
 				}
-
 				if ((line.matches("[b, o, $, !, 0-9]*"))) {
 					RlePattern = RlePattern.concat(line);
 				}
-
 			}
-			
-
-		}
-
-		catch (NumberFormatException e) {  // wrong format in file
-			error.formatError();
-		}
-
 		rle(RlePattern);
 		return board;
-
 	}
 
 	/**
@@ -82,7 +68,7 @@ public class FileConverter{
 	 * @param the rle pattern in the form of a string
 	 * @return the pattern simplified 
 	 * */
-	public String rle(String rlePattern) {
+	public void rle(String rlePattern) {
 
 		StringBuilder simpleRle = new StringBuilder();
 		Pattern pattern = Pattern.compile("\\d+|[ob]|\\$");
@@ -98,9 +84,7 @@ public class FileConverter{
 				simpleRle.append(matcher.group());
 			}
 		}
-
 		rleConverter(simpleRle.toString());
-		return simpleRle.toString();
 	}
 
 	
@@ -150,10 +134,8 @@ public class FileConverter{
 		URL destination = new URL(url);
 		URLConnection conn = destination.openConnection();
 
-		try(
 				BufferedReader in = new BufferedReader(
 						new InputStreamReader(conn.getInputStream()));
-				) {
 
 			String inputLine = " ";
 
@@ -165,35 +147,14 @@ public class FileConverter{
 
 					rows = Integer.parseInt(M.group(1));
 					columns = Integer.parseInt(M.group(2));
-					rule = M.group(2);
-				
+					rule = M.group(2);		
 				}
-
 				if ((inputLine.matches("[b, o, $, !, 0-9]*"))) {
 					RlePattern = RlePattern.concat(inputLine);
 				}
-
 			}
-
-		}
-
-		catch (NumberFormatException e) {  // wrong format in file
-			Error error = new Error();
-			error.urlError();
-		}
-
-		catch (MalformedURLException m) { // invalid URL
-			Error error = new Error();
-			error.malformedURLError();
-		}
-
-		catch (IOException ioe) { //general IO exception
-			Error error = new Error();
-			error.generalError();
-		}
 		rle(RlePattern);
 		return board;
-
 	}
 }
 

@@ -1,3 +1,11 @@
+/**
+ * This class has all the methods and controls that affects the GUI by user.
+ * 
+ * @author Carlo Nguyen
+ * @author Haweya Jama
+ * @author Idris Milamean
+ */
+
 package golController;
 
 import javafx.animation.Animation;
@@ -24,28 +32,16 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.*;
-import java.util.Collections;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 import javax.swing.JOptionPane;
 
-import golClasses.Board;
+import golClasses.DynamicBoard;
 import golClasses.FileConverter;
 import golClasses.Pool;
 import golClasses.Error;
 
-
-
-/**
- * This class has all the methods and controls that affects the GUI by user.
- * 
- * @author Carlo Nguyen
- * @author Haweya Jama
- * @author Idris Milamean
- */
 public class Control implements Initializable{
 
 	// Data field to FXML
@@ -65,12 +61,12 @@ public class Control implements Initializable{
 	private GraphicsContext gc;
 	private Timeline timeline = new Timeline();
 	private byte[][] gameBoard = new byte[100][100];
-	Pool p;
 
 	//Objects
 	FileConverter FileRead;
 	DynamicBoard board;
-
+	Pool p;
+	
 	@Override
 	public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
@@ -106,6 +102,15 @@ public class Control implements Initializable{
 		}
 
 		board.draw();
+		
+		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
+			//board.checkIncrease();
+			board.nextGeneration();
+		});
+		
+		timeline.setCycleCount(Animation.INDEFINITE);
+		timeline.setAutoReverse(true);
+		timeline.getKeyFrames().add(keyframe);
 	}
 
 	public void closeProgram(ActionEvent event) {
@@ -122,7 +127,7 @@ public class Control implements Initializable{
 		if(startPauseBtn.isSelected()) {
 			startPauseBtn.setText("Pause");
 
-			Animation();
+			timeline.play();
 		}else {
 			startPauseBtn.setText("Start");
 			timeline.pause();
@@ -189,14 +194,17 @@ public class Control implements Initializable{
 		// Shows the name of the uploaded file
 		File path = file.showOpenDialog(null);
 
-		if(path != null) {
-			board.clearBoard();
-			listview.getItems().add(path.getName());
-			FileConverter fileR = new FileConverter();
-			gameBoard = fileR.readBoardFromDisk(path);
-			board.setBoard(gameBoard);
-			board.drawBoard();
-
+		try{
+			if(path != null) {
+				board.clearBoard();
+				listview.getItems().add(path.getName());
+				FileConverter fileR = new FileConverter();
+				gameBoard = fileR.readBoardFromDisk(path);
+				board.setBoard(gameBoard);
+				board.drawBoard();
+		}	}
+		catch (NumberFormatException e) {  // wrong format in file
+			Error.formatError();
 		}
 	}
 
@@ -211,14 +219,25 @@ public class Control implements Initializable{
 	public void loadURL() throws Exception {
 		String url = new String();
 		url = JOptionPane.showInputDialog(null, "Please enter a URL");
-
-		if(url != null) {
-			board.clearBoard();
-
-			FileConverter fileR = new FileConverter();
-			gameBoard = fileR.readFromURL(url);
-			board.setBoard(gameBoard);
-			board.drawBoard();
+		
+		try{
+			if(url != null) {
+				board.clearBoard();
+	
+				FileConverter fileR = new FileConverter();
+				gameBoard = fileR.readFromURL(url);
+				board.setBoard(gameBoard);
+				board.drawBoard();
+			}
+		}		
+		catch (NumberFormatException e) {  // wrong format in file
+			Error.urlError();
+		}
+		catch (MalformedURLException m) { // invalid URL
+			Error.malformedURLError();
+		}
+		catch (IOException ioe) { //general IO exception
+			Error.generalError();
 		}
 	}
 
@@ -265,24 +284,4 @@ public class Control implements Initializable{
 			timeline.stop();
 		}
 	}
-
-	/**
-	 * This method makes the animation of the game by creating a timeline.
-	 * 
-	 * */
-	public void Animation() {
-
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.setAutoReverse(true);
-
-		// Speed
-		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
-			//board.checkIncrease();
-			board.nextGeneration();
-		});
-
-		timeline.getKeyFrames().add(keyframe);
-		timeline.play();
-	}
-
 }

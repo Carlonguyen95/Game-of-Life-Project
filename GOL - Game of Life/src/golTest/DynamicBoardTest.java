@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import golController.DynamicBoard;
+import golClasses.DynamicBoard;
 
 /**
  * This class is used to testing the NextGeneration method

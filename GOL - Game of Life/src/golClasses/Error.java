@@ -1,7 +1,3 @@
-package golClasses;
-
-import javax.swing.JOptionPane;
-
 /** This class contains methods that display error messages to user if something 
  * has gone wrong (after an exception has been thrown).
  * 
@@ -11,6 +7,11 @@ import javax.swing.JOptionPane;
  * @author Haweyo
  * 
  * */
+
+package golClasses;
+
+import javax.swing.JOptionPane;
+
 public class Error extends Exception {
 	
 	/**
