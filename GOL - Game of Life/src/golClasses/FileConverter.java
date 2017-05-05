@@ -115,7 +115,7 @@ public class FileConverter{
 		int x = 0;
 		int y = 0;
 
-		rle_Board = new byte[350][350]; 
+		rle_Board = new byte[160][160]; 
 
 		for (int i = 0; i < rle.length(); i++) {
 			if (rle.charAt(i) == '$') {

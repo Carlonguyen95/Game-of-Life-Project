@@ -1,7 +1,14 @@
+/**
+ * This class has all the methods and controls that affects the GUI by user.
+ * 
+ * @author Carlo Nguyen
+ * @author Haweya Jama
+ * @author Idris Milamean
+ */
+
 package golController;
 
 import javafx.animation.Animation;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -24,28 +31,12 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.*;
-import java.util.Collections;
-
 import javax.swing.JOptionPane;
 
-import golClasses.Board;
+ 
 import golClasses.FileConverter;
 import golClasses.Pool;
-import golClasses.Error;
 
-
-
-/**
- * This class has all the methods and controls that affects the GUI by user.
- * 
- * @author Carlo Nguyen
- * @author Haweya Jama
- * @author Idris Milamean
- */
 public class Control implements Initializable{
 
 	// Data field to FXML
@@ -64,12 +55,13 @@ public class Control implements Initializable{
 	// Data field
 	private GraphicsContext gc;
 	private Timeline timeline = new Timeline();
-	private byte[][] gameBoard = new byte[100][100];
-	Pool p;
+	
+	private byte[][] gameBoard = new byte[300][300];
 
 	//Objects
 	FileConverter FileRead;
 	DynamicBoard board;
+	Pool p;
 
 	@Override
 	public void initialize(java.net.URL location,java.util.ResourceBundle resources){
@@ -83,21 +75,17 @@ public class Control implements Initializable{
 		speedBtn.setValue("Speed"); 
 		speedBtn.setItems(speedList);
 
-		FileRead = new FileConverter();
+		// Setting up Objects
+		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
+		board.init();
 
 		// Setting up Board
-		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
 		//board = Collections.synchronizedList(new ArrayList(byte);
-
 		this.board = board;
 
-
-		/* starts threads
-		(due to a lack of time we couldn't finish implementing threads. some of
-		 * these parts are commented out so that the game can run.
-		 * */
+		// start thread
 		try {
-
+			
 			//  p.setTask(() -> {board.nextGenerationConcurrent();});
 			// p.clearWorkers();
 		}
@@ -106,11 +94,17 @@ public class Control implements Initializable{
 		}
 
 		board.draw();
-	}
+		
+		// Setting up Animation
+		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
+			//board.checkIncrease();
+			board.nextGeneration();
+		});
 
-	public void closeProgram(ActionEvent event) {
-		System.exit(0);
-	} 
+		timeline.getKeyFrames().add(keyframe);
+		timeline.setCycleCount(Animation.INDEFINITE);
+		timeline.setAutoReverse(true);
+	}
 
 	/**
 	 * This method is connected to a togglebutton.
@@ -118,11 +112,10 @@ public class Control implements Initializable{
 	 * When the Start-button is pressed, Animation() method will execute.
 	 */
 	public void toggleBtn() {
-
 		if(startPauseBtn.isSelected()) {
 			startPauseBtn.setText("Pause");
 
-			Animation();
+			timeline.play();
 		}else {
 			startPauseBtn.setText("Start");
 			timeline.pause();
@@ -136,7 +129,6 @@ public class Control implements Initializable{
 	 * gc is a variable assigned to Canvas, and returns the GraphicsContext associated with this Canvas.
 	 */
 	public void colorChange() {
-
 		gc.setFill(colorChangerBtn.getValue());
 		board.draw();
 	}
@@ -156,7 +148,6 @@ public class Control implements Initializable{
 	 * Allows user to select the direction/speed at which the Animation is expected to be played.
 	 */
 	public void speedSlction() { 
-
 		if(speedBtn.getValue().equals("1x")) { 
 			timeline.setRate(1); 
 		} 
@@ -196,7 +187,7 @@ public class Control implements Initializable{
 			gameBoard = fileR.readBoardFromDisk(path);
 			board.setBoard(gameBoard);
 			board.drawBoard();
-
+		
 		}
 	}
 
@@ -222,41 +213,35 @@ public class Control implements Initializable{
 		}
 	}
 
-
 	/**
-	 * This method allows the user to draw cells on the board themself, by dragclick with the mouse.
+	 * This method allows the user to selfdraw cells on the board, by dragclick with the mouse.
 	 * Each dragclick on the board will get the pointers coordinate X and Y relative to the Board.
 	 * The value X and Y get casted into integer values, then put into Board's array.
 	 * Board[x][y] is equal to 1 means there is a living cell on that coordinate.
 	 */
 	public void drawCell(MouseEvent event) {
-
 		int x = (int) event.getX()/board.getCellSize();
 		int y = (int) event.getY()/board.getCellSize();
 
-
 		try {
+
 			if(x>=0 && y>= 0 && x <gc.getCanvas().getWidth() && y < gc.getCanvas().getHeight())  {
 				board.board.get(x).set(y, (byte) 1);
 				gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
 				gc.setFill(colorChangerBtn.getValue());
-
+				board.rectangular(x, y);
 			}
-		} 
-		
-		catch (Exception e) {	
-			Error err = new Error();
-			err.generalError();
+			
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * this method clears the board by killing all the alive cells.
-	 * */
+	 * This method clears the board for cells
+	 */
 	public void resetBoard() {
-		gameBoard = board.getBoard();
 		board.clearBoard();
-
 
 		if(startPauseBtn.isSelected()) {
 			startPauseBtn.setText("Start");
@@ -265,24 +250,13 @@ public class Control implements Initializable{
 			timeline.stop();
 		}
 	}
-
+	
 	/**
-	 * This method makes the animation of the game by creating a timeline.
-	 * 
-	 * */
-	public void Animation() {
-
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.setAutoReverse(true);
-
-		// Speed
-		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
-			//board.checkIncrease();
-			board.nextGeneration();
-		});
-
-		timeline.getKeyFrames().add(keyframe);
-		timeline.play();
-	}
+	 *
+	 * @param event
+	 */
+	public void closeProgram(ActionEvent event) {
+		System.exit(0);
+	} 
 
 }
