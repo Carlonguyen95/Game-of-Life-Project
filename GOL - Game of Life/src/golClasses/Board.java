@@ -34,8 +34,8 @@ public class Board {
 		byte[][] board = new byte[100][100];
 		this.board = board;
 	}
-	
-	
+
+
 	/**
 	 * This method makes a given cell alive (changing the value to 1)
 	 * @param x and y variables that tells us where the cell is on the board
@@ -60,12 +60,12 @@ public class Board {
 		drawBoard();
 
 	}
-	
+
 	public int getCellSize() {
 		return cellSize;
 	}
-	
- 
+
+
 	/**
 	 * This method is connected to a slider.
 	 * Allows the user to select size to the board and drawn cells.

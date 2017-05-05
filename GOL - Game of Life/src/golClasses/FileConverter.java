@@ -23,7 +23,7 @@ public class FileConverter{
 
 	private byte[][] board = new byte[300][300];
 	private byte[][] rle_Board;
-	private PatternFormatException error = new PatternFormatException();
+	private Error error = new Error();
 
 	StringBuilder RLEPattern = new StringBuilder();
 	String line = "";
@@ -37,8 +37,6 @@ public class FileConverter{
 		/**
 	 * this method reads file from disk. The file contains a specific pattern formatted in #RLE
 	 * Any other format will be caught as an pattern exception.
-	 * The information is then stored in a temporary arrayList.
-	 * Lastly the arrayList is used to fill a byte array representing the board.
 	 * @param filePath is the path where the file is located in disk.
 	 * @return a byte board with the pattern in the file.
 	 * @throws exception of the type numberFormat or IOException.
@@ -78,7 +76,12 @@ public class FileConverter{
 
 	}
 
-
+	/**
+	 * helping method that takes a given rlepattern and simplifies it in order to
+	 * turn the information into an Array. 
+	 * @param the rle pattern in the form of a string
+	 * @return the pattern simplified 
+	 * */
 	public String rle(String rlePattern) {
 
 		StringBuilder simpleRle = new StringBuilder();
@@ -96,17 +99,23 @@ public class FileConverter{
 			}
 		}
 
-
 		rleConverter(simpleRle.toString());
 		return simpleRle.toString();
 	}
 
+	
+	/**
+	 * turns the given string into an array by sorting the information
+	 * given in the string into byte
+	 * @param the string containing the rle information
+	 * @return the converted 2d byte array
+	 * */
 	public byte[][] rleConverter(String rle) {
 
 		int x = 0;
 		int y = 0;
 
-		rle_Board = new byte[rows][columns];
+		rle_Board = new byte[350][350]; 
 
 		for (int i = 0; i < rle.length(); i++) {
 			if (rle.charAt(i) == '$') {
@@ -130,19 +139,16 @@ public class FileConverter{
 	 * this method reads pattern from URL.
 	 * The page contains a specific pattern formatted in #Life 1.06
 	 * Any other format will be caught as an pattern exception.
-	 * The information is then stored in a temporary arrayList.
-	 * Lastly the arrayList is used to fill a byte array representing the board.
 	 * @param url contains the URL given by user.
 	 * @return a byte board with the pattern from the URL.
 	 * @throws exception of the type numberFormat or IOException.
 	 */
 
-	public byte[][] readFromURL(String url) throws Exception, PatternFormatException,
+	public byte[][] readFromURL(String url) throws Exception, Error,
 	MalformedURLException {
 
 		URL destination = new URL(url);
 		URLConnection conn = destination.openConnection();
-
 
 		try(
 				BufferedReader in = new BufferedReader(
@@ -167,24 +173,22 @@ public class FileConverter{
 					RlePattern = RlePattern.concat(inputLine);
 				}
 
-
 			}
 
 		}
 
 		catch (NumberFormatException e) {  // wrong format in file
-			PatternFormatException error = new PatternFormatException();
+			Error error = new Error();
 			error.urlError();
 		}
 
 		catch (MalformedURLException m) { // invalid URL
-			PatternFormatException error = new PatternFormatException();
+			Error error = new Error();
 			error.malformedURLError();
 		}
 
-
 		catch (IOException ioe) { //general IO exception
-			PatternFormatException error = new PatternFormatException();
+			Error error = new Error();
 			error.generalError();
 		}
 		rle(RlePattern);

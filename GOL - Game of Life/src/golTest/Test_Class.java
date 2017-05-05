@@ -1,11 +1,14 @@
 package golTest;
- /**
-  *  This class is used to testing both of NextGeneration method if it's working in the right way and getting the expecting results.
-  *  in the first we 
-  *   
-  * 
-  *
-  */
+ 
+/**
+ * This class is used to testing the NextGeneration method, by using JUNIT testing,
+ * it checks if if it's working in the right way by setting up 'expected results'.
+ * 
+ * @author Carlo Nguyen
+ * @author Haweya Jama
+ * @author Idris Milamean
+ */
+
 public class Test_Class {  
 	
 	/**

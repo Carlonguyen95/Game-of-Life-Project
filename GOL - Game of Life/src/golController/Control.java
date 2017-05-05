@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 import golClasses.Board;
 import golClasses.FileConverter;
 import golClasses.Pool;
+import golClasses.Error;
 
 
 
@@ -91,9 +92,12 @@ public class Control implements Initializable{
 		this.board = board;
 
 
-		// start thread
+		/* starts threads
+		(due to a lack of time we couldn't finish implementing threads. some of
+		 * these parts are commented out so that the game can run.
+		 * */
 		try {
-			
+
 			//  p.setTask(() -> {board.nextGenerationConcurrent();});
 			// p.clearWorkers();
 		}
@@ -220,7 +224,7 @@ public class Control implements Initializable{
 
 
 	/**
-	 * This method allows the user to selfdraw cells on the board, by dragclick with the mouse.
+	 * This method allows the user to draw cells on the board themself, by dragclick with the mouse.
 	 * Each dragclick on the board will get the pointers coordinate X and Y relative to the Board.
 	 * The value X and Y get casted into integer values, then put into Board's array.
 	 * Board[x][y] is equal to 1 means there is a living cell on that coordinate.
@@ -230,24 +234,34 @@ public class Control implements Initializable{
 		int x = (int) event.getX()/board.getCellSize();
 		int y = (int) event.getY()/board.getCellSize();
 
-		//gameBoard[(int)x][(int)y] = 1;
 
 		try {
 
-			if(x>=0 && y>= 0 && x <gc.getCanvas().getWidth() && y < gc.getCanvas().getHeight())  {
-				board.board.get(x).set(y, (byte) 1);
+
+			if(x > board.board.size() || y> board.board.get(0).size()) { // outside the boardSize
+				board.checkExpand(x,y);
+				board.setCellState(x, y);
 				gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
 				gc.setFill(colorChangerBtn.getValue());
-				board.rectangular(x, y);
+
+			}
+			else {
+				board.board.get(x).add(y, (byte) 1);
+				gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
+				gc.setFill(colorChangerBtn.getValue());
+
 			}
 
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e) {	
+			Error err = new Error();
+			err.generalError();
 		}
-
 	}
-
+	
+	
+	/**
+	 * this method clears the board by killing all the alive cells.
+	 * */
 	public void resetBoard() {
 		gameBoard = board.getBoard();
 		board.clearBoard();
