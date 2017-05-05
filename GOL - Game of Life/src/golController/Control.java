@@ -1,3 +1,11 @@
+/**
+ * This class has all the methods and controls that affects the GUI by user.
+ * 
+ * @author Carlo Nguyen
+ * @author Haweya Jama
+ * @author Idris Milamean
+ */
+
 package golController;
 
 import javafx.animation.Animation;
@@ -24,28 +32,14 @@ import javafx.util.Duration;
 import javafx.scene.control.ToggleButton;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.*;
-import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
-import golClasses.Board;
+import golClasses.DynamicBoard;
 import golClasses.FileConverter;
 import golClasses.Pool;
 import golClasses.Error;
 
-
-
-/**
- * This class has all the methods and controls that affects the GUI by user.
- * 
- * @author Carlo Nguyen
- * @author Haweya Jama
- * @author Idris Milamean
- */
 public class Control implements Initializable{
 
 	// Data field to FXML
@@ -65,12 +59,12 @@ public class Control implements Initializable{
 	private GraphicsContext gc;
 	private Timeline timeline = new Timeline();
 	private byte[][] gameBoard = new byte[100][100];
-	Pool p;
 
 	//Objects
 	FileConverter FileRead;
 	DynamicBoard board;
-
+	Pool p;
+	
 	@Override
 	public void initialize(java.net.URL location,java.util.ResourceBundle resources){
 
@@ -88,7 +82,7 @@ public class Control implements Initializable{
 		// Setting up Board
 		DynamicBoard board = new DynamicBoard(gc, graphics,colorChangerBtn, sizeSliderBtn);
 		//board = Collections.synchronizedList(new ArrayList(byte);
-
+		board.init();
 		this.board = board;
 
 
@@ -106,6 +100,15 @@ public class Control implements Initializable{
 		}
 
 		board.draw();
+		
+		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
+			//board.checkIncrease();
+			board.nextGeneration();
+		});
+
+		timeline.getKeyFrames().add(keyframe);
+		timeline.setCycleCount(Animation.INDEFINITE);
+		timeline.setAutoReverse(true);
 	}
 
 	public void closeProgram(ActionEvent event) {
@@ -122,7 +125,7 @@ public class Control implements Initializable{
 		if(startPauseBtn.isSelected()) {
 			startPauseBtn.setText("Pause");
 
-			Animation();
+			timeline.play();
 		}else {
 			startPauseBtn.setText("Start");
 			timeline.pause();
@@ -234,13 +237,11 @@ public class Control implements Initializable{
 		int x = (int) event.getX()/board.getCellSize();
 		int y = (int) event.getY()/board.getCellSize();
 
-
 		try {
 			if(x>=0 && y>= 0 && x <gc.getCanvas().getWidth() && y < gc.getCanvas().getHeight())  {
 				board.board.get(x).set(y, (byte) 1);
-				gc.fillRect(x*board.getCellSize(), y*board.getCellSize(),board.getCellSize()-1,board.getCellSize()-1);
+				gc.fillRect(x * board.getCellSize(), y * board.getCellSize(), board.getCellSize()-1, board.getCellSize()-1);
 				gc.setFill(colorChangerBtn.getValue());
-
 			}
 		} 
 		
@@ -254,9 +255,7 @@ public class Control implements Initializable{
 	 * this method clears the board by killing all the alive cells.
 	 * */
 	public void resetBoard() {
-		gameBoard = board.getBoard();
 		board.clearBoard();
-
 
 		if(startPauseBtn.isSelected()) {
 			startPauseBtn.setText("Start");
@@ -264,25 +263,6 @@ public class Control implements Initializable{
 
 			timeline.stop();
 		}
-	}
-
-	/**
-	 * This method makes the animation of the game by creating a timeline.
-	 * 
-	 * */
-	public void Animation() {
-
-		timeline.setCycleCount(Animation.INDEFINITE);
-		timeline.setAutoReverse(true);
-
-		// Speed
-		KeyFrame keyframe =  new KeyFrame(Duration.millis(150), e -> {
-			//board.checkIncrease();
-			board.nextGeneration();
-		});
-
-		timeline.getKeyFrames().add(keyframe);
-		timeline.play();
 	}
 
 }

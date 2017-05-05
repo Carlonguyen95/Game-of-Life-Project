@@ -6,7 +6,7 @@
  * @author Idris Milamean
  */
 
-package golController;
+package golClasses;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +24,6 @@ public class DynamicBoard {
 
 	// Data field
 	public List<List<Byte>> board = new ArrayList<>();
-	protected List<List<Boolean>> boolBoard = new ArrayList<>();
 	protected int cellSize = 15;
 	private int boardSize = 150;
 
@@ -34,7 +33,6 @@ public class DynamicBoard {
 	private GraphicsContext gc;
 
 	public DynamicBoard(GraphicsContext gc, Canvas graphics, ColorPicker colorChangerBtn, Slider sizeSliderBtn) {
-		//super(gc,graphics,colorChangerBtn,sizeSliderBtn);
 		this.gc = gc;
 		this.graphics = graphics;
 		this.colorChangerBtn = colorChangerBtn;
@@ -44,13 +42,10 @@ public class DynamicBoard {
 	public void init(){
 		for (int x = 0; x < boardSize; x++){
 			List <Byte> innerBoard = new ArrayList<>();
-			List <Boolean> innerBoolBoard = new ArrayList<>();
 			for (int y = 0; y < boardSize; y++){
 				innerBoard.add((byte) 0);
-				innerBoolBoard.add(false);
 			}
 			board.add(innerBoard);
-			boolBoard.add(innerBoolBoard);
 		}
 	}
 

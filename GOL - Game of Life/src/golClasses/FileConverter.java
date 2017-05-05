@@ -82,7 +82,7 @@ public class FileConverter{
 	 * @param the rle pattern in the form of a string
 	 * @return the pattern simplified 
 	 * */
-	public String rle(String rlePattern) {
+	public void rle(String rlePattern) {
 
 		StringBuilder simpleRle = new StringBuilder();
 		Pattern pattern = Pattern.compile("\\d+|[ob]|\\$");
@@ -100,7 +100,6 @@ public class FileConverter{
 		}
 
 		rleConverter(simpleRle.toString());
-		return simpleRle.toString();
 	}
 
 	
